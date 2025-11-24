@@ -7,7 +7,7 @@
 --- BADGE_COLOUR: 00FF00
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0905a]
 
-local MyDreamJournal = {}
+MyDreamJournal = MyDreamJournal or {}
 
 SMODS.Atlas({
     key = "modicon",
@@ -60,6 +60,7 @@ SMODS.Joker {
     key = "unicode",
     atlas = 'awesomejokers',
     pos = { x = 0, y = 0 },
+	pixel_size = { w = 62 },
 	discovered = true,
     rarity = 2,
 	loc_txt = {
