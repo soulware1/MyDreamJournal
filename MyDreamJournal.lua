@@ -131,7 +131,8 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 			"{X:glop,C:white}+#1#{} to all {C:glop}+Glop{}",
 			"{X:glop,C:white}+#2#{} to all {X:glop,C:white}XGlop{}",
 			"{X:glop,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Glop",
-			"{C:inactive,s:0.9}N being 10x the used operation{}"
+			"{C:inactive,s:0.9}N being 10x the used operation{}",
+			"{C:inactive,s:0.8}also {}{X:glop,C:inactive,s:0.8}+#6#{}{C:inactive,s:0.8} to default gained Glop{}",
 			}
 		},
 		pronouns = 'they_them',
@@ -139,9 +140,19 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 		perishable_compat = true,
 		eternal_compat = true,
 		cost = 8,
-		config = { extra = { add = 0.1, mult = 0.1, expo = 0.01, tetra = 0.001, penta = 0.0001, hyper = 0.00001 }, },
+		config = { extra = { add = 0.1, mult = 0.1, expo = 0.01, tetra = 0.001, penta = 0.0001, hyper = 0.00001, default_glop = 0.01 }, },
 		loc_vars = function(self, info_queue, card)
-			return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
+			return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper, card.ability.extra.default_glop } }
+		end,
+		add_to_deck = function(self, card, from_debuff)
+			if G.GAME.kali_glop_increase_from_calc_keys then
+				G.GAME.kali_glop_increase_from_calc_keys = G.GAME.kali_glop_increase_from_calc_keys+card.ability.extra.default_glop
+			end
+		end,
+		add_to_deck = function(self, card, from_debuff)
+			if G.GAME.kali_glop_increase_from_calc_keys then
+				G.GAME.kali_glop_increase_from_calc_keys = G.GAME.kali_glop_increase_from_calc_keys-card.ability.extra.default_glop
+			end
 		end,
 	}
 end
