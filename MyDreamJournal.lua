@@ -139,7 +139,7 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 		perishable_compat = true,
 		eternal_compat = true,
 		cost = 8,
-		config = { extra = { add = 0.1, mult = 0.01, expo = 0.001, tetra = 0.0001, penta = 0.00001, hyper = 0.000001 }, },
+		config = { extra = { add = 0.1, mult = 0.1, expo = 0.01, tetra = 0.001, penta = 0.0001, hyper = 0.00001 }, },
 		loc_vars = function(self, info_queue, card)
 			return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
 		end,
