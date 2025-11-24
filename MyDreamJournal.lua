@@ -108,6 +108,44 @@ SMODS.Joker {
     end,
 }
 
+if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
+	SMODS.Font {
+		key = "fairfaxpona",
+		path = "FairfaxPona.ttf",
+		render_scale = 24 --[[number]],
+		TEXT_HEIGHT_SCALE = 1 --[[number]],
+		TEXT_OFFSET = { x = 0 --[[number]], y = 0 --[[number]] },
+		FONTSCALE = 0.5 --[[number]],
+		squish = 0 --[[number]],
+		DESCSCALE = 1 --[[number]]
+	}
+	SMODS.Joker {
+		key = "jannasa",
+		atlas = 'awesomejokers',
+		pos = { x = 2, y = 0 },
+		discovered = true,
+		rarity = 3,
+		loc_txt = {
+			name = '{f:MDJ_fairfaxpona}AB{}',
+			text = {
+			"{X:glop,C:white}+#1#{} to all {C:glop}+Glop{}",
+			"{X:glop,C:white}+#2#{} to all {X:glop,C:white}XGlop{}",
+			"{X:glop,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Glop",
+			"{C:inactive,s:0.9}N being 10x the used operation{}"
+			}
+		},
+		pronouns = 'they_them',
+		blueprint_compat = false,
+		perishable_compat = true,
+		eternal_compat = true,
+		cost = 8,
+		config = { extra = { add = 0.1, mult = 0.01, expo = 0.001, tetra = 0.0001, penta = 0.00001, hyper = 0.000001 }, },
+		loc_vars = function(self, info_queue, card)
+			return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
+		end,
+	}
+end
+
 MyDreamJournal.chipmultopswap = {
 	['chips'] = 'mult',
 	['h_chips'] = 'h_mult',
@@ -176,6 +214,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
 	local unicodes = SMODS.find_card("j_MDJ_unicode")
 	local emojis = SMODS.find_card("j_MDJ_emoji")
+	local jans = SMODS.find_card("j_MDJ_jannasa")
 	if is_corrupted then
 		local msg
 		if string.find(key, 'chip') then 
@@ -220,6 +259,17 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
+				if operation and v.ability.extra[operation] then
+					amount = amount + v.ability.extra[operation]
+				end
+			end
+		end
+	end
+	if next(jans) then
+		for i = 1, #jans do
+			local v = jans[i]
+			if is_corrupted then
+				local operation = MyDreamJournal.glopmodkeys[key]
 				if operation and v.ability.extra[operation] then
 					amount = amount + v.ability.extra[operation]
 				end
