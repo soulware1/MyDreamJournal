@@ -16,8 +16,8 @@ SMODS.Atlas({
     py = 32
  })
  SMODS.Atlas({
-    key = "unicode",
-    path = "unicode.png",
+    key = "awesomejokers",
+    path = "jonklers.png",
     px = 71,
     py = 95
  })
@@ -58,7 +58,7 @@ SMODS.Edition({
 
 SMODS.Joker {
     key = "unicode",
-    atlas = 'unicode',
+    atlas = 'awesomejokers',
     pos = { x = 0, y = 0 },
 	discovered = true,
     rarity = 2,
@@ -77,6 +77,31 @@ SMODS.Joker {
     eternal_compat = true,
     cost = 8,
     config = { extra = { add = 4, mult = 0.4, expo = 0.04, tetra = 0.004, penta = 0.0004, hyper = 0.00004 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
+    end,
+}
+SMODS.Joker {
+    key = "emoji",
+    atlas = 'awesomejokers',
+    pos = { x = 1, y = 0 },
+	discovered = true,
+    rarity = 2,
+	loc_txt = {
+        name = 'Emoji',
+		text = {
+		"{X:blue,C:white}+#1#{} to all {C:blue}+Chip{}",
+		"{X:blue,C:white}+#2#{} to all {X:blue,C:white}XChip{}",
+		"{X:blue,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Chip",
+		"{C:inactive,s:0.9}N being 10x the used operation{}"
+		}
+    },
+	pronouns = 'he_him',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 8,
+    config = { extra = { add = 30, mult = 0.3, expo = 0.03, tetra = 0.003, penta = 0.0003, hyper = 0.00003 }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
     end,
@@ -149,6 +174,7 @@ local calcindiveffectref = SMODS.calculate_individual_effect
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
 	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
 	local unicodes = SMODS.find_card("j_MDJ_unicode")
+	local emojis = SMODS.find_card("j_MDJ_emoji")
 	if is_corrupted then
 		local msg
 		if string.find(key, 'chip') then 
@@ -178,6 +204,23 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				local operation = MyDreamJournal.chipmodkeys[key]
 				if operation and v.ability.extra[operation] then
 					amount = amount + v.ability.extra[operation]*7.5
+				end
+			end
+		end
+	end
+	if next(emojis) then
+		for i = 1, #emojis do
+			local v = emojis[i]
+			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			if is_corrupted then
+				local operation = MyDreamJournal.multmodkeys[key]
+				if operation and v.ability.extra[operation] then
+					amount = amount + v.ability.extra[operation]
+				end
+			else
+				local operation = MyDreamJournal.chipmodkeys[key]
+				if operation and v.ability.extra[operation] then
+					amount = amount + v.ability.extra[operation]
 				end
 			end
 		end
