@@ -86,7 +86,7 @@ SMODS.Joker {
     atlas = 'awesomejokers',
     pos = { x = 1, y = 0 },
 	discovered = true,
-    rarity = 2,
+    rarity = 3,
 	loc_txt = {
         name = 'Emoji',
 		text = {
