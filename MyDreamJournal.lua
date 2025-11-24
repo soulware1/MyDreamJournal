@@ -268,11 +268,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if next(jans) then
 		for i = 1, #jans do
 			local v = jans[i]
-			if is_corrupted then
-				local operation = MyDreamJournal.glopmodkeys[key]
-				if operation and v.ability.extra[operation] then
-					amount = amount + v.ability.extra[operation]
-				end
+			local operation = MyDreamJournal.glopmodkeys[key]
+			if operation and v.ability.extra[operation] then
+				amount = amount + v.ability.extra[operation]
 			end
 		end
 	end
