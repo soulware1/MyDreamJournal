@@ -3,7 +3,7 @@
 --- MOD_ID: MyDreamJournal
 --- PREFIX: MDJ
 --- MOD_AUTHOR: [soulware]
---- MOD_DESCRIPTION: Idk :P
+--- MOD_DESCRIPTION: Idk :P also thanks to snonc41 for the construction joker idea
 --- BADGE_COLOUR: 00FF00
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0905a]
 
@@ -21,6 +21,13 @@ SMODS.Atlas({
     px = 71,
     py = 95
  })
+  SMODS.Atlas({
+    key = "placeholder",
+    path = "stolenplaceholder.png",
+    px = 71,
+    py = 95
+ })
+
 
 SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
 
@@ -31,6 +38,57 @@ SMODS.Sound(
 	}
 )
 
+MyDreamJournal.rank_shorthands = {
+		"_",
+		"2",
+		"3",
+		"4",
+		"5",
+		"6",
+		"7",
+		"8",
+		"9",
+		"10",
+		"J",
+		"Q",
+		"K",
+		"A"
+}
+
+function SMODS.current_mod.calculate(self, context)
+	-- setup
+	if not G.GAME.current_round.MDJ_construction_jokers_ranks and not G.GAME.current_round.MDJ_construction_jokers_temp_ranks and not G.GAME.current_round.MDJ_construction_jokers_displayed_ranks and not G.GAME.current_round.MDJ_construction_jokers_first_hand then
+		G.GAME.current_round.MDJ_construction_jokers_ranks = {}
+		G.GAME.current_round.MDJ_construction_jokers_temp_ranks = {}
+		G.GAME.current_round.MDJ_construction_jokers_displayed_ranks = "None"
+	end
+	local ranks = G.GAME.current_round.MDJ_construction_jokers_ranks
+	local ranks2 = G.GAME.current_round.MDJ_construction_jokers_temp_ranks
+	local rank_shorthands = MyDreamJournal.rank_shorthands
+	if context.before and not next(ranks) and G.GAME.current_round.MDJ_construction_jokers_displayed_ranks == "None" and next(SMODS.find_card("j_MDJ_constructionjoker")) then
+		for i = 1, #context.scoring_hand do
+			local v = context.scoring_hand[i]
+			local rank = v:get_id()
+			local rankless_check = SMODS.has_no_rank(v)
+			if rankless_check then
+				rank = 1
+			end
+			if not ranks[rank] then
+				ranks[rank] = 0
+			end
+			ranks[rank] = ranks[rank]+1
+			table.insert(ranks2, rank_shorthands[rank])
+		end
+		G.GAME.current_round.MDJ_construction_jokers_displayed_ranks = table.concat(ranks2, ", ")
+	end
+
+	if context.ante_change then
+		G.GAME.current_round.MDJ_construction_jokers_ranks = {}
+		G.GAME.current_round.MDJ_construction_jokers_temp_ranks = {}
+		G.GAME.current_round.MDJ_construction_jokers_displayed_ranks = "None"
+	end
+end
+
 
 SMODS.Edition({
     key = "corrupted",
@@ -40,7 +98,7 @@ SMODS.Edition({
 		sound = 'MDJ_snd',
         text = {
             "Chips effects now affects Mult instead",
-			"Mult effects {X:mult,C:white} X#1# {} and now affects Chips instead",
+			"Mult effects {X:mult,C:white} X#1# {} if Additive and now affects Chips instead",
         }
     },
 	-- Stop shadow from being rendered under the card
@@ -110,6 +168,67 @@ SMODS.Joker {
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
     end,
+}
+SMODS.Joker {
+    key = "constructionjoker",
+    atlas = 'awesomejokers',
+    pos = { x = 3, y = 0 },
+	discovered = true,
+    rarity = 2,
+	loc_txt = {
+        name = 'Construction Joker',
+		text = {
+			"This Joker gains {X:mult,C:white}X#1#{} Mult",
+			"every time you play a hand",
+			"that has the same scored ranks as the",
+			"one played at the start of this Ante",
+			"(currently {X:mult,C:white}X#2#{} Mult)",
+			"{C:inactive,s:0.9} (Ranks: #3#) {}"
+		}
+    },
+	pronouns = 'he_they',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 8,
+    config = { extra = { gain = 0.03, mult = 1, displayed_ranks = "None", hand_matches = true }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.gain, card.ability.extra.mult, G.GAME.current_round.MDJ_construction_jokers_displayed_ranks or "None" } }
+    end,
+    calculate = function(self, card, context)
+		if context.before then
+			card.ability.extra.hand_matches = true
+			local hand_ranks = {}
+			local stored_ranks = G.GAME.current_round.MDJ_construction_jokers_ranks
+			for i = 1, #context.scoring_hand do
+				local v = context.scoring_hand[i]
+				local rank = v:get_id()
+				local rankless_check = SMODS.has_no_rank(v)
+				if rankless_check then
+					rank = 1
+				end
+				if not hand_ranks[rank] then
+					hand_ranks[rank] = 0
+				end
+				hand_ranks[rank] = hand_ranks[rank]+1
+			end
+			for i = 1, 14 do
+				if hand_ranks[i] ~= stored_ranks[i] then
+					print(i)
+					card.ability.extra.hand_matches = false
+				end
+			end
+			if card.ability.extra.hand_matches then
+				card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Increased!", colour = G.C.mult, delay = 0.2})
+				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.gain
+			end
+		end
+        if context.joker_main then
+			return {
+				xmult  = card.ability.extra.mult
+			}
+		end
+    end
 }
 
 if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
