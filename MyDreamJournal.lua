@@ -214,7 +214,6 @@ SMODS.Joker {
 			end
 			for i = 1, 14 do
 				if hand_ranks[i] ~= stored_ranks[i] then
-					print(i)
 					card.ability.extra.hand_matches = false
 				end
 			end
