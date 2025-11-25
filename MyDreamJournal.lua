@@ -24,9 +24,12 @@ SMODS.Atlas({
 
 SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
 
-SMODS.current_mod.optional_features = {
-    post_trigger = true,
-}
+SMODS.Sound(
+	{
+		key = "snd",
+		path = "snd.ogg"
+	}
+)
 
 
 SMODS.Edition({
@@ -34,6 +37,7 @@ SMODS.Edition({
     loc_txt = {
         name = "Corrupted",
         label = "Corrupted",
+		sound = 'MDJ_snd',
         text = {
             "Chips effects now affects Mult instead",
 			"Mult effects {X:mult,C:white} X#1# {} and now affects Chips instead",
@@ -132,7 +136,7 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 			"{X:glop,C:white}+#2#{} to all {X:glop,C:white}XGlop{}",
 			"{X:glop,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Glop",
 			"{C:inactive,s:0.9}N being 10x the used operation{}",
-			"{C:inactive,s:0.8}also {}{X:glop,C:inactive,s:0.8}+#6#{}{C:inactive,s:0.8} to default gained Glop{}",
+			"{C:inactive,s:0.8}also {}{X:glop,C:inactive,s:0.8}+#6#{}{C:inactive,s:0.8} to default Glop{}",
 			}
 		},
 		pronouns = 'they_them',
@@ -149,7 +153,7 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 				G.GAME.kali_glop_increase_from_calc_keys = G.GAME.kali_glop_increase_from_calc_keys+card.ability.extra.default_glop
 			end
 		end,
-		add_to_deck = function(self, card, from_debuff)
+		remove_from_deck = function(self, card, from_debuff)
 			if G.GAME.kali_glop_increase_from_calc_keys then
 				G.GAME.kali_glop_increase_from_calc_keys = G.GAME.kali_glop_increase_from_calc_keys-card.ability.extra.default_glop
 			end
