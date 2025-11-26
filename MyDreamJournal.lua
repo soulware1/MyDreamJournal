@@ -179,7 +179,7 @@ SMODS.Joker {
 	loc_txt = {
         name = "Let's take a look",
 		text = {
-			"Debuff the Joker to the left of this joker.",
+			"Debuff the {C:attention}Joker{} to the left.",
 		}
     },
 	pronouns = 'he_him',
