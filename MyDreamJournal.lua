@@ -8,6 +8,7 @@
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0905a]
 
 MyDreamJournal = MyDreamJournal or {}
+Talisman = Talisman or nil
 
 SMODS.Atlas({
     key = "modicon",
@@ -170,6 +171,28 @@ SMODS.Joker {
     end,
 }
 SMODS.Joker {
+    key = "eyesjoker",
+    atlas = 'awesomejokers',
+    pos = { x = 4, y = 0 },
+	discovered = true,
+    rarity = 1,
+	loc_txt = {
+        name = "Let's take a look",
+		text = {
+			"Debuff the Joker to the left of this joker.",
+		}
+    },
+	pronouns = 'he_him',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 2,
+    config = {},
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+}
+SMODS.Joker {
     key = "constructionjoker",
     atlas = 'awesomejokers',
     pos = { x = 3, y = 0 },
@@ -187,7 +210,7 @@ SMODS.Joker {
 		}
     },
 	pronouns = 'he_they',
-    blueprint_compat = false,
+    blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
     cost = 8,
@@ -343,6 +366,7 @@ MyDreamJournal.multmodkeys = {
 }
 
 local calcindiveffectref = SMODS.calculate_individual_effect
+---@diagnostic disable-next-line: duplicate-set-field
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
 	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
 	local unicodes = SMODS.find_card("j_MDJ_unicode")
@@ -409,6 +433,29 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)
 	if ret then return ret end
+end
+
+local olddrag = Card.stop_drag
+function Card:stop_drag()  -- override 
+	olddrag(self)
+	local eyes = SMODS.find_card("j_MDJ_eyesjoker")
+	if next(eyes) then
+		for i = 1, #eyes do
+			local left_joker
+			local eye = eyes[i]
+			for k, v in pairs(G.jokers.cards) do
+				if k > 1 and v == eye then left_joker = G.jokers.cards[k-1] end
+				if v.debuff == true and v.ability.eyes == true and v ~= left_joker then
+					v.ability.eyes = nil
+					SMODS.debuff_card(v, false, eye.config.center.key)
+				end
+			end
+			if left_joker then
+				left_joker.ability.eyes = true
+				SMODS.debuff_card(left_joker, true, eye.config.center.key)
+			end
+		end
+	end
 end
 
 ----------------------------------------------
