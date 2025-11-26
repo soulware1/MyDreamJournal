@@ -1,0 +1,12 @@
+{
+	"id": "MyDreamJournal",
+	"name": "My Dream Journal",
+	"display_name": "My Dream Journal",
+	"author": ["soulware"],
+	"description": "Idk :P also thanks to snonc41 for the construction joker idea",
+	"prefix": "MDJ",
+	"main_file": "MyDreamJournal.lua",
+	"priority": 0,
+	"badge_colour": "00FF00",
+	"version": "1.0.0",
+}
