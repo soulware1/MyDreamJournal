@@ -133,7 +133,7 @@ SMODS.Joker {
 		"{X:mult,C:white}+#1#{} to all {C:mult}+Mult{}",
 		"{X:mult,C:white}+#2#{} to all {X:mult,C:white}XMult{}",
 		"{X:mult,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Mult",
-		"{C:inactive,s:0.9}N being 10x the used operation{}"
+		"{C:inactive,s:0.9}N being 10^ the used operation{}"
 		}
     },
 	pronouns = 'it_its',
@@ -170,7 +170,7 @@ SMODS.Joker {
 		"{X:chips,C:white}+#1#{} to all {C:chips}+Chip{}",
 		"{X:chips,C:white}+#2#{} to all {X:chips,C:white}XChip{}",
 		"{X:chips,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Chip",
-		"{C:inactive,s:0.9}N being 10x the used operation{}"
+		"{C:inactive,s:0.9}N being 10^ the used operation{}"
 		}
     },
 	pronouns = 'he_him',
@@ -240,7 +240,7 @@ SMODS.Joker {
     eternal_compat = true,
 	demicolon_compat = true,
     cost = 8,
-    config = { extra = { gain = 0.03, mult = 1, displayed_ranks = "None", hand_matches = true }, },
+    config = { extra = { gain = 0.1, mult = 1, displayed_ranks = "None", hand_matches = true }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.gain, card.ability.extra.mult, G.GAME.current_round.MDJ_construction_jokers_displayed_ranks or "None" } }
     end,
@@ -317,7 +317,7 @@ SMODS.Joker {
 		"{X:mult,C:white}X#1#{} all {C:mult}+Mult{}",
 		"{X:mult,C:white}X#2#{} all {X:mult,C:white}XMult{}",
 		"{X:mult,C:white}X(1+(#7#/N)){} all {C:attention}higher-operation{} Mult",
-		"{C:inactive,s:0.9}N being 10x the used operation+1{}"
+		"{C:inactive,s:0.9}N being 2^ the used operation{}"
 		}
     },
 	pronouns = 'he_him',
@@ -366,7 +366,7 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 			"{X:glop,C:white}+#1#{} to all {C:glop}+Glop{}",
 			"{X:glop,C:white}+#2#{} to all {X:glop,C:white}XGlop{}",
 			"{X:glop,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Glop",
-			"{C:inactive,s:0.9}N being 10x the used operation{}",
+			"{C:inactive,s:0.9}N being 10^ the used operation{}",
 			"{C:inactive,s:0.8}also {}{X:glop,C:inactive,s:0.8}+#6#{}{C:inactive,s:0.8} to default Glop{}",
 			}
 		},
@@ -374,6 +374,7 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 		blueprint_compat = false,
 		perishable_compat = true,
 		eternal_compat = true,
+		demicolon_compat = true,
 		cost = 8,
 		config = { extra = { add = 0.1, mult = 0.1, expo = 0.01, tetra = 0.001, penta = 0.0001, hyper = 0.00001, default_glop = 0.01 }, },
 		loc_vars = function(self, info_queue, card)
@@ -389,6 +390,16 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 				G.GAME.kali_glop_increase_from_calc_keys = G.GAME.kali_glop_increase_from_calc_keys-card.ability.extra.default_glop
 			end
 		end,
+		-- does potassium even have cry compatibility? whatever
+		calculate = function(self, card, context)
+			if context.forcetrigger then
+				return {
+					glop = card.ability.extra.add,
+					xglop = 1+card.ability.extra.mult,
+					eglop = 1+card.ability.extra.expo,
+				}
+			end
+		end
 	}
 end
 
@@ -463,6 +474,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local emojis = SMODS.find_card("j_MDJ_emoji")
 	local jans = SMODS.find_card("j_MDJ_jannasa")
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
+	local is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
 	if is_corrupted then
 		local msg
 		if string.find(key, 'chip') then 
@@ -482,7 +494,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 		key = MyDreamJournal.chipmultopswap[key]
 	end
-	if next(unicodes) then
+	if next(unicodes) and not is_demicolon then
 		for i = 1, #unicodes do
 			local v = unicodes[i]
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
@@ -499,7 +511,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			end
 		end
 	end
-	if next(emojis) then
+	if next(emojis) and not is_demicolon then
 		for i = 1, #emojis do
 			local v = emojis[i]
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
@@ -516,7 +528,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			end
 		end
 	end
-	if next(jans) then
+	if next(jans) and not is_demicolon then
 		for i = 1, #jans do
 			local v = jans[i]
 			local operation = MyDreamJournal.glopmodkeys[key]
@@ -525,7 +537,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			end
 		end
 	end
-	if next(soulwares) then
+	if next(soulwares) and not is_demicolon then
 		for i = 1, #soulwares do
 			local v = soulwares[i]
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
