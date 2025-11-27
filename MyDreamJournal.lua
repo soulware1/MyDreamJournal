@@ -35,7 +35,8 @@ SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
 SMODS.Sound(
 	{
 		key = "snd",
-		path = "snd.ogg"
+		path = "snd.ogg",
+		volume = 1
 	}
 )
 
@@ -98,8 +99,8 @@ SMODS.Edition({
         label = "Corrupted",
 		sound = 'MDJ_snd',
         text = {
-            "Chips effects now affects Mult instead",
-			"Mult effects {X:mult,C:white} X#1# {} if Additive and now affects Chips instead",
+            "Chips effects {X:chips,C:white}X#2#{} if {C:chips}+Chips{} and now affects Mult instead",
+			"Mult effects {X:mult,C:white}X#1#{} if {C:mult}+Mult{} and now affects Chips instead",
         }
     },
 	-- Stop shadow from being rendered under the card
@@ -109,13 +110,13 @@ SMODS.Edition({
     shader = "corrupted",
     discovered = true,
     unlocked = true,
-    config = { x_mult = 7.5 },
+    config = { x_mult = 7.5, d_chips = "(2/15)" },
     in_shop = true,
     weight = 8,
     extra_cost = 6,
     apply_to_float = true,
     loc_vars = function(self)
-        return { vars = { self.config.x_mult } }
+        return { vars = { self.config.x_mult, self.config.d_chips } }
     end,
 })
 
@@ -139,11 +140,23 @@ SMODS.Joker {
     blueprint_compat = false,
 	perishable_compat = true,
     eternal_compat = true,
+	demicolon_compat = true,
     cost = 8,
     config = { extra = { add = 4, mult = 0.4, expo = 0.04, tetra = 0.004, penta = 0.0004, hyper = 0.00004 }, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
+        return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.expo, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
     end,
+	calculate = function(self, card, context)
+		if context.forcetrigger then
+			return {
+				mult = card.ability.extra.add,
+				xmult = 1+card.ability.extra.mult,
+				emult = 1+card.ability.extra.expo,
+				eemult = 1+card.ability.extra.tetra,
+				eeemult = 1+card.ability.extra.penta,
+			}
+		end
+	end
 }
 SMODS.Joker {
     key = "emoji",
@@ -154,9 +167,9 @@ SMODS.Joker {
 	loc_txt = {
         name = 'Emoji',
 		text = {
-		"{X:blue,C:white}+#1#{} to all {C:blue}+Chip{}",
-		"{X:blue,C:white}+#2#{} to all {X:blue,C:white}XChip{}",
-		"{X:blue,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Chip",
+		"{X:chips,C:white}+#1#{} to all {C:chips}+Chip{}",
+		"{X:chips,C:white}+#2#{} to all {X:chips,C:white}XChip{}",
+		"{X:chips,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Chip",
 		"{C:inactive,s:0.9}N being 10x the used operation{}"
 		}
     },
@@ -164,11 +177,23 @@ SMODS.Joker {
     blueprint_compat = false,
 	perishable_compat = true,
     eternal_compat = true,
+	demicolon_compat = true,
     cost = 8,
     config = { extra = { add = 30, mult = 0.3, expo = 0.03, tetra = 0.003, penta = 0.0003, hyper = 0.00003 }, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
+        return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.expo, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
     end,
+	calculate = function(self, card, context)
+		if context.forcetrigger then
+			return {
+				chips = card.ability.extra.add,
+				xchips = 1+card.ability.extra.mult,
+				echips = 1+card.ability.extra.expo,
+				eechips = 1+card.ability.extra.tetra,
+				eeechips = 1+card.ability.extra.penta,
+			}
+		end
+	end
 }
 SMODS.Joker {
     key = "eyesjoker",
@@ -213,6 +238,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+	demicolon_compat = true,
     cost = 8,
     config = { extra = { gain = 0.03, mult = 1, displayed_ranks = "None", hand_matches = true }, },
     loc_vars = function(self, info_queue, card)
@@ -245,12 +271,76 @@ SMODS.Joker {
 				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.gain
 			end
 		end
-        if context.joker_main then
+        if context.joker_main or context.forcetrigger then
+			if context.forcetrigger then
+				card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Increased!", colour = G.C.mult, delay = 0.2})
+				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.gain
+			end
 			return {
 				xmult  = card.ability.extra.mult
 			}
 		end
     end
+}
+SMODS.Joker {
+    key = "anarchy",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	loc_txt = {
+        name = 'anarchy!!!!',
+		text = {
+			"{C:hearts}Hearts{} count as every suit",
+			"but their own"
+		}
+    },
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 7,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+}
+SMODS.Joker {
+    key = "soulware",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 4,
+	loc_txt = {
+        name = 'Soulware',
+		text = {
+		"{X:mult,C:white}X#1#{} all {C:mult}+Mult{}",
+		"{X:mult,C:white}X#2#{} all {X:mult,C:white}XMult{}",
+		"{X:mult,C:white}X(1+(#7#/N)){} all {C:attention}higher-operation{} Mult",
+		"{C:inactive,s:0.9}N being 10x the used operation+1{}"
+		}
+    },
+	pronouns = 'he_him',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 8,
+    config = { extra = { add = 3, mult = 2.5, expo = 1.25, tetra = 1.125, penta = 1.0625, hyper = 1.03125, extra = 0.5, }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.expo, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper, card.ability.extra.extra } }
+    end,
+	calculate = function(self, card, context)
+		if context.forcetrigger then
+			return {
+				mult = card.ability.extra.add,
+				xmult = card.ability.extra.mult,
+				emult = card.ability.extra.expo,
+				eemult = card.ability.extra.tetra,
+				eeemult = card.ability.extra.penta,
+			}
+		end
+	end
 }
 
 if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
@@ -372,10 +462,14 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local unicodes = SMODS.find_card("j_MDJ_unicode")
 	local emojis = SMODS.find_card("j_MDJ_emoji")
 	local jans = SMODS.find_card("j_MDJ_jannasa")
+	local soulwares = SMODS.find_card("j_MDJ_soulware")
 	if is_corrupted then
 		local msg
 		if string.find(key, 'chip') then 
 			msg = "Mult!"
+			if MyDreamJournal.multmodkeys[key] == "add" then
+				amount = math.floor((amount/7.5)+0.5)
+			end
 		elseif string.find(key, 'mult') then 
 			msg = "Chips!"
 			-- rounds
@@ -400,7 +494,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
 				if operation and v.ability.extra[operation] then
-					amount = amount + v.ability.extra[operation]*7.5
+					amount = amount + v.ability.extra[operation]
 				end
 			end
 		end
@@ -431,6 +525,23 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			end
 		end
 	end
+	if next(soulwares) then
+		for i = 1, #soulwares do
+			local v = soulwares[i]
+			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			if not is_corrupted then
+				local operation = MyDreamJournal.multmodkeys[key]
+				if operation and v.ability.extra[operation] then
+					amount = amount * v.ability.extra[operation]
+				end
+			else
+				local operation = MyDreamJournal.chipmodkeys[key]
+				if operation and v.ability.extra[operation] then
+					amount = amount * v.ability.extra[operation]
+				end
+			end
+		end
+	end
 	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)
 	if ret then return ret end
 end
@@ -455,6 +566,20 @@ function Card:stop_drag()  -- override
 				SMODS.debuff_card(left_joker, true, eye.config.center.key)
 			end
 		end
+	end
+end
+
+local oldcardissuit = Card.is_suit
+---@diagnostic disable-next-line: duplicate-set-field
+function Card:is_suit(suit, bypass_debuff, flush_calc)
+	local anarchy = next(SMODS.find_card("j_MDJ_anarchy"))
+	if anarchy then
+		    local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
+			if self.base.suit == 'Hearts' then return self.base.suit ~= suit end
+			return g
+	else
+		local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
+		return g
 	end
 end
 
