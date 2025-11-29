@@ -230,8 +230,8 @@ SMODS.Joker {
 			"every time you play a hand",
 			"that has the same scored ranks as the",
 			"one played at the start of this Ante",
-			"(currently {X:mult,C:white}X#2#{} Mult)",
-			"{C:inactive,s:0.9} (Ranks: #3#) {}"
+			"{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+			"{C:inactive,s:0.85} (Ranks: #3#) {}"
 		}
     },
 	pronouns = 'he_they',
@@ -292,7 +292,7 @@ SMODS.Joker {
         name = 'anarchy!!!!',
 		text = {
 			"{C:hearts}Hearts{} count as every suit",
-			"but their own"
+			"except their own"
 		}
     },
 	pronouns = 'she_her',
@@ -304,6 +304,80 @@ SMODS.Joker {
     loc_vars = function(self, info_queue, card)
         return { vars = {} }
     end,
+}
+SMODS.Joker {
+    key = "spiral",
+    atlas = 'awesomejokers',
+    pos = { x = 0, y = 1 },
+	discovered = true,
+    rarity = 2,
+	loc_txt = {
+        name = 'Spiral',
+		text = {
+			"This Joker gains {X:mult,C:white}X#1#{} Mult",
+			"every time you {C:attention}continue{} a straight",
+			"{C:inactive,s:0.85} (Ex: A K Q J 10 -> 9 8 7 6 5){}",
+			"{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+		}
+    },
+	pronouns = 'it_its',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 7,
+    config = { extra = { gain = 0.3, mult = 1, rank_to_find = nil, rank_to_exclude = nil }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.gain, card.ability.extra.mult} }
+    end,
+    calculate = function(self, card, context)
+		if context.before and next(context.poker_hands["Straight"]) then
+			-- set to a large value, so any value is less then it
+			local least_rank = math.huge
+			local found_rank = false
+			local excluded_rank = false
+			for i = 1, #context.scoring_hand do
+				local v = context.scoring_hand[i]
+				-- ahhh, a rankless card!? in MY straight? its more likely then you think, pray that the entire hand isn't just rankless
+				local rank = v:get_id()
+				local rankless = SMODS.has_no_rank(v)
+				if rankless then
+					-- bootleg continue
+				else
+					if rank < least_rank then
+						least_rank = rank
+					end
+					if rank == card.ability.extra.rank_to_find then
+						found_rank = true
+					end
+					if rank == card.ability.extra.rank_to_exclude then
+						excluded_rank = true
+					end
+				end
+			end
+			-- get what card would be in the next hand by subtracting one
+			least_rank = least_rank-1
+			-- handle ace
+			if least_rank == 1 then
+				least_rank = 14
+			end
+			card.ability.extra.rank_to_exclude = card.ability.extra.rank_to_find
+			card.ability.extra.rank_to_find = least_rank
+			if found_rank and not excluded_rank then
+				card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Increased!", colour = G.C.mult, delay = 0.2})
+				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.gain
+			end
+		end
+		 if context.joker_main or context.forcetrigger then
+			if context.forcetrigger then
+				card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Increased!", colour = G.C.mult, delay = 0.2})
+				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.gain
+			end
+			return {
+				xmult  = card.ability.extra.mult
+			}
+		end
+    end
 }
 SMODS.Joker {
     key = "soulware",
@@ -325,7 +399,7 @@ SMODS.Joker {
 	perishable_compat = true,
     eternal_compat = true,
 	demicolon_compat = true,
-    cost = 8,
+    cost = 20,
     config = { extra = { add = 3, mult = 2.5, expo = 1.25, tetra = 1.125, penta = 1.0625, hyper = 1.03125, extra = 0.5, }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.expo, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper, card.ability.extra.extra } }
