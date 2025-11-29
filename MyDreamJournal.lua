@@ -548,7 +548,10 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local emojis = SMODS.find_card("j_MDJ_emoji")
 	local jans = SMODS.find_card("j_MDJ_jannasa")
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
-	local is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
+	local is_demicolon = false
+	if scored_card.config then
+		is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
+	end
 	if is_corrupted then
 		local msg
 		if string.find(key, 'chip') then 
