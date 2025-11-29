@@ -540,6 +540,10 @@ MyDreamJournal.multmodkeys = {
 	-- Other mods can add their custom operations to this table.
 }
 
+MyDreamJournal.keysToNumbers = {
+	["add"] = 1, ["mult"] = 2, ["expo"] = 3, ["tetra"] = 4, ["penta"] = 5, ["hyper"] = 6
+}
+
 local calcindiveffectref = SMODS.calculate_individual_effect
 ---@diagnostic disable-next-line: duplicate-set-field
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
@@ -549,6 +553,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local jans = SMODS.find_card("j_MDJ_jannasa")
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
 	local is_demicolon = false
+	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
 	if scored_card.config then
 		if scored_card.config.center then
 			is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
@@ -580,12 +585,20 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
 				if operation and v.ability.extra[operation] then
-					amount = amount + v.ability.extra[operation]
+					if type(amount) == "number" then
+						amount = amount + v.ability.extra[operation]
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] + v.ability.extra[operation]
+					end
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
 				if operation and v.ability.extra[operation] then
-					amount = amount + v.ability.extra[operation]
+					if type(amount) == "number" then
+						amount = amount + v.ability.extra[operation]
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] + v.ability.extra[operation]
+					end
 				end
 			end
 		end
@@ -597,12 +610,20 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			if is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
 				if operation and v.ability.extra[operation] then
-					amount = amount + v.ability.extra[operation]
+					if type(amount) == "number" then
+						amount = amount + v.ability.extra[operation]
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] + v.ability.extra[operation]
+					end
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
 				if operation and v.ability.extra[operation] then
-					amount = amount + v.ability.extra[operation]
+					if type(amount) == "number" then
+						amount = amount + v.ability.extra[operation]
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] + v.ability.extra[operation]
+					end
 				end
 			end
 		end
@@ -612,7 +633,11 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local v = jans[i]
 			local operation = MyDreamJournal.glopmodkeys[key]
 			if operation and v.ability.extra[operation] then
-				amount = amount + v.ability.extra[operation]
+				if type(amount) == "number" then
+					amount = amount + v.ability.extra[operation]
+				elseif type(amount) == "table" then
+					amount[2] = amount[2] + v.ability.extra[operation]
+				end
 			end
 		end
 	end
@@ -623,12 +648,20 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
 				if operation and v.ability.extra[operation] then
-					amount = amount * v.ability.extra[operation]
+					if type(amount) == "number" then
+						amount = amount * v.ability.extra[operation]
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] * v.ability.extra[operation]
+					end
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
 				if operation and v.ability.extra[operation] then
-					amount = amount * v.ability.extra[operation]
+					if type(amount) == "number" then
+						amount = amount * v.ability.extra[operation]
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] * v.ability.extra[operation]
+					end
 				end
 			end
 		end
