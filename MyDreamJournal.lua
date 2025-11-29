@@ -575,7 +575,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				amount = math.floor((amount*7.5)+0.5)
 			end
 		end
-		if msg and not (Talisman and Talisman.config_file.disable_anims) then
+		if msg and not (Talisman and Talisman.config_file.disable_anims) and scored_card then
 			card_eval_status_text(scored_card, 'extra', nil, nil, nil, {message = msg, colour = string.find(key, 'chip') and G.C.CHIPS or string.find(key, 'mult') and G.C.MULT, delay = 0.2})
 		end
 		key = MyDreamJournal.chipmultopswap[key]
