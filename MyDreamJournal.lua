@@ -554,9 +554,11 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
 	local is_demicolon = false
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
-	if scored_card.config then
-		if scored_card.config.center then
-			is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
+	if scored_card then
+		if scored_card.config then
+			if scored_card.config.center then
+				is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
+			end
 		end
 	end
 	if is_corrupted then
