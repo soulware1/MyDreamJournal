@@ -316,7 +316,7 @@ SMODS.Joker {
 		text = {
 			"This Joker gains {X:mult,C:white}X#1#{} Mult",
 			"every time you {C:attention}continue{} a straight",
-			"{C:inactive,s:0.85} (Ex: A K Q J 10 -> 9 8 7 6 5){}",
+			"{C:inactive,s:0.85} (Ex: 5 4 3 2 A -> K Q J 10 9){}",
 			"{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
 		}
     },
