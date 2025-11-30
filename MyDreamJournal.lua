@@ -267,14 +267,28 @@ SMODS.Joker {
 				end
 			end
 			if card.ability.extra.hand_matches then
-				card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Increased!", colour = G.C.mult, delay = 0.2})
-				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.gain
+				SMODS.scale_card(card, {
+				ref_table = card.ability.extra, -- the table that has the value you are changing in
+			    ref_value = "mult", -- the key to the value in the ref_table
+				scalar_value = "gain", -- the key to the value to scale by, in the ref_table by default
+				scaling_message = {
+				message = "Upgrade!",
+				colour = G.C.RED
+				}
+				})
 			end
 		end
         if context.joker_main or context.forcetrigger then
 			if context.forcetrigger then
-				card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Increased!", colour = G.C.mult, delay = 0.2})
-				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.gain
+				SMODS.scale_card(card, {
+				ref_table = card.ability.extra, -- the table that has the value you are changing in
+			    ref_value = "mult", -- the key to the value in the ref_table
+				scalar_value = "gain", -- the key to the value to scale by, in the ref_table by default
+				scaling_message = {
+				message = "Upgrade!",
+				colour = G.C.RED
+				}
+				})
 			end
 			return {
 				xmult  = card.ability.extra.mult
@@ -364,18 +378,73 @@ SMODS.Joker {
 			card.ability.extra.rank_to_exclude = card.ability.extra.rank_to_find
 			card.ability.extra.rank_to_find = least_rank
 			if found_rank and not excluded_rank then
-				card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Increased!", colour = G.C.mult, delay = 0.2})
-				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.gain
+				SMODS.scale_card(card, {
+				ref_table = card.ability.extra, -- the table that has the value you are changing in
+			    ref_value = "mult", -- the key to the value in the ref_table
+				scalar_value = "gain", -- the key to the value to scale by, in the ref_table by default
+				scaling_message = {
+				message = "Upgrade!",
+				colour = G.C.RED
+				}
+				})
 			end
 		end
 		 if context.joker_main or context.forcetrigger then
 			if context.forcetrigger then
-				card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Increased!", colour = G.C.mult, delay = 0.2})
-				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.gain
+				SMODS.scale_card(card, {
+				ref_table = card.ability.extra, -- the table that has the value you are changing in
+			    ref_value = "mult", -- the key to the value in the ref_table
+				scalar_value = "gain", -- the key to the value to scale by, in the ref_table by default
+				scaling_message = {
+				message = "Upgrade!",
+				colour = G.C.RED
+				}
+				})
 			end
 			return {
 				xmult  = card.ability.extra.mult
 			}
+		end
+    end
+}
+SMODS.Joker {
+    key = "compressed",
+    atlas = 'awesomejokers',
+    pos = { x = 1, y = 1 },
+	discovered = true,
+    rarity = 3,
+	loc_txt = {
+        name = 'JPG',
+		text = {
+			"Consumables {C:attention}halve{} the amount of slots",
+			"they take every round when held",
+		}
+    },
+	pronouns = 'he_its',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 10,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function(self, card, context)
+		if (context.end_of_round and context.main_eval and context.game_over == false) or context.forcetrigger then
+			local consumables = G.consumeables.cards
+			for i = 1, #consumables do
+				local v = consumables[i]
+				local adjustvalue = v.ability.extra_slots_used
+				local timesdivided = v.ability.compressed_times_divided
+				-- you can't halve zero!
+				if adjustvalue == 0 or adjustvalue == nil then
+					v.ability.extra_slots_used = -0.5
+					v.ability.compressed_times_divided = 1
+				else
+					v.ability.extra_slots_used = -(1/(2*timesdivided))
+				end
+			end
 		end
     end
 }
