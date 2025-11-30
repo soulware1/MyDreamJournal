@@ -407,6 +407,29 @@ SMODS.Joker {
 		end
     end
 }
+
+-- stolen from starspace :3c
+if next(SMODS.find_mod("cardpronouns")) then
+  CardPronouns.Pronoun {
+    colour = HEX("80407E"),
+    text_colour = G.C.WHITE,
+    pronoun_table = { "She", "Its" },
+    in_pool = function()
+      return true
+    end,
+    key = "she_its"
+  }
+  CardPronouns.Pronoun {
+    colour = HEX("405780"),
+    text_colour = G.C.WHITE,
+    pronoun_table = { "He", "Its" },
+    in_pool = function()
+      return true
+    end,
+    key = "he_its"
+  }
+end
+
 SMODS.Joker {
     key = "compressed",
     atlas = 'awesomejokers',
