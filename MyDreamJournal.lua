@@ -29,16 +29,17 @@ SMODS.Atlas({
     py = 95
  })
 
+ SMODS.Sound(
+	{
+			key = "snd",
+			path = "snd.ogg",
+			per = 1,
+			volume = 1
+	}
+ )
+
 
 SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
-
-SMODS.Sound(
-	{
-		key = "snd",
-		path = "snd.ogg",
-		volume = 1
-	}
-)
 
 MyDreamJournal.rank_shorthands = {
 		"_",
@@ -97,7 +98,12 @@ SMODS.Edition({
     loc_txt = {
         name = "Corrupted",
         label = "Corrupted",
-		sound = 'MDJ_snd',
+		sound = {
+			key = "snd",
+			path = "snd.ogg",
+			per = 1,
+			volume = 1
+		},
         text = {
             "Chips effects {X:chips,C:white}X#2#{} if {C:chips}+Chips{} and now affects Mult instead",
 			"Mult effects {X:mult,C:white}X#1#{} if {C:mult}+Mult{} and now affects Chips instead",
@@ -142,18 +148,18 @@ SMODS.Joker {
     eternal_compat = true,
 	demicolon_compat = true,
     cost = 8,
-    config = { extra = { add = 4, mult = 0.4, expo = 0.04, tetra = 0.004, penta = 0.0004, hyper = 0.00004 }, },
+    config = { extra = { add = 4 }, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.expo, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
+        return { vars = { card.ability.extra.add, card.ability.extra.add/10 } }
     end,
 	calculate = function(self, card, context)
 		if context.forcetrigger then
 			return {
 				mult = card.ability.extra.add,
-				xmult = 1+card.ability.extra.mult,
-				emult = 1+card.ability.extra.expo,
-				eemult = 1+card.ability.extra.tetra,
-				eeemult = 1+card.ability.extra.penta,
+				xmult = 1+(card.ability.extra.add/10),
+				emult = 1+(card.ability.extra.add/100),
+				eemult = 1+(card.ability.extra.add/1000),
+				eeemult = 1+(card.ability.extra.add/10000),
 			}
 		end
 	end
@@ -179,18 +185,18 @@ SMODS.Joker {
     eternal_compat = true,
 	demicolon_compat = true,
     cost = 8,
-    config = { extra = { add = 30, mult = 0.3, expo = 0.03, tetra = 0.003, penta = 0.0003, hyper = 0.00003 }, },
+    config = { extra = { add = 30 }, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.expo, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper } }
+        return { vars = { card.ability.extra.add, card.ability.extra.add/100 } }
     end,
 	calculate = function(self, card, context)
 		if context.forcetrigger then
 			return {
 				chips = card.ability.extra.add,
-				xchips = 1+card.ability.extra.mult,
-				echips = 1+card.ability.extra.expo,
-				eechips = 1+card.ability.extra.tetra,
-				eeechips = 1+card.ability.extra.penta,
+				xchips = 1+(card.ability.extra.add/100),
+				echips = 1+((card.ability.extra.add/100)/10),
+				eechips =1+((card.ability.extra.add/100)/100),
+				eeechips = 1+((card.ability.extra.add/100)/1000),
 			}
 		end
 	end
@@ -320,6 +326,39 @@ SMODS.Joker {
     end,
 }
 SMODS.Joker {
+    key = "installer",
+    atlas = 'awesomejokers',
+    pos = { x = 2, y = 1 },
+	discovered = true,
+    rarity = 3,
+	loc_txt = {
+        name = 'Installer',
+		text = {
+			"Scaling {C:attention}Jokers{} scale {C:attention}twice{} as fast"
+		}
+    },
+	pronouns = 'any_all',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 10,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
+
+	if scalar_value > 0 and not args.dont_repeat then
+		return {
+			override_scalar_value = { -- this will override the scalar_value
+				value = scalar_value*2, -- set the scalar_value to X
+				-- other calculation return keys accepted here, timing is before the scaling event
+			},
+		}
+	end
+end
+}
+SMODS.Joker {
     key = "spiral",
     atlas = 'awesomejokers',
     pos = { x = 0, y = 1 },
@@ -410,12 +449,13 @@ SMODS.Joker {
 
 -- stolen from starspace :3c
 if next(SMODS.find_mod("cardpronouns")) then
+---@diagnostic disable-next-line: undefined-global
   CardPronouns.Pronoun {
     colour = HEX("80407E"),
     text_colour = G.C.WHITE,
     pronoun_table = { "She", "Its" },
     in_pool = function()
-      return true
+      return false
     end,
     key = "she_its"
   }
@@ -424,7 +464,7 @@ if next(SMODS.find_mod("cardpronouns")) then
     text_colour = G.C.WHITE,
     pronoun_table = { "He", "Its" },
     in_pool = function()
-      return true
+      return false
     end,
     key = "he_its"
   }
@@ -482,7 +522,7 @@ SMODS.Joker {
 		text = {
 		"{X:mult,C:white}X#1#{} all {C:mult}+Mult{}",
 		"{X:mult,C:white}X#2#{} all {X:mult,C:white}XMult{}",
-		"{X:mult,C:white}X(1+(#7#/N)){} all {C:attention}higher-operation{} Mult",
+		"{X:mult,C:white}X(1+(#3#/N)){} all {C:attention}higher-operation{} Mult",
 		"{C:inactive,s:0.9}N being 2^ the used operation{}"
 		}
     },
@@ -492,18 +532,19 @@ SMODS.Joker {
     eternal_compat = true,
 	demicolon_compat = true,
     cost = 20,
-    config = { extra = { add = 3, mult = 2.5, expo = 1.25, tetra = 1.125, penta = 1.0625, hyper = 1.03125, extra = 0.5, }, },
+    config = { extra = { add = 3, extra = 0.5, }, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.expo, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper, card.ability.extra.extra } }
+		-- 0.8333333333333334 because 3*0.8333333333333334 == 2.5 in float64
+        return { vars = { card.ability.extra.add, card.ability.extra.add*0.8333333333333334, card.ability.extra.extra } }
     end,
 	calculate = function(self, card, context)
 		if context.forcetrigger then
 			return {
 				mult = card.ability.extra.add,
-				xmult = card.ability.extra.mult,
-				emult = card.ability.extra.expo,
-				eemult = card.ability.extra.tetra,
-				eeemult = card.ability.extra.penta,
+				xmult = card.ability.extra.add*0.8333333333333334,
+				emult = 1+(card.ability.extra.extra/2),
+				eemult = 1+(card.ability.extra.extra/4),
+				eeemult = 1+(card.ability.extra.extra/8),
 			}
 		end
 	end
@@ -530,10 +571,10 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 			name = '{f:MDJ_fairfaxpona}AB{}',
 			text = {
 			"{X:glop,C:white}+#1#{} to all {C:glop}+Glop{}",
-			"{X:glop,C:white}+#2#{} to all {X:glop,C:white}XGlop{}",
-			"{X:glop,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Glop",
+			"{X:glop,C:white}+#1#{} to all {X:glop,C:white}XGlop{}",
+			"{X:glop,C:white}+(#1#/N){} to all {C:attention}higher-operation{} Glop",
 			"{C:inactive,s:0.9}N being 10^ the used operation{}",
-			"{C:inactive,s:0.8}also {}{X:glop,C:inactive,s:0.8}+#6#{}{C:inactive,s:0.8} to default Glop{}",
+			"{C:inactive,s:0.8}also {}{X:glop,C:inactive,s:0.8}+#2#{}{C:inactive,s:0.8} to default Glop{}",
 			}
 		},
 		pronouns = 'they_them',
@@ -542,9 +583,9 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 		eternal_compat = true,
 		demicolon_compat = true,
 		cost = 8,
-		config = { extra = { add = 0.1, mult = 0.1, expo = 0.01, tetra = 0.001, penta = 0.0001, hyper = 0.00001, default_glop = 0.01 }, },
+		config = { extra = { add = 0.1, default_glop = 0.01 }, },
 		loc_vars = function(self, info_queue, card)
-			return { vars = { card.ability.extra.add, card.ability.extra.mult, card.ability.extra.tetra, card.ability.extra.penta, card.ability.extra.hyper, card.ability.extra.default_glop } }
+			return { vars = { card.ability.extra.add, card.ability.extra.default_glop } }
 		end,
 		add_to_deck = function(self, card, from_debuff)
 			if G.GAME.kali_glop_increase_from_calc_keys then
@@ -561,8 +602,8 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 			if context.forcetrigger then
 				return {
 					glop = card.ability.extra.add,
-					xglop = 1+card.ability.extra.mult,
-					eglop = 1+card.ability.extra.expo,
+					xglop = 1+card.ability.extra.add,
+					eglop = 1+(card.ability.extra.add/10),
 				}
 			end
 		end
@@ -633,7 +674,7 @@ MyDreamJournal.multmodkeys = {
 }
 
 MyDreamJournal.keysToNumbers = {
-	["add"] = 1, ["mult"] = 2, ["expo"] = 3, ["tetra"] = 4, ["penta"] = 5, ["hyper"] = 6
+	["add"] = -1, ["mult"] = 0, ["expo"] = 1, ["tetra"] = 2, ["penta"] = 3, ["hyper"] = 4
 }
 
 local calcindiveffectref = SMODS.calculate_individual_effect
@@ -678,20 +719,44 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
-				if operation and v.ability.extra[operation] then
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (v.ability.extra.add/10)/(10^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add/10
+					end
 					if type(amount) == "number" then
-						amount = amount + v.ability.extra[operation]
+						amount = amount + op_number
 					elseif type(amount) == "table" then
-						amount[2] = amount[2] + v.ability.extra[operation]
+						amount[2] = amount[2] + op_number
 					end
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
-				if operation and v.ability.extra[operation] then
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (v.ability.extra.add/10)/(10^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add/10
+					end
 					if type(amount) == "number" then
-						amount = amount + v.ability.extra[operation]
+						amount = amount + op_number
 					elseif type(amount) == "table" then
-						amount[2] = amount[2] + v.ability.extra[operation]
+						amount[2] = amount[2] + op_number
 					end
 				end
 			end
@@ -703,20 +768,44 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
-				if operation and v.ability.extra[operation] then
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (v.ability.extra.add/10)/(10^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add/10
+					end
 					if type(amount) == "number" then
-						amount = amount + v.ability.extra[operation]
+						amount = amount + op_number
 					elseif type(amount) == "table" then
-						amount[2] = amount[2] + v.ability.extra[operation]
+						amount[2] = amount[2] + op_number
 					end
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
-				if operation and v.ability.extra[operation] then
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (v.ability.extra.add/10)/(10^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add/10
+					end
 					if type(amount) == "number" then
-						amount = amount + v.ability.extra[operation]
+						amount = amount + op_number
 					elseif type(amount) == "table" then
-						amount[2] = amount[2] + v.ability.extra[operation]
+						amount[2] = amount[2] + op_number
 					end
 				end
 			end
@@ -726,11 +815,22 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		for i = 1, #jans do
 			local v = jans[i]
 			local operation = MyDreamJournal.glopmodkeys[key]
-			if operation and v.ability.extra[operation] then
+			local op_number = MyDreamJournal.keysToNumbers[operation]
+			if operation and op_number then
+				-- handle generalized higher order hyperoperations
+				if op_number == 4 and type(amount) == "table" then
+					op_number = amount[1]
+				end
+				-- mult has the same amount to add as add
+				if op_number ~= -1 and op_number ~= 0 then
+					op_number = v.ability.extra.add/(10^op_number)
+				else
+					op_number = v.ability.extra.add
+				end
 				if type(amount) == "number" then
-					amount = amount + v.ability.extra[operation]
+					amount = amount + op_number
 				elseif type(amount) == "table" then
-					amount[2] = amount[2] + v.ability.extra[operation]
+					amount[2] = amount[2] + op_number
 				end
 			end
 		end
@@ -741,20 +841,44 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
-				if operation and v.ability.extra[operation] then
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = v.ability.extra.add/(2^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add*0.8333333333333334
+					end
 					if type(amount) == "number" then
-						amount = amount * v.ability.extra[operation]
+						amount = amount * op_number
 					elseif type(amount) == "table" then
-						amount[2] = amount[2] * v.ability.extra[operation]
+						amount[2] = amount[2] * op_number
 					end
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
-				if operation and v.ability.extra[operation] then
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = v.ability.extra.add/(2^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add*0.8333333333333334
+					end
 					if type(amount) == "number" then
-						amount = amount * v.ability.extra[operation]
+						amount = amount * op_number
 					elseif type(amount) == "table" then
-						amount[2] = amount[2] * v.ability.extra[operation]
+						amount[2] = amount[2] * op_number
 					end
 				end
 			end
@@ -793,6 +917,7 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 	local anarchy = next(SMODS.find_card("j_MDJ_anarchy"))
 	if anarchy then
 		    local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
+---@diagnostic disable-next-line: undefined-field
 			if self.base.suit == 'Hearts' then return self.base.suit ~= suit end
 			return g
 	else
