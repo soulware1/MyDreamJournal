@@ -309,17 +309,235 @@ SMODS.Joker {
 	discovered = true,
     rarity = 2,
 	loc_txt = {
-        name = 'anarchy!!!!',
+        name = {
+			'anarchy!!!',
+			'{s:0.75}By STOMACH BOOK',
+		},
 		text = {
 			"{C:hearts}Hearts{} count as every suit",
 			"except their own"
 		}
     },
 	pronouns = 'she_her',
-    blueprint_compat = true,
+    blueprint_compat = false,
 	perishable_compat = true,
     eternal_compat = true,
     cost = 7,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+}
+SMODS.Joker {
+    key = "bones",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	loc_txt = {
+        name = {
+			'Skeleton Appreciation Day in Vestal, NY (Bones)',
+			'{s:0.75}By Will Wood',
+		},
+		text = {
+			"{C:attention}Decrease{} the ranks of scored cards in",
+			"the winning hand by #1# at the end of the round",
+			"{C:inactive}(Aces count as 1s, can't go below 1)",
+		}
+    },
+	pronouns = 'he_him',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 9,
+    config = { extra = {decrease = -1}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {-card.ability.extra.decrease} }
+    end,
+	calculate = function(self, card, context)
+		if context.after or context.forcetrigger then
+			-- stolen vanillaremade code
+			for i = 1, #context.scoring_hand do
+				local percent = 1.15 - (i - 0.999) / (#context.scoring_hand - 0.998) * 0.3
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.15,
+					func = function()
+						context.scoring_hand[i]:flip()
+						play_sound('card1', percent)
+						context.scoring_hand[i]:juice_up(0.3, 0.3)
+						return true
+					end
+				}))
+			end
+			delay(0.2)
+			for i = 1, #context.scoring_hand do
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.1,
+					func = function()
+						-- SMODS.modify_rank will increment/decrement a given card's rank by a given amount
+						if context.scoring_hand[i]:get_id() == 14 then
+							
+						elseif context.scoring_hand[i]:get_id() == 2 then
+							assert(SMODS.modify_rank(context.scoring_hand[i], 12))
+						else
+							assert(SMODS.modify_rank(context.scoring_hand[i], card.ability.extra.decrease))
+						end
+						return true
+					end
+				}))
+			end
+			for i = 1, #context.scoring_hand do
+				local percent = 0.85 + (i - 0.999) / (#context.scoring_hand - 0.998) * 0.3
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.15,
+					func = function()
+						context.scoring_hand[i]:flip()
+						play_sound('tarot2', percent, 0.6)
+						context.scoring_hand[i]:juice_up(0.3, 0.3)
+						return true
+					end
+				}))
+			end
+			delay(0.4)
+		end
+	end
+}
+SMODS.Joker {
+    key = "bones_live",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	loc_txt = {
+        name = {
+			'Fibrodysplasia Ossificans Progressiva (Live)',
+			'{s:0.75}By Will Wood',
+		},
+		text = {
+			"Destroyed or unscored cards get",
+			"replaced by {C:attention}Stone Cards",
+		}
+    },
+	pronouns = 'he_him',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 6,
+    config = { extra = {decrease = -1}, },
+    loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = G.P_CENTERS.m_stone
+        return { vars = {} }
+    end,
+	calculate = function(self, card, context)
+		if context.remove_playing_cards and context.removed then
+            for i = 1, #context.removed do
+				local v = context.removed[i]
+                local repair_card = copy_card(v, nil, nil, G.playing_card)
+                table.insert(G.playing_cards, repair_card)
+				draw_card(repair_card.area, v.area, 90, 'up', nil, repair_card)
+				repair_card:set_ability("m_stone")
+            end
+		end
+		if context.before or context.forcetrigger then
+			context.unscored_hand = {}
+			for i, v in ipairs(context.full_hand) do
+				local scored = false
+				for j, b in ipairs(context.scoring_hand) do
+					if v == b then
+						scored = true
+					end
+				end
+				if not scored then
+					table.insert(context.unscored_hand, v)
+				end
+			end
+			for i = 1, #context.unscored_hand do
+				local percent = 1.15 - (i - 0.999) / (#context.unscored_hand - 0.998) * 0.3
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.15,
+					func = function()
+						context.unscored_hand[i]:flip()
+						play_sound('card1', percent)
+						context.unscored_hand[i]:juice_up(0.3, 0.3)
+						return true
+					end
+				}))
+			end
+			delay(0.2)
+			for i = 1, #context.unscored_hand do
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.1,
+					func = function()
+                    	context.unscored_hand[i]:set_ability("m_stone")
+						return true
+					end
+				}))
+			end
+			for i = 1, #context.unscored_hand do
+				local percent = 0.85 + (i - 0.999) / (#context.unscored_hand - 0.998) * 0.3
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.15,
+					func = function()
+						context.unscored_hand[i]:flip()
+						play_sound('tarot2', percent, 0.6)
+						context.unscored_hand[i]:juice_up(0.3, 0.3)
+						return true
+					end
+				}))
+			end
+			delay(0.4)
+		end
+	end
+}
+SMODS.Joker {
+    key = "suitshuffle",
+    atlas = 'awesomejokers',
+    pos = { x = (G.SETTINGS.colourblind_option and 1) or 0, y = 2 },
+	discovered = true,
+    rarity = 1,
+	loc_txt = {
+        name = 'Suit Shuffle',
+		text = {
+			"{C:spades}Hearts{} count as {C:hearts}Spades{}",
+			"{C:hearts}Spades{} count as {C:spades}Hearts{}",
+			"{C:diamonds}Clubs{} count as {C:clubs}Diamonds{}",
+			"{C:clubs}Diamonds{} count as {C:diamonds}Clubs{}",
+		}
+    },
+	pronouns = 'they_them',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 2,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+}
+SMODS.Joker {
+    key = "bitplane",
+    atlas = 'awesomejokers',
+    pos = { x = 4, y = 1 },
+	discovered = true,
+    rarity = 2,
+	loc_txt = {
+        name = 'Bit Plane',
+		text = {
+			"{C:chips}+Chips{} and {C:mult}+Mult{} are rounded up",
+			"to {C:attention}the nearest power of 2"
+		}
+    },
+	pronouns = 'it_its',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 4,
     config = { extra = {}, },
     loc_vars = function(self, info_queue, card)
         return { vars = {} }
@@ -685,6 +903,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local emojis = SMODS.find_card("j_MDJ_emoji")
 	local jans = SMODS.find_card("j_MDJ_jannasa")
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
+	local theres_a_bitplane = next(SMODS.find_card("j_MDJ_bitplane"))
 	local is_demicolon = false
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
 	if scored_card then
@@ -692,6 +911,19 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			if scored_card.config.center then
 				is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
 			end
+		end
+	end
+	if theres_a_bitplane and (MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]) == "add" then
+		-- round to the nearest power of two
+		local amount_is_negative = (amount < 0)
+		if amount_is_negative then
+			amount = math.abs(amount)
+		end
+		local log2 = math.log(amount, 2)
+		local ceiling = math.ceil(log2)
+		amount = 2^ceiling
+		if amount_is_negative then
+			amount = -amount
 		end
 	end
 	if is_corrupted then
@@ -915,15 +1147,28 @@ local oldcardissuit = Card.is_suit
 ---@diagnostic disable-next-line: duplicate-set-field
 function Card:is_suit(suit, bypass_debuff, flush_calc)
 	local anarchy = next(SMODS.find_card("j_MDJ_anarchy"))
-	if anarchy then
-		    local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
----@diagnostic disable-next-line: undefined-field
-			if self.base.suit == 'Hearts' then return self.base.suit ~= suit end
-			return g
-	else
-		local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
-		return g
+	local suit_shuffle = next(SMODS.find_card("j_MDJ_suitshuffle"))
+	local anarchy_suit = 'Hearts'
+	if suit_shuffle then
+		anarchy_suit = 'Spades'
 	end
+	local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
+	if anarchy then
+        ---@diagnostic disable-next-line: undefined-field
+		--- if suit == self.base.suit, return false, else return true, this is basically what this does
+		if self.base.suit == anarchy_suit then return self.base.suit ~= suit end
+	end
+	if suit_shuffle then
+		local clubs = "Clubs"
+		local spades = "Spades"
+		local hearts = "Hearts"
+		local diamonds = "Diamonds"
+		if self.base.suit == clubs then return diamonds == suit end
+		if self.base.suit == diamonds then return clubs == suit end
+		if self.base.suit == hearts then return spades == suit end
+		if self.base.suit == spades then return hearts == suit end
+	end
+	return g
 end
 
 ----------------------------------------------
