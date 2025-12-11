@@ -665,6 +665,7 @@ SMODS.Joker {
     end
 }
 
+
 -- stolen from starspace :3c
 if next(SMODS.find_mod("cardpronouns")) then
 ---@diagnostic disable-next-line: undefined-global
@@ -728,6 +729,91 @@ SMODS.Joker {
 			end
 		end
     end
+}
+SMODS.Joker {
+    key = "perfect",
+    atlas = 'awesomejokers',
+    pos = { x = 3, y = 1 },
+    soul_pos = { x = 3, y = 2 },
+	discovered = true,
+    rarity = 3,
+	loc_txt = {
+        name = 'Perfection',
+		text = {
+		"At end of {C:attention}ante{}, if less than",
+		"{C:attention}4{} hands were used, create",
+		"{C:attention}3{} {C:dark_edition{}Negative{} {C:attention}consumables{}"
+		}
+    },
+	pronouns = 'it_its',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+	immutable = true,
+    cost = 8,
+    config = { extra = { hands_played = 0 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+	calculate = function(self, card, context)
+        if context.after and not context.blueprint then
+			card.ability.extra.hands_played = card.ability.extra.hands_played+1
+		end
+		if (context.ante_change and context.end_of_round and context.main_eval) or context.forcetrigger then
+			if card.ability.extra.hands_played  < 3 then
+				for i = 1, 3 do
+					local consumable = SMODS.add_card{ -- For a random one
+						set = "Consumeables",
+						area = G.consumeables
+					}
+					consumable:set_edition("e_negative")
+				end
+			end
+			card.ability.extra.hands_played = 0
+		end
+	end
+}
+SMODS.Joker {
+    key = "heresy",
+    atlas = 'awesomejokers',
+    pos = { x = 2, y = 2 },
+    soul_pos = { x = 4, y = 2 },
+	discovered = true,
+    rarity = 3,
+	loc_txt = {
+        name = 'Heresy',
+		text = {
+		"{X:mult,C:white}X#1#{} Mult but permanently",
+		"debuff if a blind is beaten",
+		"in more than 1 hand"
+		}
+    },
+	pronouns = 'it_its',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = false,
+	demicolon_compat = true,
+    cost = 8,
+    config = { extra = { more = 0, xmult = 5 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult } }
+    end,
+	calculate = function(self, card, context)
+        if context.after and not context.blueprint then
+			card.ability.extra.more = card.ability.extra.more+1
+		end
+		if context.end_of_round and context.main_eval and not context.blueprint and card.ability.extra.more <= 1  then
+			card.ability.extra.more = 0
+		elseif context.end_of_round and context.main_eval and not context.blueprint and card.ability.extra.more > 1 then
+			SMODS.debuff_card(card, true, card.config.center.key)
+		end
+		if context.joker_main or context.forcetrigger then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+	end
 }
 SMODS.Joker {
     key = "soulware",
