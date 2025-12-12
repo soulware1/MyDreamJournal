@@ -1,0 +1,309 @@
+function SMODS.current_mod.calculate(self, context)
+	-- setup
+	if not G.GAME.current_round.MDJ_construction_jokers_ranks and not G.GAME.current_round.MDJ_construction_jokers_temp_ranks and not G.GAME.current_round.MDJ_construction_jokers_displayed_ranks and not G.GAME.current_round.MDJ_construction_jokers_first_hand then
+		G.GAME.current_round.MDJ_construction_jokers_ranks = {}
+		G.GAME.current_round.MDJ_construction_jokers_temp_ranks = {}
+		G.GAME.current_round.MDJ_construction_jokers_displayed_ranks = "None"
+	end
+	local ranks = G.GAME.current_round.MDJ_construction_jokers_ranks
+	local ranks2 = G.GAME.current_round.MDJ_construction_jokers_temp_ranks
+	local rank_shorthands = MyDreamJournal.rank_shorthands
+	if context.before and not next(ranks) and G.GAME.current_round.MDJ_construction_jokers_displayed_ranks == "None" and next(SMODS.find_card("j_MDJ_constructionjoker")) then
+		for i = 1, #context.scoring_hand do
+			local v = context.scoring_hand[i]
+			local rank = v:get_id()
+			local rankless_check = SMODS.has_no_rank(v)
+			if rankless_check then
+				rank = 1
+			end
+			if not ranks[rank] then
+				ranks[rank] = 0
+			end
+			ranks[rank] = ranks[rank]+1
+			table.insert(ranks2, rank_shorthands[rank])
+		end
+		G.GAME.current_round.MDJ_construction_jokers_displayed_ranks = table.concat(ranks2, ", ")
+	end
+
+	if context.ante_change then
+		G.GAME.current_round.MDJ_construction_jokers_ranks = {}
+		G.GAME.current_round.MDJ_construction_jokers_temp_ranks = {}
+		G.GAME.current_round.MDJ_construction_jokers_displayed_ranks = "None"
+	end
+end
+
+local calcindiveffectref = SMODS.calculate_individual_effect
+---@diagnostic disable-next-line: duplicate-set-field
+SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
+	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
+	local unicodes = SMODS.find_card("j_MDJ_unicode")
+	local emojis = SMODS.find_card("j_MDJ_emoji")
+	local jans = SMODS.find_card("j_MDJ_jannasa")
+	local soulwares = SMODS.find_card("j_MDJ_soulware")
+	local theres_a_bitplane = next(SMODS.find_card("j_MDJ_bitplane"))
+	local is_demicolon = false
+	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
+	if scored_card then
+		if scored_card.config then
+			if scored_card.config.center then
+				is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
+			end
+		end
+	end
+	if theres_a_bitplane and (MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]) == "add" then
+		-- round to the nearest power of two
+		local amount_is_negative = (amount < 0)
+		if amount_is_negative then
+			amount = math.abs(amount)
+		end
+		local log2 = math.log(amount, 2)
+		local ceiling = math.ceil(log2)
+		amount = 2^ceiling
+		if amount_is_negative then
+			amount = -amount
+		end
+	end
+	if is_corrupted then
+		local msg
+		if string.find(key, 'chip') then 
+			msg = "Mult!"
+			if MyDreamJournal.multmodkeys[key] == "add" then
+				amount = math.floor((amount/7.5)+0.5)
+			end
+		elseif string.find(key, 'mult') then 
+			msg = "Chips!"
+			-- rounds
+			if MyDreamJournal.multmodkeys[key] == "add" then
+				amount = math.floor((amount*7.5)+0.5)
+			end
+		end
+		if msg and not (Talisman and Talisman.config_file.disable_anims) and scored_card then
+			card_eval_status_text(scored_card, 'extra', nil, nil, nil, {message = msg, colour = string.find(key, 'chip') and G.C.CHIPS or string.find(key, 'mult') and G.C.MULT, delay = 0.2})
+		end
+		key = MyDreamJournal.chipmultopswap[key]
+	end
+	if next(unicodes) and not is_demicolon then
+		for i = 1, #unicodes do
+			local v = unicodes[i]
+			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			if not is_corrupted then
+				local operation = MyDreamJournal.multmodkeys[key]
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (v.ability.extra.add/10)/(10^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add/10
+					end
+					if type(amount) == "number" then
+						amount = amount + op_number
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] + op_number
+					end
+				end
+			else
+				local operation = MyDreamJournal.chipmodkeys[key]
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (v.ability.extra.add/10)/(10^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add/10
+					end
+					if type(amount) == "number" then
+						amount = amount + op_number
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] + op_number
+					end
+				end
+			end
+		end
+	end
+	if next(emojis) and not is_demicolon then
+		for i = 1, #emojis do
+			local v = emojis[i]
+			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			if is_corrupted then
+				local operation = MyDreamJournal.multmodkeys[key]
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (v.ability.extra.add/10)/(10^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add/10
+					end
+					if type(amount) == "number" then
+						amount = amount + op_number
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] + op_number
+					end
+				end
+			else
+				local operation = MyDreamJournal.chipmodkeys[key]
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (v.ability.extra.add/10)/(10^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add/10
+					end
+					if type(amount) == "number" then
+						amount = amount + op_number
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] + op_number
+					end
+				end
+			end
+		end
+	end
+	if next(jans) and not is_demicolon then
+		for i = 1, #jans do
+			local v = jans[i]
+			local operation = MyDreamJournal.glopmodkeys[key]
+			local op_number = MyDreamJournal.keysToNumbers[operation]
+			if operation and op_number then
+				-- handle generalized higher order hyperoperations
+				if op_number == 4 and type(amount) == "table" then
+					op_number = amount[1]
+				end
+				-- mult has the same amount to add as add
+				if op_number ~= -1 and op_number ~= 0 then
+					op_number = v.ability.extra.add/(10^op_number)
+				else
+					op_number = v.ability.extra.add
+				end
+				if type(amount) == "number" then
+					amount = amount + op_number
+				elseif type(amount) == "table" then
+					amount[2] = amount[2] + op_number
+				end
+			end
+		end
+	end
+	if next(soulwares) and not is_demicolon then
+		for i = 1, #soulwares do
+			local v = soulwares[i]
+			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			if not is_corrupted then
+				local operation = MyDreamJournal.multmodkeys[key]
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = v.ability.extra.add/(2^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add*0.8333333333333334
+					end
+					if type(amount) == "number" then
+						amount = amount * op_number
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] * op_number
+					end
+				end
+			else
+				local operation = MyDreamJournal.chipmodkeys[key]
+				local op_number = MyDreamJournal.keysToNumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					if op_number == 4 and type(amount) == "table" then
+						op_number = amount[1]
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = v.ability.extra.add/(2^op_number)
+					elseif op_number == -1 then
+						op_number = v.ability.extra.add
+					elseif op_number == 0 then
+						op_number = v.ability.extra.add*0.8333333333333334
+					end
+					if type(amount) == "number" then
+						amount = amount * op_number
+					elseif type(amount) == "table" then
+						amount[2] = amount[2] * op_number
+					end
+				end
+			end
+		end
+	end
+	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)
+	if ret then return ret end
+end
+
+local olddrag = Card.stop_drag
+function Card:stop_drag()  -- override 
+	olddrag(self)
+	local eyes = SMODS.find_card("j_MDJ_eyesjoker")
+	if next(eyes) then
+		for i = 1, #eyes do
+			local left_joker
+			local eye = eyes[i]
+			for k, v in pairs(G.jokers.cards) do
+				if k > 1 and v == eye then left_joker = G.jokers.cards[k-1] end
+				if v.debuff == true and v.ability.eyes == true and v ~= left_joker then
+					v.ability.eyes = nil
+					SMODS.debuff_card(v, false, eye.config.center.key)
+				end
+			end
+			if left_joker then
+				left_joker.ability.eyes = true
+				SMODS.debuff_card(left_joker, true, eye.config.center.key)
+			end
+		end
+	end
+end
+
+local oldcardissuit = Card.is_suit
+---@diagnostic disable-next-line: duplicate-set-field
+function Card:is_suit(suit, bypass_debuff, flush_calc)
+	local anarchy = next(SMODS.find_card("j_MDJ_anarchy"))
+	local suit_shuffle = next(SMODS.find_card("j_MDJ_suitshuffle"))
+	local anarchy_suit = 'Hearts'
+	if suit_shuffle then
+		anarchy_suit = 'Spades'
+	end
+	local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
+	if anarchy then
+        ---@diagnostic disable-next-line: undefined-field
+		--- if suit == self.base.suit, return false, else return true, this is basically what this does
+		if self.base.suit == anarchy_suit then return self.base.suit ~= suit end
+	end
+	if suit_shuffle then
+		local clubs = "Clubs"
+		local spades = "Spades"
+		local hearts = "Hearts"
+		local diamonds = "Diamonds"
+		if self.base.suit == clubs then return diamonds == suit end
+		if self.base.suit == diamonds then return clubs == suit end
+		if self.base.suit == hearts then return spades == suit end
+		if self.base.suit == spades then return hearts == suit end
+	end
+	return g
+end
