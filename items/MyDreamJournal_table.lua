@@ -84,3 +84,23 @@ MyDreamJournal.multmodkeys = {
 MyDreamJournal.keysToNumbers = {
 	["add"] = -1, ["mult"] = 0, ["expo"] = 1, ["tetra"] = 2, ["penta"] = 3, ["hyper"] = 4
 }
+G.C.veryrare = { HEX('FF0000') }
+if (SMODS.Mods["Cryptid"] or {}).can_load then
+    MyDreamJournal.epic = "cry_epic"
+elseif (SMODS.Mods["vallkarri"] or {}).can_load then
+    MyDreamJournal.epic = "valk_renowned"
+else
+    MyDreamJournal.epic = "MDJ_veryrare"
+    SMODS.Rarity {
+        key = 'veryrare',
+		loc_txt = {},
+        badge_colour = HEX('FF0000'),
+        pools = { ["Joker"] = true },
+        default_weight = 0.01,
+		get_weight = function(self, weight, object_type)
+			-- genius!
+			return weight
+		end,
+        --approx 3x more common than a cryptid epic joker
+    }
+end

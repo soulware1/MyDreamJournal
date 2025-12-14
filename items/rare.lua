@@ -4,12 +4,6 @@ SMODS.Joker {
     pos = { x = 2, y = 1 },
 	discovered = true,
     rarity = 3,
-	loc_txt = {
-        name = 'Installer',
-		text = {
-			"Scaling {C:attention}Jokers{} scale {C:attention}twice{} as fast"
-		}
-    },
 	pronouns = 'any_all',
     blueprint_compat = true,
 	perishable_compat = true,
@@ -61,13 +55,6 @@ SMODS.Joker {
     pos = { x = 1, y = 1 },
 	discovered = true,
     rarity = 3,
-	loc_txt = {
-        name = 'JPG',
-		text = {
-			"Consumables {C:attention}halve{} the amount of slots",
-			"they take every round when held",
-		}
-    },
 	pronouns = 'he_its',
     blueprint_compat = true,
 	perishable_compat = true,
@@ -103,14 +90,6 @@ SMODS.Joker {
     soul_pos = { x = 3, y = 2 },
 	discovered = true,
     rarity = 3,
-	loc_txt = {
-        name = 'Perfection',
-		text = {
-		"At end of {C:attention}ante{}, if less than",
-		"{C:attention}4{} hands were used, create",
-		"{C:attention}3{} {C:dark_edition{}Negative{} {C:attention}consumables{}"
-		}
-    },
 	pronouns = 'it_its',
     blueprint_compat = true,
 	perishable_compat = true,
@@ -127,7 +106,7 @@ SMODS.Joker {
 			card.ability.extra.hands_played = card.ability.extra.hands_played+1
 		end
 		if (context.ante_change and context.end_of_round and context.main_eval) or context.forcetrigger then
-			if card.ability.extra.hands_played  < 3 then
+			if card.ability.extra.hands_played < 4 then
 				for i = 1, 3 do
 					local consumable = SMODS.add_card{ -- For a random one
 						set = "Consumeables",
@@ -151,14 +130,6 @@ SMODS.Joker {
     soul_pos = { x = 4, y = 2 },
 	discovered = true,
     rarity = 3,
-	loc_txt = {
-        name = 'Heresy',
-		text = {
-		"{X:mult,C:white}X#1#{} Mult but permanently",
-		"debuff if a blind is beaten",
-		"in more than 1 hand"
-		}
-    },
 	pronouns = 'it_its',
     blueprint_compat = true,
 	perishable_compat = true,

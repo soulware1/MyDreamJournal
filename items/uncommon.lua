@@ -5,15 +5,6 @@ SMODS.Joker {
 	pixel_size = { w = 62 },
 	discovered = true,
     rarity = 2,
-	loc_txt = {
-        name = 'Unicode',
-		text = {
-		"{X:mult,C:white}+#1#{} to all {C:mult}+Mult{}",
-		"{X:mult,C:white}+#2#{} to all {X:mult,C:white}XMult{}",
-		"{X:mult,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Mult",
-		"{C:inactive,s:0.9}N being 10^ the used operation{}"
-		}
-    },
 	pronouns = 'it_its',
     blueprint_compat = false,
 	perishable_compat = true,
@@ -42,15 +33,6 @@ SMODS.Joker {
     pos = { x = 1, y = 0 },
 	discovered = true,
     rarity = 2,
-	loc_txt = {
-        name = 'Emoji',
-		text = {
-		"{X:chips,C:white}+#1#{} to all {C:chips}+Chip{}",
-		"{X:chips,C:white}+#2#{} to all {X:chips,C:white}XChip{}",
-		"{X:chips,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Chip",
-		"{C:inactive,s:0.9}N being 10^ the used operation{}"
-		}
-    },
 	pronouns = 'he_him',
     blueprint_compat = false,
 	perishable_compat = true,
@@ -79,17 +61,6 @@ SMODS.Joker {
     pos = { x = 3, y = 0 },
 	discovered = true,
     rarity = 2,
-	loc_txt = {
-        name = 'Construction Joker',
-		text = {
-			"This Joker gains {X:mult,C:white}X#1#{} Mult",
-			"every time you play a hand",
-			"that has the same scored ranks as the",
-			"one played at the start of this Ante",
-			"{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
-			"{C:inactive,s:0.85} (Ranks: #3#) {}"
-		}
-    },
 	pronouns = 'he_they',
     blueprint_compat = true,
 	perishable_compat = true,
@@ -158,16 +129,6 @@ SMODS.Joker {
     pos = { x = 0, y = 3 },
 	discovered = true,
     rarity = 2,
-	loc_txt = {
-        name = {
-			'anarchy!!!',
-			'{s:0.75}By STOMACH BOOK',
-		},
-		text = {
-			"{C:hearts}Hearts{} count as every suit",
-			"except their own"
-		}
-    },
 	pronouns = 'she_her',
     blueprint_compat = false,
 	perishable_compat = true,
@@ -187,17 +148,6 @@ SMODS.Joker {
     pos = { x = 0, y = 0 },
 	discovered = true,
     rarity = 2,
-	loc_txt = {
-        name = {
-			'Skeleton Appreciation Day in Vestal, NY (Bones)',
-			'{s:0.75}By Will Wood',
-		},
-		text = {
-			"{C:attention}Decrease{} the ranks of scored cards in",
-			"the winning hand by #1# at the end of the round",
-			"{C:inactive}(Aces count as 1s, can't go below 1)",
-		}
-    },
 	pronouns = 'he_him',
     blueprint_compat = true,
 	perishable_compat = true,
@@ -264,16 +214,6 @@ SMODS.Joker {
     pos = { x = 0, y = 0 },
 	discovered = true,
     rarity = 2,
-	loc_txt = {
-        name = {
-			'Fibrodysplasia Ossificans Progressiva (Live)',
-			'{s:0.75}By Will Wood',
-		},
-		text = {
-			"Destroyed or unscored cards get",
-			"replaced by {C:attention}Stone Cards",
-		}
-    },
 	pronouns = 'he_him',
     blueprint_compat = false,
 	perishable_compat = true,
@@ -354,13 +294,6 @@ SMODS.Joker {
     pos = { x = 4, y = 1 },
 	discovered = true,
     rarity = 2,
-	loc_txt = {
-        name = 'Bit Plane',
-		text = {
-			"{C:chips}+Chips{} and {C:mult}+Mult{} are rounded up",
-			"to {C:attention}the nearest power of 2"
-		}
-    },
 	pronouns = 'it_its',
     blueprint_compat = false,
 	perishable_compat = true,
@@ -377,15 +310,6 @@ SMODS.Joker {
     pos = { x = 0, y = 1 },
 	discovered = true,
     rarity = 2,
-	loc_txt = {
-        name = 'Spiral',
-		text = {
-			"This Joker gains {X:mult,C:white}X#1#{} Mult",
-			"every time you {C:attention}continue{} a straight",
-			"{C:inactive,s:0.85} (Ex: 5 4 3 2 A -> K Q J 10 9){}",
-			"{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
-		}
-    },
 	pronouns = 'it_its',
     blueprint_compat = true,
 	perishable_compat = true,

@@ -217,7 +217,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 						op_number = amount[1]
 					end
 					if op_number ~= -1 and op_number ~= 0 then
-						op_number = v.ability.extra.add/(2^op_number)
+						op_number = 1+(v.ability.extra.extra/(2^op_number))
 					elseif op_number == -1 then
 						op_number = v.ability.extra.add
 					elseif op_number == 0 then
@@ -255,6 +255,28 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)
 	if ret then return ret end
+end
+
+local OLDgambling = pseudorandom
+function pseudorandom(seed, min, max)
+	local moves = next(SMODS.find_card("j_MDJ_forcedmove"))
+	-- the game is asking for a normalized result between 0 and 1
+	if moves and not max and not min then
+		-- so the game doesn't crash, i can't pick 1 and 0 exactly
+		max = 0.999999940395355224609375
+		-- the number right before 1 in float32
+		min = 0.00000000099999997171806853657471947371959686279
+		-- the lowest number that doesn't have a e in it
+	end
+	if moves then
+		if OLDgambling(seed, 0, 1) == 1 then
+			return max
+		else
+			return min
+		end
+	else
+		return OLDgambling(seed, min, max)
+	end
 end
 
 local olddrag = Card.stop_drag
