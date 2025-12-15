@@ -65,6 +65,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 	end
 	if next(latins) and MyDreamJournal.plustox[key] then
+		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
 		for i = 1, #latins do
 			local v = latins[i]
 			local converted_key = MyDreamJournal.plustox[key]
@@ -73,12 +74,12 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			if is_corrupted and MyDreamJournal.pluschipstoxchips[key] then
 				local cchips = G.GAME.current_round.current_hand.chips
 				local achips = cchips+amount
-				amount = achips/cchips
+				amount = achips/cchips+v.ability.extra.add
 				key = converted_key
 			elseif not is_corrupted and MyDreamJournal.plusmulttoxmult[key] then
 				local cmult = G.GAME.current_round.current_hand.mult
 				local amult = cmult+amount
-				amount = amult/cmult
+				amount = amult/cmult+v.ability.extra.add
 				key = converted_key
 			end
 		end

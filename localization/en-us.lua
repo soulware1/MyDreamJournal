@@ -144,7 +144,7 @@ return {
                 text = {
                     "{C:mult}+Mult{} is converted to {X:mult,C:white}XMult",
                     "using this formula",
-                    "{C:inactive}(CMult+Mult)/CMult",
+                    "{C:inactive}(CMult+Mult)/CMult+#1#",
                     "{C:inactive,s:0.85}CMult being Current Mult"
                 }
             },
