@@ -30,3 +30,19 @@ SMODS.Joker {
         return { vars = {} }
     end,
 }
+SMODS.Joker {
+    key = "latin",
+    atlas = 'awesomejokers',
+    pos = { x = 6, y = 1 },
+	discovered = true,
+    rarity = 1,
+	pronouns = 'he_him',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 2,
+    config = {},
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+}

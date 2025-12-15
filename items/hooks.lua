@@ -41,6 +41,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local jans = SMODS.find_card("j_MDJ_jannasa")
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
 	local theres_a_bitplane = next(SMODS.find_card("j_MDJ_bitplane"))
+	local latins = SMODS.find_card("j_MDJ_latin")
 	local is_demicolon = false
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
 	if scored_card then
@@ -61,6 +62,25 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		amount = 2^ceiling
 		if amount_is_negative then
 			amount = -amount
+		end
+	end
+	if next(latins) and MyDreamJournal.plustox[key] then
+		for i = 1, #latins do
+			local v = latins[i]
+			local converted_key = MyDreamJournal.plustox[key]
+ 			---@diagnostic disable-next-line: redefined-local
+			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			if is_corrupted and MyDreamJournal.pluschipstoxchips[key] then
+				local cchips = G.GAME.current_round.current_hand.chips
+				local achips = cchips+amount
+				amount = achips/cchips
+				key = converted_key
+			elseif not is_corrupted and MyDreamJournal.plusmulttoxmult[key] then
+				local cmult = G.GAME.current_round.current_hand.mult
+				local amult = cmult+amount
+				amount = amult/cmult
+				key = converted_key
+			end
 		end
 	end
 	if is_corrupted then
@@ -91,8 +111,10 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				local op_number = MyDreamJournal.keysToNumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
-					if op_number == 4 and type(amount) == "table" then
+					local is_hyper = false
+					if op_number == 4 then
 						op_number = amount[1]
+						is_hyper = true
 					end
 					if op_number ~= -1 and op_number ~= 0 then
 						op_number = (v.ability.extra.add/10)/(10^op_number)
@@ -101,9 +123,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add/10
 					end
-					if type(amount) == "number" then
+					if not is_hyper then
 						amount = amount + op_number
-					elseif type(amount) == "table" then
+					else
 						amount[2] = amount[2] + op_number
 					end
 				end
@@ -112,8 +134,10 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				local op_number = MyDreamJournal.keysToNumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
-					if op_number == 4 and type(amount) == "table" then
+					local is_hyper = false
+					if op_number == 4 then
 						op_number = amount[1]
+						is_hyper = true
 					end
 					if op_number ~= -1 and op_number ~= 0 then
 						op_number = (v.ability.extra.add/10)/(10^op_number)
@@ -122,9 +146,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add/10
 					end
-					if type(amount) == "number" then
+					if not is_hyper then
 						amount = amount + op_number
-					elseif type(amount) == "table" then
+					else
 						amount[2] = amount[2] + op_number
 					end
 				end
@@ -140,19 +164,21 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				local op_number = MyDreamJournal.keysToNumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
-					if op_number == 4 and type(amount) == "table" then
+					local is_hyper = false
+					if op_number == 4 then
 						op_number = amount[1]
+						is_hyper = true
 					end
 					if op_number ~= -1 and op_number ~= 0 then
-						op_number = (v.ability.extra.add/10)/(10^op_number)
+						op_number = (v.ability.extra.add/100)/(10^op_number)
 					elseif op_number == -1 then
 						op_number = v.ability.extra.add
 					elseif op_number == 0 then
-						op_number = v.ability.extra.add/10
+						op_number = v.ability.extra.add/100
 					end
-					if type(amount) == "number" then
+					if not is_hyper then
 						amount = amount + op_number
-					elseif type(amount) == "table" then
+					else
 						amount[2] = amount[2] + op_number
 					end
 				end
@@ -161,19 +187,21 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				local op_number = MyDreamJournal.keysToNumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
-					if op_number == 4 and type(amount) == "table" then
+					local is_hyper = false
+					if op_number == 4 then
 						op_number = amount[1]
+						is_hyper = true
 					end
 					if op_number ~= -1 and op_number ~= 0 then
-						op_number = (v.ability.extra.add/10)/(10^op_number)
+						op_number = (v.ability.extra.add/100)/(10^op_number)
 					elseif op_number == -1 then
 						op_number = v.ability.extra.add
 					elseif op_number == 0 then
-						op_number = v.ability.extra.add/10
+						op_number = v.ability.extra.add/100
 					end
-					if type(amount) == "number" then
+					if not is_hyper then
 						amount = amount + op_number
-					elseif type(amount) == "table" then
+					else
 						amount[2] = amount[2] + op_number
 					end
 				end
@@ -187,8 +215,10 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local op_number = MyDreamJournal.keysToNumbers[operation]
 			if operation and op_number then
 				-- handle generalized higher order hyperoperations
-				if op_number == 4 and type(amount) == "table" then
+				local is_hyper = false
+				if op_number == 4 then
 					op_number = amount[1]
+					is_hyper = true
 				end
 				-- mult has the same amount to add as add
 				if op_number ~= -1 and op_number ~= 0 then
@@ -196,9 +226,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				else
 					op_number = v.ability.extra.add
 				end
-				if type(amount) == "number" then
+				if not is_hyper then
 					amount = amount + op_number
-				elseif type(amount) == "table" then
+				else
 					amount[2] = amount[2] + op_number
 				end
 			end
@@ -213,8 +243,10 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				local op_number = MyDreamJournal.keysToNumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
-					if op_number == 4 and type(amount) == "table" then
+					local is_hyper = false
+					if op_number == 4 then
 						op_number = amount[1]
+						is_hyper = true
 					end
 					if op_number ~= -1 and op_number ~= 0 then
 						op_number = 1+(v.ability.extra.extra/(2^op_number))
@@ -223,9 +255,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add*0.8333333333333334
 					end
-					if type(amount) == "number" then
+					if not is_hyper then
 						amount = amount * op_number
-					elseif type(amount) == "table" then
+					else
 						amount[2] = amount[2] * op_number
 					end
 				end
@@ -234,8 +266,10 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				local op_number = MyDreamJournal.keysToNumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
-					if op_number == 4 and type(amount) == "table" then
+					local is_hyper = false
+					if op_number == 4 then
 						op_number = amount[1]
+						is_hyper = true
 					end
 					if op_number ~= -1 and op_number ~= 0 then
 						op_number = v.ability.extra.add/(2^op_number)
@@ -244,9 +278,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add*0.8333333333333334
 					end
-					if type(amount) == "number" then
+					if not is_hyper then
 						amount = amount * op_number
-					elseif type(amount) == "table" then
+					else
 						amount[2] = amount[2] * op_number
 					end
 				end

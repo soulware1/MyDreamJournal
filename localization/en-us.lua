@@ -138,6 +138,16 @@ return {
                     "highest or lowest possible values",
                 }
             },
+            j_MDJ_latin = {
+                -- as in the chess notation
+                name = "Latin Script",
+                text = {
+                    "{C:mult}+Mult{} is converted to {X:mult,C:white}XMult",
+                    "using this formula",
+                    "{C:inactive}(CMult+Mult)/CMult",
+                    "{C:inactive,s:0.85}CMult being Current Mult"
+                }
+            },
         },
         Edition = {
             e_MDJ_corrupted = {

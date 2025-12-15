@@ -81,10 +81,29 @@ MyDreamJournal.multmodkeys = {
 	-- Other mods can add their custom operations to this table.
 }
 
+MyDreamJournal.plustox = {
+	['mult'] = 'x_mult',
+	['h_mult'] = 'xmult',
+	['mult_mod'] = 'x_mult_mod',
+	['chips'] = 'x_chips',
+	['h_chips'] = 'xchips',
+	['chip_mod'] = 'Xchip_mod',
+}
+MyDreamJournal.plusmulttoxmult = {
+	['mult'] = 'x_mult',
+	['h_mult'] = 'xmult',
+	['mult_mod'] = 'x_mult_mod',
+}
+MyDreamJournal.pluschipstoxchips = {
+	['chips'] = 'x_chips',
+	['h_chips'] = 'xchips',
+	['chip_mod'] = 'Xchip_mod',
+}
+
 MyDreamJournal.keysToNumbers = {
 	["add"] = -1, ["mult"] = 0, ["expo"] = 1, ["tetra"] = 2, ["penta"] = 3, ["hyper"] = 4
 }
-G.C.veryrare = { HEX('FF0000') }
+G.C.veryrare = HEX('FF0000')
 if (SMODS.Mods["Cryptid"] or {}).can_load then
     MyDreamJournal.epic = "cry_epic"
 elseif (SMODS.Mods["vallkarri"] or {}).can_load then
@@ -94,7 +113,7 @@ else
     SMODS.Rarity {
         key = 'veryrare',
 		loc_txt = {},
-        badge_colour = HEX('FF0000'),
+        badge_colour = G.C.veryrare,
         pools = { ["Joker"] = true },
         default_weight = 0.01,
 		get_weight = function(self, weight, object_type)
