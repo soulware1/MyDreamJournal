@@ -150,7 +150,8 @@ return {
             j_MDJ_leet = {
                 name = "1337 H4X0R",
                 text = {
-                    "Earn {C:money}$1{} for every {E:1,C:attention}payout row",
+                    "Earn {C:money}$#1#{} for every {E:1,C:attention}payout row",
+                    "{X:money,C:white}+#1#{} to money given during scoring"
                 }
             },
         },
