@@ -139,13 +139,18 @@ return {
                 }
             },
             j_MDJ_latin = {
-                -- as in the chess notation
                 name = "Latin Script",
                 text = {
                     "{C:mult}+Mult{} is converted to {X:mult,C:white}XMult",
                     "using this formula",
                     "{C:inactive}(CMult+Mult)/CMult+#1#",
                     "{C:inactive,s:0.85}CMult being Current Mult"
+                }
+            },
+            j_MDJ_leet = {
+                name = "1337 H4X0R",
+                text = {
+                    "Earn {C:money}$1{} for every {E:1,C:attention}payout row",
                 }
             },
         },

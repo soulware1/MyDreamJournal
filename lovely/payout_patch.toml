@@ -1,0 +1,29 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -1
+
+# Make sure that leet runs after all other possible bonuses
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if total_cashout_rows > 7 then"
+position = "before"
+payload = '''
+    for _, area in ipairs(SMODS.get_card_areas('jokers')) do
+            for _, _card in ipairs(area.cards) do
+            local ret = (_card.config.center.key == "j_MDJ_leet")
+    
+            -- TARGET: calc_dollar_bonus per card
+            if ret then
+                -- +1 because it should count itself
+                ret = _card.ability.extra.add*(total_cashout_rows+1)
+                i = i+1
+                add_round_eval_row({dollars = ret, bonus = true, name='joker'..i, pitch = pitch, card = _card})
+                pitch = pitch + 0.06
+                dollars = dollars + ret
+            end
+        end
+    end
+'''
+match_indent = true

@@ -72,12 +72,12 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
  			---@diagnostic disable-next-line: redefined-local
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if is_corrupted and MyDreamJournal.pluschipstoxchips[key] then
-				local cchips = G.GAME.current_round.current_hand.chips
+				local cchips = SMODS.Scoring_Parameters.chips.current
 				local achips = cchips+amount
 				amount = achips/cchips+v.ability.extra.add
 				key = converted_key
 			elseif not is_corrupted and MyDreamJournal.plusmulttoxmult[key] then
-				local cmult = G.GAME.current_round.current_hand.mult
+				local cmult = SMODS.Scoring_Parameters.mult.current
 				local amult = cmult+amount
 				amount = amult/cmult+v.ability.extra.add
 				key = converted_key
