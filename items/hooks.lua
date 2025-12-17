@@ -298,23 +298,60 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if ret then return ret end
 end
 
+local function lerp(a, b, x)
+	return a + ((b - a) * x)
+end
+
 local OLDgambling = pseudorandom
 function pseudorandom(seed, min, max)
 	local moves = next(SMODS.find_card("j_MDJ_forcedmove"))
-	-- the game is asking for a normalized result between 0 and 1
-	if moves and not max and not min then
-		-- so the game doesn't crash, i can't pick 1 and 0 exactly
-		max = 0.999999940395355224609375
-		-- the number right before 1 in float32
-		min = 0.00000000099999997171806853657471947371959686279
-		-- the lowest number that doesn't have a e in it
-	end
 	if moves then
-		if OLDgambling(seed, 0, 1) == 1 then
-			return max
+		local max_probablity = 2
+		local probablities = {}
+		-- the game is asking for a normalized result between 0 and 1
+		if not max and not min then
+			max_probablity = 5
+			-- so the game doesn't crash, i can't pick 1 and 0 exactly
+			max = 0.999999940395355224609375
+			-- the number right before 1 in float32
+			min = 0.00000000099999997171806853657471947371959686279
+			-- the lowest number that doesn't have a e in it
+			probablities[#probablities+1] = max
+			probablities[#probablities+1] = min
+			probablities[#probablities+1] = 0.75
+			probablities[#probablities+1] = 0.25
+			probablities[#probablities+1] = 0.5
 		else
-			return min
+			print(seed)
+			for i = 1, 3 do
+				local actual_i = i+2
+				-- returns a int if possible
+				local spaced_out_check = (max-min)/(actual_i-1)
+				if spaced_out_check == math.floor(spaced_out_check) then
+					max_probablity = actual_i
+				end
+			end
+			if max_probablity == 2 then
+				probablities[#probablities+1] = max
+				probablities[#probablities+1] = min
+			elseif max_probablity == 3 then
+				probablities[#probablities+1] = max
+				probablities[#probablities+1] = min
+				probablities[#probablities+1] = lerp(min,max,0.5)
+			elseif max_probablity == 4 then
+				probablities[#probablities+1] = max
+				probablities[#probablities+1] = min
+				probablities[#probablities+1] = lerp(min,max,0.3333333333333333333333333333)
+				probablities[#probablities+1] = lerp(min,max,0.6666666666666666666666666666)
+			else
+				probablities[#probablities+1] = max
+				probablities[#probablities+1] = min
+				probablities[#probablities+1] = lerp(min,max,0.5)
+				probablities[#probablities+1] = lerp(min,max,0.75)
+				probablities[#probablities+1] = lerp(min,max,0.25)
+			end
 		end
+		return probablities[OLDgambling(seed, 1, max_probablity)]
 	else
 		return OLDgambling(seed, min, max)
 	end

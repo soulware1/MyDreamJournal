@@ -134,8 +134,9 @@ return {
                 -- as in the chess notation
                 name = "Forced Move",
                 text = {
-                    "All random rolls only pick the",
-                    "highest or lowest possible values",
+                    "All random rolls are limited to",
+                    "5 or below equally spaced out",
+                    "possible outcomes"
                 }
             },
             j_MDJ_latin = {
