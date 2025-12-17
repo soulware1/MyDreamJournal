@@ -27,5 +27,3 @@ payload = '''
     end
 '''
 match_indent = true
-
-local edition_poll = pseudorandom(pseudoseed(_key or 'edition_generic')) -- Generate the poll value
