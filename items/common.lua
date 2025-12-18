@@ -75,3 +75,28 @@ SMODS.Joker {
         return { vars = { card.ability.extra.add } }
     end,
 }
+SMODS.Joker {
+    key = "mistake",
+    atlas = 'awesomejokers',
+    pos = { x = 7, y = 0 },
+	discovered = true,
+    rarity = 1,
+	pronouns = 'it_its',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 3,
+    immutable = true,
+    config = { extra = { odds = 5 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.odds } }
+    end,
+    calculate = function (self, card, context)
+        if context.mod_probability then
+            return {
+                numerator = 1,
+                denominator = 5
+            }
+        end
+    end
+}

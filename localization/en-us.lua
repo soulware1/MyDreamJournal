@@ -155,6 +155,13 @@ return {
                     "{X:money,C:white}+#1#{} to money given during scoring"
                 }
             },
+            j_MDJ_mistake = {
+                name = "Mistake",
+                text = {
+                    "All {C:attention}listed {C:green,E:1}probablities{} are",
+                    "set to a {C:green}1 in 5{} chance"
+                }
+            },
         },
         Edition = {
             e_MDJ_corrupted = {
