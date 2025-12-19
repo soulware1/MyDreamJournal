@@ -1,3 +1,6 @@
+local to_big = to_big or function(n)
+	return n
+end
 function SMODS.current_mod.calculate(self, context)
 	-- setup
 	if not G.GAME.current_round.MDJ_construction_jokers_ranks and not G.GAME.current_round.MDJ_construction_jokers_temp_ranks and not G.GAME.current_round.MDJ_construction_jokers_displayed_ranks and not G.GAME.current_round.MDJ_construction_jokers_first_hand then
@@ -31,6 +34,7 @@ function SMODS.current_mod.calculate(self, context)
 		G.GAME.current_round.MDJ_construction_jokers_displayed_ranks = "None"
 	end
 end
+
 
 local calcindiveffectref = SMODS.calculate_individual_effect
 ---@diagnostic disable-next-line: duplicate-set-field

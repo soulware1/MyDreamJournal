@@ -383,3 +383,28 @@ SMODS.Joker {
 		end
     end
 }
+SMODS.Joker {
+    key = "fractal",
+    atlas = 'awesomejokers',
+    pos = { x = 5, y = 2 },
+	discovered = true,
+    rarity = 2,
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 6,
+    config = { extra = { mult = 10 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.mult } }
+    end,
+	    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            local mult = math.floor(math.log(SMODS.Scoring_Parameters.mult.current, 10))*card.ability.extra.mult
+            return {
+                mult = mult,
+            }
+        end
+    end,
+}

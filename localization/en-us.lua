@@ -162,6 +162,18 @@ return {
                     "set to a {C:green}1 in #1#{} chance"
                 }
             },
+            j_MDJ_base = {
+                name = "33058899",
+                text = {
+                    "Convert {C:mult}Mult{} to {C:attention,E:1}Base 9",
+                }
+            },
+            j_MDJ_fractal = {
+                name = "Juila Fractal",
+                text = {
+                    "{C:mult}+#1#{} for each digit in {C:mult}Mult",
+                }
+            },
         },
         Edition = {
             e_MDJ_corrupted = {

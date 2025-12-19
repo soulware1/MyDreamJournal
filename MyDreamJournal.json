@@ -6,7 +6,7 @@
 	"description": "Idk :P also thanks to snonc41 for the construction joker idea",
 	"prefix": "MDJ",
 	"main_file": "MyDreamJournal.lua",
-	"priority": 2147483647,
+	"priority": -2147483648,
 	"badge_colour": "00FF00",
 	"version": "1.0.0"
 }

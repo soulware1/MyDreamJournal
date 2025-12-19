@@ -1,3 +1,6 @@
+local to_big = to_big or function(n)
+	return n
+end
 SMODS.Joker {
     key = "installer",
     atlas = 'awesomejokers',
@@ -46,6 +49,15 @@ if next(SMODS.find_mod("cardpronouns")) then
       return false
     end,
     key = "he_its"
+  }
+	CardPronouns.Pronoun {
+    colour = HEX("918302"),
+    text_colour = G.C.WHITE,
+    pronoun_table = { "626", "22702" },
+    in_pool = function()
+      return false
+    end,
+    key = "he_him_base"
   }
 end
 
@@ -155,4 +167,47 @@ SMODS.Joker {
 			}
 		end
 	end
+}
+function Base9(n)
+    if n == to_big(0) then return to_big(0) end
+	n = math.floor(to_big(n))
+    local result = to_big(0)
+    local place = to_big(1)
+    
+    while n > 0 do
+        local remainder = n % to_big(9)
+        result = result + remainder * place
+        n = math.floor(n / to_big(9))
+        place = place * to_big(10)
+    end
+    
+    return to_big(result)
+end
+SMODS.Joker {
+    key = "base",
+    atlas = 'awesomejokers',
+    pos = { x = 9, y = 1 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'he_him_base',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 9,
+	-- so no one gets any funnny ideas!
+	immutable = true,
+    config = {},
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            local mult = Base9(SMODS.Scoring_Parameters.mult.current)-SMODS.Scoring_Parameters.mult.current
+            return {
+                mult = mult,
+                message = "Converted!"
+            }
+        end
+    end
 }
