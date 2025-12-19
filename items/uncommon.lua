@@ -395,15 +395,15 @@ SMODS.Joker {
     eternal_compat = true,
 	demicolon_compat = true,
     cost = 6,
-    config = { extra = { mult = 10 }, },
+    config = { extra = { chips = 30 }, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult } }
+        return { vars = { card.ability.extra.chips } }
     end,
 	    calculate = function (self, card, context)
         if context.joker_main or context.forcetrigger then
-            local mult = math.floor(math.log(SMODS.Scoring_Parameters.mult.current, 10))*card.ability.extra.mult
+            local chips = math.floor(math.log(SMODS.Scoring_Parameters.chips.current, 10)+1)*card.ability.extra.chips
             return {
-                mult = mult,
+                chips = chips,
             }
         end
     end,

@@ -203,11 +203,15 @@ SMODS.Joker {
     end,
     calculate = function (self, card, context)
         if context.joker_main or context.forcetrigger then
-            local mult = Base9(SMODS.Scoring_Parameters.mult.current)-SMODS.Scoring_Parameters.mult.current
-            return {
-                mult = mult,
-                message = "Converted!"
-            }
+            if (card.edition and not card.edition.key == "e_MDJ_corrupted") or not card.edition then
+                return {
+                    eq_chips = Base9(SMODS.Scoring_Parameters.chips.current),
+                }
+            elseif card.edition and card.edition.key == "e_MDJ_corrupted" then
+                return {
+                    eq_mult = Base9(SMODS.Scoring_Parameters.mult.current),
+                }
+            end
         end
     end
 }

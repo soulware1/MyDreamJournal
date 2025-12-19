@@ -165,13 +165,13 @@ return {
             j_MDJ_base = {
                 name = "33058899",
                 text = {
-                    "Convert {C:mult}Mult{} to {C:attention,E:1}Base 9",
+                    "Convert {C:chips}Chips{} to {C:attention,E:1}Base 9",
                 }
             },
             j_MDJ_fractal = {
                 name = "Juila Fractal",
                 text = {
-                    "{C:mult}+#1#{} for each digit in {C:mult}Mult",
+                    "{C:chips}+#1#{} Chips for each digit in {C:chips}Chips",
                 }
             },
         },

@@ -39,6 +39,7 @@ end
 local calcindiveffectref = SMODS.calculate_individual_effect
 ---@diagnostic disable-next-line: duplicate-set-field
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
+	print(key)
 	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
 	local unicodes = SMODS.find_card("j_MDJ_unicode")
 	local emojis = SMODS.find_card("j_MDJ_emoji")
@@ -56,7 +57,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			end
 		end
 	end
-	if next(haxors) and key == "dollars" then
+	if next(haxors) and (key == "dollars" or key == "p_dollars") then
 		for i = 1, #haxors do
 			amount = amount+haxors[i].ability.extra.add
 		end
@@ -96,12 +97,12 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if is_corrupted then
 		local msg
-		if string.find(key, 'chip') then 
+		if string.find(key, 'chip') then
 			msg = "Mult!"
 			if MyDreamJournal.multmodkeys[key] == "add" then
 				amount = math.floor((amount/7.5)+0.5)
 			end
-		elseif string.find(key, 'mult') then 
+		elseif string.find(key, 'mult') then
 			msg = "Chips!"
 			-- rounds
 			if MyDreamJournal.multmodkeys[key] == "add" then
@@ -112,6 +113,27 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			card_eval_status_text(scored_card, 'extra', nil, nil, nil, {message = msg, colour = string.find(key, 'chip') and G.C.CHIPS or string.find(key, 'mult') and G.C.MULT, delay = 0.2})
 		end
 		key = MyDreamJournal.chipmultopswap[key]
+	end
+	-- add in the equals if no entropy :sob:
+	if SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load then
+		if (key == 'eq_mult' or key == 'Eqmult_mod') then
+			local mult = SMODS.Scoring_Parameters["mult"]
+			mult.current = amount
+			update_hand_text({delay = 0}, {mult = mult.current})
+			if not Talisman or not Talisman.config_file.disable_anims then
+				Entropy.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent)
+			end
+			return true
+		end
+		if (key == 'eq_chips' or key == 'Eqchips_mod') then
+			local chips = SMODS.Scoring_Parameters["chips"]
+			chips.current = amount
+			update_hand_text({delay = 0}, {chips = chips.current})
+			if not Talisman or not Talisman.config_file.disable_anims then
+				Entropy.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "="..amount.. " Chips", G.C.BLUE)
+			end
+			return true
+		end
 	end
 	if next(unicodes) and not is_demicolon then
 		for i = 1, #unicodes do
