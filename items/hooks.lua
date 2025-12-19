@@ -341,8 +341,8 @@ function pseudorandom(seed, min, max)
 			elseif max_probablity == 4 then
 				probablities[#probablities+1] = max
 				probablities[#probablities+1] = min
-				probablities[#probablities+1] = lerp(min,max,0.3333333333333333333333333333)
-				probablities[#probablities+1] = lerp(min,max,0.6666666666666666666666666666)
+				probablities[#probablities+1] = math.ceil(lerp(min,max,0.333333333333333333333333333333333333333))
+				probablities[#probablities+1] = math.ceil(lerp(min,max,0.666666666666666666666666666666666666666))
 			else
 				probablities[#probablities+1] = max
 				probablities[#probablities+1] = min

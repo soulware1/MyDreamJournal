@@ -159,7 +159,7 @@ return {
                 name = "Mistake",
                 text = {
                     "All {C:attention}listed {C:green,E:1}probablities{} are",
-                    "set to a {C:green}1 in 5{} chance"
+                    "set to a {C:green}1 in #1#{} chance"
                 }
             },
         },

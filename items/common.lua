@@ -95,7 +95,7 @@ SMODS.Joker {
         if context.mod_probability then
             return {
                 numerator = 1,
-                denominator = 5
+                denominator = card.ability.extra.odds
             }
         end
     end
