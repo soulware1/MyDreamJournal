@@ -61,8 +61,8 @@ end
 SMODS.Joker {
     key = "leet",
     atlas = 'awesomejokers',
-    pos = { x = 7, y = 1 },
-    soul_pos = { x = 8, y = 1 },
+    pos = { x = 8, y = 1 },
+    soul_pos = { x = 7, y = 1 },
 	discovered = true,
     rarity = 1,
 	pronouns = 'he_him_leet',
