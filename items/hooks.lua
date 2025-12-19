@@ -39,7 +39,6 @@ end
 local calcindiveffectref = SMODS.calculate_individual_effect
 ---@diagnostic disable-next-line: duplicate-set-field
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
-	print(key)
 	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
 	local unicodes = SMODS.find_card("j_MDJ_unicode")
 	local emojis = SMODS.find_card("j_MDJ_emoji")
