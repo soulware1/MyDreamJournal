@@ -1,5 +1,8 @@
 MyDreamJournal = MyDreamJournal or {}
 Talisman = Talisman or nil
+local to_big = to_big or function(n)
+	return n
+end
 
 MyDreamJournal.rank_shorthands = {
 		"_",
