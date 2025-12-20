@@ -114,7 +114,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = MyDreamJournal.chipmultopswap[key]
 	end
 	-- add in the equals if no entropy :sob:
-	if SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load then
+	if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
 		if (key == 'eq_mult' or key == 'Eqmult_mod') then
 			local mult = SMODS.Scoring_Parameters["mult"]
 			mult.current = amount
