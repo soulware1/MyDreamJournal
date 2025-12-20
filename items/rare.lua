@@ -168,25 +168,7 @@ SMODS.Joker {
 		end
 	end
 }
-local big_ass_number = to_big(10)^1000
-function Base9(n)
-    if n == to_big(0) then return to_big(0) end
-    if n >= big_ass_number then
-        return n^math.log(10, 9)
-    end
-	n = math.floor(to_big(n))
-    local result = to_big(0)
-    local place = to_big(1)
-    
-    while n > 0 do
-        local remainder = n % to_big(9)
-        result = result + remainder * place
-        n = math.floor(n / to_big(9))
-        place = place * to_big(10)
-    end
-    
-    return to_big(result)
-end
+
 SMODS.Joker {
     key = "base",
     atlas = 'awesomejokers',
@@ -207,15 +189,9 @@ SMODS.Joker {
     end,
     calculate = function (self, card, context)
         if context.joker_main or context.forcetrigger then
-            if (card.edition and card.edition.key ~= "e_MDJ_corrupted") or not card.edition then
-                return {
-                    eq_chips = Base9(SMODS.Scoring_Parameters.chips.current),
-                }
-            elseif card.edition and card.edition.key == "e_MDJ_corrupted" then
-                return {
-                    eq_mult = Base9(SMODS.Scoring_Parameters.mult.current),
-                }
-            end
+            return {
+                base_chips = 9,
+            }
         end
     end
 }

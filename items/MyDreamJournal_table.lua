@@ -61,6 +61,11 @@ MyDreamJournal.chipmultopswap = {
 	['EEchip_mod'] = 'EEmult_mod',
 	['EEEchip_mod'] = 'EEEmult_mod',
 	['hyperchip_mod'] = 'hypermult_mod',
+    -- Custom Ops
+    ['digit_mult'] = 'digit_chips',
+    ['digit_chips'] = 'digit_mult',
+    ['base_mult'] = 'base_chips',
+    ['base_chips'] = 'base_mult',
 	-- Other mods can add their custom operations to this table.
 }
 
