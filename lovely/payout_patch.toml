@@ -27,3 +27,14 @@ payload = '''
     end
 '''
 match_indent = true
+
+# I'm evil 😈😈😈😈
+[[patches]]
+[patches.pattern]
+target = "SMODS _ "src/utils.lua"
+pattern = "local result = pseudorandom(seed) < numerator / denominator"
+position = "at"
+payload = '''
+local result = pseudorandom(seed) <= numerator / denominator
+'''
+match_indent = true
