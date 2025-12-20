@@ -1,3 +1,6 @@
+local to_big = to_big or function(n)
+	return n
+end
 SMODS.Joker {
     key = "unicode",
     atlas = 'awesomejokers',
@@ -401,7 +404,8 @@ SMODS.Joker {
     end,
 	    calculate = function (self, card, context)
         if context.joker_main or context.forcetrigger then
-            local chips = math.floor(math.log(SMODS.Scoring_Parameters.chips.current, 10)+1)*card.ability.extra.chips
+            local chips = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.chips.current), to_big(10))+1)))*to_big(card.ability.extra.chips)
+			print(chips)
             return {
                 chips = chips,
             }
