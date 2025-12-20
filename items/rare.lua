@@ -172,7 +172,7 @@ local big_ass_number = to_big(10)^1000
 function Base9(n)
     if n == to_big(0) then return to_big(0) end
     if n >= big_ass_number then
-        return n^1.04795163714
+        return n^math.log(10, 9)
     end
 	n = math.floor(to_big(n))
     local result = to_big(0)
