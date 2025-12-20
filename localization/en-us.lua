@@ -174,13 +174,37 @@ return {
                     "{C:chips}+#1#{} Chips for each digit in {C:chips}Chips",
                 }
             },
+            j_MDJ_soulware = {
+                name = {
+                'Soulware',
+                "(The Idea)"
+                },
+                text = {
+                "{X:mult,C:white}X#1#{} all {C:mult}+Mult{}",
+                "{X:mult,C:white}X#2#{} all {X:mult,C:white}XMult{}",
+                "{X:mult,C:white}X(1+(#3#/N)){} all {C:attention}higher-operation{} Mult",
+                "{C:inactive,s:0.9}N being 2^ the used operation{}"
+                }
+            },
+            j_MDJ_mindware = {
+                name = "Mindware",
+                text = {
+                    "All {C:mult,E:1}Mult Operations{}",
+                    "apply to {C:chips}Chips{} too",
+                    "All {C:chips,E:1}Chips Operations{}",
+                    "apply to {C:mult}Mult{} too",
+                    "{C:inactive,s:0.85}follows {C:attention,s:0.85}Corrupted{C:inactive,s:0.85} logic"
+                }
+            },
         },
         Edition = {
             e_MDJ_corrupted = {
                 name = "Corrupted",
                 text = {
-                    "Chips effects {X:chips,C:white}X#2#{} if {C:chips}+Chips{} and now affects Mult instead",
-                    "Mult effects {X:mult,C:white}X#1#{} if {C:mult}+Mult{} and now affects Chips instead",
+                    "Chips effects {X:chips,C:white}X#2#{} if {C:chips}+Chips{}",
+                    "and now affects Mult instead",
+                    "Mult effects {X:mult,C:white}X#1#{} if {C:mult}+Mult{}",
+                    "and now affects Chips instead"
                 }
             },
         },

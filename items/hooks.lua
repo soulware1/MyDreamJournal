@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field
 local to_big = to_big or function(n)
 	return n
 end
@@ -35,6 +36,19 @@ function SMODS.current_mod.calculate(self, context)
 	end
 end
 
+-- stolen from https://gist.github.com/tylerneylon/81333721109155b2d244
+function Copy3(obj, seen)
+    -- Handle non-tables and previously-seen tables.
+    if type(obj) ~= 'table' then return obj end
+    if seen and seen[obj] then return seen[obj] end
+  
+    -- New table; mark it as seen and copy recursively.
+    local s = seen or {}
+    local res = {}
+    s[obj] = res
+    for k, v in pairs(obj) do res[Copy3(k, s)] = Copy3(v, s) end
+    return setmetatable(res, getmetatable(obj))
+end
 
 local calcindiveffectref = SMODS.calculate_individual_effect
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -45,9 +59,10 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local jans = SMODS.find_card("j_MDJ_jannasa")
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
 	local theres_a_bitplane = next(SMODS.find_card("j_MDJ_bitplane"))
+	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
 	local latins = SMODS.find_card("j_MDJ_latin")
 	local haxors = SMODS.find_card("j_MDJ_leet")
-	local is_demicolon = false
+	local is_demicolon = nil
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
 	if scored_card then
 		if scored_card.config then
@@ -55,6 +70,22 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
 			end
 		end
+	end
+	if theres_a_mindware and not effect.from_mindware then
+		local new_effect = Copy3(effect)
+		new_effect[key] = nil
+		new_effect.from_mindware = true
+		local is_chips = MyDreamJournal.chipmodkeys[key]
+		local is_mult = MyDreamJournal.multmodkeys[key]
+		local is_additive = ((is_chips == "add") and true) or ((is_mult == "add") and true)
+		local new_amount = amount
+		if is_additive and is_chips then
+			new_amount = new_amount/7.5
+		elseif is_additive and is_mult then
+			new_amount = new_amount*7.5
+		end
+		new_effect[MyDreamJournal.chipmultopswap[key]] = new_amount
+		SMODS.calculate_effect(new_effect, scored_card, from_edition)
 	end
 	if next(haxors) and (key == "dollars" or key == "p_dollars") then
 		for i = 1, #haxors do
@@ -120,7 +151,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			mult.current = amount
 			update_hand_text({delay = 0}, {mult = mult.current})
 			if not Talisman or not Talisman.config_file.disable_anims then
-				Entropy.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent)
+				MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent)
 			end
 			return true
 		end
@@ -129,7 +160,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			chips.current = amount
 			update_hand_text({delay = 0}, {chips = chips.current})
 			if not Talisman or not Talisman.config_file.disable_anims then
-				Entropy.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "="..amount.. " Chips", G.C.BLUE)
+				MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "="..amount.. " Chips", G.C.BLUE)
 			end
 			return true
 		end

@@ -402,10 +402,9 @@ SMODS.Joker {
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.chips } }
     end,
-	    calculate = function (self, card, context)
+	calculate = function (self, card, context)
         if context.joker_main or context.forcetrigger then
             local chips = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.chips.current), to_big(10))+1)))*to_big(card.ability.extra.chips)
-			print(chips)
             return {
                 chips = chips,
             }

@@ -4,15 +4,6 @@ SMODS.Joker {
     pos = { x = 0, y = 0 },
 	discovered = true,
     rarity = 4,
-	loc_txt = {
-        name = 'Soulware',
-		text = {
-		"{X:mult,C:white}X#1#{} all {C:mult}+Mult{}",
-		"{X:mult,C:white}X#2#{} all {X:mult,C:white}XMult{}",
-		"{X:mult,C:white}X(1+(#3#/N)){} all {C:attention}higher-operation{} Mult",
-		"{C:inactive,s:0.9}N being 2^ the used operation{}"
-		}
-    },
 	pronouns = 'he_him',
     blueprint_compat = false,
 	perishable_compat = true,
@@ -35,4 +26,21 @@ SMODS.Joker {
 			}
 		end
 	end
+}
+SMODS.Joker {
+    key = "mindware",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'they_them',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 20,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = G.P_CENTERS.e_MDJ_corrupted
+        return { vars = {  } }
+    end,
 }
