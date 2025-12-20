@@ -347,7 +347,6 @@ function pseudorandom(seed, min, max)
 			probablities[#probablities+1] = 0.25
 			probablities[#probablities+1] = 0.5
 		else
-			print(seed)
 			for i = 1, 3 do
 				local actual_i = i+2
 				-- returns a int if possible
