@@ -89,6 +89,12 @@ MyDreamJournal.multmodkeys = {
 	-- Other mods can add their custom operations to this table.
 }
 
+MyDreamJournal.dollarmodkeys = {
+    ['h_dollars'] = true,
+    ['dollars'] = true,
+    ['p_dollars'] = true,
+}
+
 MyDreamJournal.plustox = {
 	['mult'] = 'x_mult',
 	['h_mult'] = 'xmult',

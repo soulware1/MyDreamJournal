@@ -134,7 +134,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		SMODS.calculate_effect(new_effect, scored_card, from_edition)
 		::skip::
 	end
-	if next(haxors) and (key == "dollars" or key == "p_dollars") then
+	if next(haxors) and MyDreamJournal.dollarmodkeys[key] then
 		for i = 1, #haxors do
 			amount = amount+haxors[i].ability.extra.add
 		end
