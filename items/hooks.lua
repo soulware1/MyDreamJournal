@@ -51,6 +51,7 @@ function Copy3(obj, seen)
 end
 
 local big_ass_number = to_big(10)^1000
+local scientific_notation = to_big(10)^11
 function Base10_to_base_less_then_10(n, b)
     if n == to_big(0) then return to_big(0) end
     b = math.floor(b)
@@ -107,7 +108,10 @@ function SumOfDigits(n)
     if n >= big_ass_number then
         return 4.5*n
     end
-    n = math.floor(math.abs(n))
+	-- count in decimals if lower then scientific_notation
+	if n > scientific_notation then
+		n = to_big(tonumber(string.gsub(tostring(n), ".", "")))
+	end
     local sum = 0
     while n ~= 0 do
         local last = n % 10
@@ -171,7 +175,7 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 end
 local oldrank = Card.get_id
 function Card:get_id()
-	if SMODS.find_card("j_MDJ_etykiw") and SMODS.has_no_rank(self) then
+	if next(SMODS.find_card("j_MDJ_etykiw")) and SMODS.has_no_rank(self) then
 		return -21
 	end
 	return oldrank(self)
@@ -199,7 +203,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 	end
 	if theres_a_mindware and not effect.from_mindware then
-
 		local new_effect = Copy3(effect)
 		new_effect[key] = nil
 		new_effect.from_mindware = true
@@ -290,7 +293,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 		key = MyDreamJournal.chipmultopswap[key]
 	end
-	print(key)
 	-- stuff that depends on current state of mult/chips
 	if key == 'base_mult' then
 		local mult = SMODS.Scoring_Parameters["mult"]
@@ -332,11 +334,20 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if key == "digit_mult" then
 		key = "mult"
-		amount = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.mult.current), to_big(10))+1)))*to_big(amount)
+		-- allows decimals to be counted in
+		if amount > scientific_notation then
+			amount = #string.gsub(tostring(SMODS.Scoring_Parameters.mult.current), ".", "")*to_big(amount)
+		else
+			amount = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.mult.current), to_big(10))+1)))*to_big(amount)
+		end
 	end
 	if key == "digit_chips" then
 		key = "chips"
-		amount = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.chips.current), to_big(10))+1)))*to_big(amount)
+		if amount > scientific_notation then
+			amount = #string.gsub(tostring(SMODS.Scoring_Parameters.chips.current), ".", "")*to_big(amount)
+		else
+			amount = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.chips.current), to_big(10))+1)))*to_big(amount)
+		end
 	end
 	if key == "sum_mult" then
 		key = "mult"

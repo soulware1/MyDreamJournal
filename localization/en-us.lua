@@ -228,7 +228,6 @@ return {
                 text = {
                     "{f:MDJ_pokemon}Convert {C:chips,f:MDJ_pokemon}Chips{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}THE SUM OF DIGITS IN CHIPS",
                     "{f:MDJ_pokemon}Convert {C:mult,f:MDJ_pokemon}Mult{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}THE SUM OF DIGITS IN MULT",
-                    "{f:MDJ_pokemon,C:inactive}Decimal Part Not In Consideration"
                 }
             },
         },
