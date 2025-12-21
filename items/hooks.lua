@@ -109,7 +109,7 @@ function SumOfDigits(n)
         return 4.5*n
     end
 	-- count in decimals if lower then scientific_notation
-	if n > scientific_notation then
+	if n < scientific_notation then
 		n = to_big(tonumber(string.gsub(tostring(n), ".", "")))
 	end
     local sum = 0
@@ -335,7 +335,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if key == "digit_mult" then
 		key = "mult"
 		-- allows decimals to be counted in
-		if amount > scientific_notation then
+		if SMODS.Scoring_Parameters.mult.current < scientific_notation then
 			amount = #string.gsub(tostring(SMODS.Scoring_Parameters.mult.current), ".", "")*to_big(amount)
 		else
 			amount = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.mult.current), to_big(10))+1)))*to_big(amount)
@@ -343,7 +343,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if key == "digit_chips" then
 		key = "chips"
-		if amount > scientific_notation then
+		if SMODS.Scoring_Parameters.mult.current < scientific_notation then
 			amount = #string.gsub(tostring(SMODS.Scoring_Parameters.chips.current), ".", "")*to_big(amount)
 		else
 			amount = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.chips.current), to_big(10))+1)))*to_big(amount)
