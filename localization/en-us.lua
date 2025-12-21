@@ -216,17 +216,37 @@ return {
                     "count as every {C:attention}Suit"
                 }
             },
+            j_MDJ_floatingpoint = {
+                name = "Floating Point",
+                text = {
+                    "Convert {C:chips}Chips{} to {C:attention,E:1}Seximal",
+                    "Convert {C:mult}Mult{} to {C:attention,E:1}Heximal",
+                }
+            },
         },
         Edition = {
             e_MDJ_corrupted = {
                 name = "Corrupted",
                 text = {
-                    "Chips effects {X:chips,C:white}X#2#{} if {C:chips}+Chips{}",
+                    "Chips operations {X:chips,C:white}X#2#{} if {C:chips}+Chips{}",
                     "and now affects Mult instead",
-                    "Mult effects {X:mult,C:white}X#1#{} if {C:mult}+Mult{}",
-                    "and now affects Chips instead"
+                    "Mult operations {X:mult,C:white}X#1#{} if {C:mult}+Mult{}",
+                    "and now affects Chips instead",
                 }
             },
+            e_MDJ_corrupted_glopped = {
+				name = "Corrupted",
+				text = {
+                    "Chips operations {X:chips,C:white}X#2#{} if {C:chips}+Chips{}",
+                    "and now affects Mult instead",
+                    "Mult operations {X:mult,C:white}X#1#{} if {C:mult}+Mult{}",
+                    "and now affects Chips instead",
+					'Glop operations {X:glop,C:white}X40{} if {C:glop}+Glop{}',
+                    "and now affects Sfark instead",
+					'Sfark operations {X:sfark,C:white}X(1/40){} if {C:sfark}+Sfark{}',
+                    "and now affects Glop instead",
+				},
+			},
         },
         Mod = {
             MDJ = {
@@ -235,7 +255,10 @@ return {
                     "Idk :P also thanks to snonc41 for the construction joker idea",
                 }
             },
-        }
+        },
+        Other = {
+
+        },
     },
     misc = {
         dictionary = {

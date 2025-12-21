@@ -57,8 +57,10 @@ function Base10_to_base_less_then_10(n, b)
     n = math.floor(n)
     -- this is a VERY rough approximation of what would happen during a base conversion, only use for when /10 doesn't reduce the tailsman number or it just takes too long man...
     local approximation = math.log(10, b)
-    if n >= big_ass_number then
+    if n >= big_ass_number and b ~= 1 then
         return n^approximation
+	elseif n >= 1001 and b == 1 then
+		return 10^n
     end
 	n = math.floor(to_big(n))
     local result = to_big(0)

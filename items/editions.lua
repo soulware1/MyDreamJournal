@@ -20,12 +20,18 @@ SMODS.Edition({
     shader = "corrupted",
     discovered = true,
     unlocked = true,
-    config = { x_mult = 7.5, d_chips = "(2/15)" },
+    config = { x_mult = 7.5, d_chips = "(2/15)", x_glop = 40, d_sfark = "(1/40)" },
     in_shop = true,
     weight = 8,
     extra_cost = 0,
     apply_to_float = true,
     loc_vars = function(self)
-        return { vars = { self.config.x_mult, self.config.d_chips } }
+        local key = self.key
+        key = key..(next(SMODS.find_mod("potassium_re")) and "_glopped" or "")
+        local vars = {
+            self.config.x_mult, self.config.d_chips,
+            self.config.x_glop, self.config.d_sfark,
+        }
+        return { key = key, vars = vars }
     end,
 })
