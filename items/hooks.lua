@@ -115,14 +115,14 @@ end
 
 local suitless = SMODS.has_no_suit
 SMODS.has_no_suit = function(card)
-	if SMODS.find_card("j_MDJ_etykiw") then
+	if next(SMODS.find_card("j_MDJ_etykiw")) then
 		return false
 	end
 	return suitless(card)
 end
 local suitful = SMODS.has_any_suit
 SMODS.has_any_suit = function(card)
-	if SMODS.find_card("j_MDJ_etykiw") and suitless(card) then
+	if next(SMODS.find_card("j_MDJ_etykiw")) and suitless(card) then
 		return true
 	end
 	return suitful(card)
@@ -140,7 +140,7 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 	if anarchy then
 		if self.base.suit == anarchy_suit then return self.base.suit ~= suit end
 	end
-	if SMODS.find_card("j_MDJ_etykiw") and suitless(self) then
+	if everything_you_know_is_wrong and suitless(self) then
 		return true
 	end
 	if suit_shuffle then
