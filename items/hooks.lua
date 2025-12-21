@@ -111,7 +111,7 @@ function SumOfDigits(n)
 	-- count in decimals if lower then scientific_notation
 	if n < scientific_notation then
 		n = string.gsub(tostring(n), "%.", "")
-		n = to_big(tonumber(n))
+		n = math.floor(to_big(tonumber(n)))
 	end
     local sum = 0
     while n ~= 0 do
