@@ -59,7 +59,7 @@ if next(SMODS.find_mod("cardpronouns")) then
 	CardPronouns.Pronoun {
     colour = HEX("000000"),
     text_colour = G.C.WHITE,
-    pronoun_table = { "ZZa", "ZZ" },
+    pronoun_table = { "ZZ", "aZZ" },
     in_pool = function()
       return false
     end,
