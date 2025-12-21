@@ -55,6 +55,12 @@ function Base10_to_base_less_then_10(n, b)
     if n == to_big(0) then return to_big(0) end
     b = math.floor(b)
     n = math.floor(n)
+	if b > 10 then
+		return BaseB_to_base_10(n, b)
+	-- silly goose
+	elseif b == 10 then
+		return n
+	end
     -- this is a VERY rough approximation of what would happen during a base conversion, only use for when /10 doesn't reduce the tailsman number or it just takes too long man...
     local approximation = math.log(10, b)
     if n >= big_ass_number and b ~= 1 then
@@ -82,6 +88,20 @@ function Base10_to_base_less_then_10(n, b)
     ::base1_skip::
     
     return to_big(result)
+end
+function BaseB_to_base_10(n, b)
+	if n >= big_ass_number then
+		return 10^(math.log(n, 10) * math.log(b, 10))
+	end
+	local result = to_big(0)
+    local place = to_big(0)
+	while n > 0 do
+        local digit = n % to_big(10)
+        result = result + digit * b^place
+        n = math.floor(n/10)
+        place = place+1
+    end
+	return result
 end
 
 if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
