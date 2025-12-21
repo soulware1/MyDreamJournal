@@ -44,3 +44,53 @@ SMODS.Joker {
         return { vars = {  } }
     end,
 }
+SMODS.Font {
+	key = "pokemon",
+	path = "pokemon-font.ttf",
+	render_scale = 200,
+	TEXT_HEIGHT_SCALE = 0.9,
+	TEXT_OFFSET = { x = 12, y = -24 },
+	FONTSCALE = 0.06,
+	squish = 1,
+	DESCSCALE = 1.25
+}
+if next(SMODS.find_mod("cardpronouns")) then
+---@diagnostic disable-next-line: undefined-global
+	CardPronouns.Pronoun {
+    colour = HEX("000000"),
+    text_colour = G.C.WHITE,
+    pronoun_table = { "ZZa", "ZZ" },
+    in_pool = function()
+      return false
+    end,
+    key = "ZZaZZ"
+  }
+end
+SMODS.Joker {
+    key = "decamark",
+    atlas = 'awesomejokers',
+    pos = { x = 2, y = 3 },
+    soul_pos = { x = 3, y = 3 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'ZZaZZ',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 20,
+	-- so no one gets any funnny ideas!
+	immutable = true,
+    config = {},
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                base_sum_mult = 1,
+                base_sum_chips = 1,
+            }
+        end
+    end
+}

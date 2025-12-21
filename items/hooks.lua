@@ -103,13 +103,27 @@ function BaseB_to_base_10(n, b)
     end
 	return result
 end
+function SumOfDigits(n)
+    if n >= big_ass_number then
+        return 4.5*n
+    end
+    n = math.floor(math.abs(n))
+    local sum = 0
+    while n ~= 0 do
+        local last = n % 10
+        sum = sum + last
+        n = math.floor(n / 10)
+    end
+    return sum
+end
+
 
 if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
 	for _, v in ipairs({'eq_mult', 'Eqmult_mod', 'eq_chips', 'Eqchips_mod'}) do
 		table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 	end
 end
-for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult'}) do
+for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult', 'sum_mult', 'sum_chips', 'base_sum_mult', 'base_sum_chips'}) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
 
@@ -276,6 +290,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 		key = MyDreamJournal.chipmultopswap[key]
 	end
+	print(key)
 	-- stuff that depends on current state of mult/chips
 	if key == 'base_mult' then
 		local mult = SMODS.Scoring_Parameters["mult"]
@@ -285,7 +300,8 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..amount, G.C.RED)
 		end
 		return true
-	elseif key == 'base_chips' then
+	end
+	if key == 'base_chips' then
 		local chips = SMODS.Scoring_Parameters["chips"]
 		chips.current = Base10_to_base_less_then_10(chips.current, amount)
 		update_hand_text({delay = 0}, {chips = chips.current})
@@ -293,12 +309,42 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..amount, G.C.BLUE)
 		end
 		return true
-	elseif key == "digit_mult" then
+	end
+	if key == "base_sum_mult" then
+		local mult = SMODS.Scoring_Parameters["mult"]
+		amount = SumOfDigits(mult.current)
+		mult.current = Base10_to_base_less_then_10(mult.current, amount)
+		update_hand_text({delay = 0}, {mult = mult.current})
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..amount, G.C.RED)
+		end
+		return true
+	end
+	if key == 'base_sum_chips' then
+		local chips = SMODS.Scoring_Parameters["chips"]
+		amount = SumOfDigits(chips.current)
+		chips.current = Base10_to_base_less_then_10(chips.current, amount)
+		update_hand_text({delay = 0}, {chips = chips.current})
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..amount, G.C.BLUE)
+		end
+		return true
+	end
+	if key == "digit_mult" then
 		key = "mult"
 		amount = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.mult.current), to_big(10))+1)))*to_big(amount)
-	elseif key == "digit_chips" then
+	end
+	if key == "digit_chips" then
 		key = "chips"
 		amount = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.chips.current), to_big(10))+1)))*to_big(amount)
+	end
+	if key == "sum_mult" then
+		key = "mult"
+		amount = SumOfDigits(SMODS.Scoring_Parameters.mult.current)
+	end
+	if key == "sum_chips" then
+		key = "chips"
+		amount = SumOfDigits(SMODS.Scoring_Parameters.chips.current)
 	end
 	-- add in the equals if no entropy :sob:
 	if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
