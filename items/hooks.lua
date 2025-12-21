@@ -343,7 +343,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if key == "digit_chips" then
 		key = "chips"
-		if SMODS.Scoring_Parameters.mult.current < scientific_notation then
+		if SMODS.Scoring_Parameters.chips.current < scientific_notation then
 			amount = #string.gsub(tostring(SMODS.Scoring_Parameters.chips.current), ".", "")*to_big(amount)
 		else
 			amount = to_big(math.floor(to_big(math.log(to_big(SMODS.Scoring_Parameters.chips.current), to_big(10))+1)))*to_big(amount)
