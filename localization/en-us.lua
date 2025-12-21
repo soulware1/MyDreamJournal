@@ -196,6 +196,26 @@ return {
                     "{C:inactive,s:0.85}follows {C:attention,s:0.85}Corrupted{C:inactive,s:0.85} logic"
                 }
             },
+            j_MDJ_mark = {
+                name = "MARK - ",
+                text = {
+                    "{C:glop}+Glop{} is converted to {X:glop,C:white}XGlop",
+                    "using this formula",
+                    "{C:inactive}(CGlop+Glop)/CGlop+#1#",
+                    "{C:inactive,s:0.85}CGlop being Current Glop"
+                }
+            },
+            j_MDJ_etykiw = {
+                name = {
+                    -- a song title
+                    'Everything You Know is Wrong',
+                    '{s:0.75}By Weird Al',
+                },
+                text = {
+                    "{C:attention}Suitless{} Cards",
+                    "count as every {C:attention}Suit"
+                }
+            },
         },
         Edition = {
             e_MDJ_corrupted = {

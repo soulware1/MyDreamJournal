@@ -102,6 +102,7 @@ MyDreamJournal.plustox = {
 	['chips'] = 'x_chips',
 	['h_chips'] = 'xchips',
 	['chip_mod'] = 'Xchip_mod',
+    ['glop'] = "xglop"
 }
 MyDreamJournal.plusmulttoxmult = {
 	['mult'] = 'x_mult',

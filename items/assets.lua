@@ -16,4 +16,10 @@ SMODS.Atlas({
     px = 71,
     py = 95
  })
+SMODS.Atlas({
+    key = "gift",
+    path = "gift.png",
+    px = 38,
+    py = 38
+ })
  SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })

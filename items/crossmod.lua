@@ -56,4 +56,20 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 			end
 		end
 	}
+	SMODS.Joker {
+		key = "mark",
+		atlas = 'awesomejokers',
+		pos = { x = 6, y = 2 },
+		discovered = true,
+		rarity = 1,
+		pronouns = 'he_him',
+		blueprint_compat = false,
+		perishable_compat = true,
+		eternal_compat = true,
+		cost = 2,
+		config = { extra = { add = 0.01 }, },
+		loc_vars = function(self, info_queue, card)
+			return { vars = { card.ability.extra.add } }
+		end,
+	}
 end

@@ -91,8 +91,57 @@ for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult'}) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
 
+local suitless = SMODS.has_no_suit
+SMODS.has_no_suit = function(card)
+	if SMODS.find_card("j_MDJ_etykiw") then
+		return false
+	end
+	return suitless(card)
+end
+local suitful = SMODS.has_any_suit
+SMODS.has_any_suit = function(card)
+	if SMODS.find_card("j_MDJ_etykiw") and suitless(card) then
+		return true
+	end
+	return suitful(card)
+end
+local oldcardissuit = Card.is_suit
+function Card:is_suit(suit, bypass_debuff, flush_calc)
+	local anarchy = next(SMODS.find_card("j_MDJ_anarchy"))
+	local suit_shuffle = next(SMODS.find_card("j_MDJ_suitshuffle"))
+	local everything_you_know_is_wrong = next(SMODS.find_card("j_MDJ_etykiw"))
+	local anarchy_suit = 'Hearts'
+	if suit_shuffle then
+		anarchy_suit = 'Spades'
+	end
+	local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
+	if anarchy then
+		if self.base.suit == anarchy_suit then return self.base.suit ~= suit end
+	end
+	if SMODS.find_card("j_MDJ_etykiw") and suitless(self) then
+		return true
+	end
+	if suit_shuffle then
+		local clubs = "Clubs"
+		local spades = "Spades"
+		local hearts = "Hearts"
+		local diamonds = "Diamonds"
+		if self.base.suit == clubs then return diamonds == suit end
+		if self.base.suit == diamonds then return clubs == suit end
+		if self.base.suit == hearts then return spades == suit end
+		if self.base.suit == spades then return hearts == suit end
+	end
+	return g
+end
+local oldrank = Card.get_id
+function Card:get_id()
+	if SMODS.find_card("j_MDJ_etykiw") and SMODS.has_no_rank(self) then
+		return -21
+	end
+	return oldrank(self)
+end
+
 local calcindiveffectref = SMODS.calculate_individual_effect
----@diagnostic disable-next-line: duplicate-set-field
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
 	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
 	local unicodes = SMODS.find_card("j_MDJ_unicode")
@@ -101,6 +150,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
 	local theres_a_bitplane = next(SMODS.find_card("j_MDJ_bitplane"))
 	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
+	local marks = SMODS.find_card("j_MDJ_mark")
 	local latins = SMODS.find_card("j_MDJ_latin")
 	local haxors = SMODS.find_card("j_MDJ_leet")
 	local is_demicolon = nil
@@ -150,6 +200,19 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		amount = 2^ceiling
 		if amount_is_negative then
 			amount = -amount
+		end
+	end
+	if next(marks) and MyDreamJournal.plustox[key] then
+		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
+		for i = 1, #marks do
+			local v = marks[i]
+			local converted_key = MyDreamJournal.plustox[key]
+			if converted_key then
+				local cglop = SMODS.Scoring_Parameters.kali_glop.current
+				local aglop = cglop+amount
+				amount = aglop/cglop+v.ability.extra.add
+				key = converted_key
+			end
 		end
 	end
 	if next(latins) and MyDreamJournal.plustox[key] then
@@ -504,32 +567,4 @@ function Card:stop_drag()  -- override
 			end
 		end
 	end
-end
-
-local oldcardissuit = Card.is_suit
----@diagnostic disable-next-line: duplicate-set-field
-function Card:is_suit(suit, bypass_debuff, flush_calc)
-	local anarchy = next(SMODS.find_card("j_MDJ_anarchy"))
-	local suit_shuffle = next(SMODS.find_card("j_MDJ_suitshuffle"))
-	local anarchy_suit = 'Hearts'
-	if suit_shuffle then
-		anarchy_suit = 'Spades'
-	end
-	local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
-	if anarchy then
-        ---@diagnostic disable-next-line: undefined-field
-		--- if suit == self.base.suit, return false, else return true, this is basically what this does
-		if self.base.suit == anarchy_suit then return self.base.suit ~= suit end
-	end
-	if suit_shuffle then
-		local clubs = "Clubs"
-		local spades = "Spades"
-		local hearts = "Hearts"
-		local diamonds = "Diamonds"
-		if self.base.suit == clubs then return diamonds == suit end
-		if self.base.suit == diamonds then return clubs == suit end
-		if self.base.suit == hearts then return spades == suit end
-		if self.base.suit == spades then return hearts == suit end
-	end
-	return g
 end

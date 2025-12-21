@@ -410,3 +410,27 @@ SMODS.Joker {
         end
     end,
 }
+SMODS.Joker {
+    key = "etykiw",
+    atlas = 'awesomejokers',
+    pos = { x = 7, y = 2 },
+	discovered = true,
+    rarity = 2,
+	pronouns = 'he_him',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 7,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    in_pool = function(self, args)
+        for _, playing_card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_no_suit(playing_card) then
+                return true
+            end
+        end
+        return false
+    end
+}
