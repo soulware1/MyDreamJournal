@@ -1,3 +1,6 @@
+local to_big = to_big or function(n)
+	return n
+end
 SMODS.Joker {
     key = "forcedmove",
     atlas = 'awesomejokers',
@@ -34,11 +37,17 @@ SMODS.Joker {
         return { vars = {} }
     end,
     calculate = function (self, card, context)
-        if context.joker_main or context.forcetrigger then
+        if (context.joker_main or context.forcetrigger) and #context.scoring_hand == to_big(6) then
             return {
                 base_chips = 6,
                 base_mult = 6,
             }
         end
+    end,
+    add_to_deck = function (self, card, from_debuff)
+        MyDreamJournal.handlimitchange(1)
+    end,
+    remove_from_deck = function (self, card, from_debuff)
+        MyDreamJournal.handlimitchange(-1)
     end
 }

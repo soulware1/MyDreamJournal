@@ -219,8 +219,10 @@ return {
             j_MDJ_floatingpoint = {
                 name = "Floating Point",
                 text = {
+                    {"If {C:attention,E:1}scoring hand{} has exactly {C:attention}6{} cards",
                     "Convert {C:chips}Chips{} to {C:attention,E:1}Seximal",
-                    "Convert {C:mult}Mult{} to {C:attention,E:1}Heximal",
+                    "Convert {C:mult}Mult{} to {C:attention,E:1}Heximal",},
+                    {"{C:attention}+1{} Card Selection Limit"}
                 }
             },
             j_MDJ_decamark = {

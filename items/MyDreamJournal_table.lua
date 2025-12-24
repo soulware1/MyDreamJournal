@@ -143,6 +143,20 @@ else
     }
 end
 
+-- stole from toga
+MyDreamJournal.handlimitapi = function()
+	return (SMODS.change_play_limit and SMODS.change_discard_limit and SMODS.update_hand_limit_text) or false
+end
+MyDreamJournal.handlimitchange = function(val, set_to)
+	val = val or 0
+	if MyDreamJournal.handlimitapi() then
+		SMODS.change_play_limit(set_to and G.GAME.starting_params.play_limit - val or val)
+		SMODS.change_discard_limit(set_to and G.GAME.starting_params.discard_limit - val or val)
+	else
+		G.hand.config.highlighted_limit = math.max(G.hand.config.highlighted_limit + val, val < 0 and 1 or 5)
+	end
+end
+
 -- stolen from entropy
 function MyDreamJournal.card_eval_status_text_eq(card, eval_type, amt, percent, dir, extra, pref, col, sound, vol, ta)
     if card.area == G.butterfly_jokers and G.deck.cards[1] then 
