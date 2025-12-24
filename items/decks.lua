@@ -1,6 +1,6 @@
 local oldshuffle = CardArea.shuffle
 function CardArea:shuffle(seed)
-	if G.GAME.selected_back.effect.center.key == "b_MDJ_cyclic" then
+	if G.GAME.selected_back.effect.center.key == "b_MDJ_cyclic" and self == G.deck then
 		return self
 	end
 	return oldshuffle(self, seed)
