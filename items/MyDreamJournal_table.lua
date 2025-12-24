@@ -131,7 +131,6 @@ else
     MyDreamJournal.epic = "MDJ_veryrare"
     SMODS.Rarity {
         key = 'veryrare',
-		loc_txt = {},
         badge_colour = G.C.veryrare,
         pools = { ["Joker"] = true },
         default_weight = 0.01,
