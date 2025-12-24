@@ -123,6 +123,7 @@ function SumOfDigits(n)
 end
 
 
+
 if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
 	for _, v in ipairs({'eq_mult', 'Eqmult_mod', 'eq_chips', 'Eqchips_mod'}) do
 		table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)

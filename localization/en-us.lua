@@ -237,6 +237,14 @@ return {
                 text = { "yo ddawg heximal and seximal are just base 6" }
             }
         },
+        Back = {
+            b_MDJ_cyclic = {
+                name = "Cyclic Deck",
+                text = {
+                    "When shuffling deck, don't.",
+                }
+            }
+        },
         Edition = {
             e_MDJ_corrupted = {
                 name = "Corrupted",

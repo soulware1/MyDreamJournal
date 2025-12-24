@@ -14,6 +14,7 @@ SMODS.load_file("items/uncommon.lua")()
 SMODS.load_file("items/rare.lua")()
 SMODS.load_file("items/veryrare.lua")()
 SMODS.load_file("items/legendary.lua")()
+SMODS.load_file("items/decks.lua")()
 SMODS.load_file("items/crossmod.lua")()
 SMODS.load_file("items/hooks.lua")()
 
