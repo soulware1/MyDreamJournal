@@ -232,6 +232,10 @@ return {
                     "{f:MDJ_pokemon}Convert {C:mult,f:MDJ_pokemon}Mult{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}THE SUM OF DIGITS IN MULT",
                 }
             },
+            MDJ_heximal_slop = {
+                name = "",
+                text = { "yo ddawg heximal and seximal are just base 6" }
+            }
         },
         Edition = {
             e_MDJ_corrupted = {
@@ -264,9 +268,15 @@ return {
                     "Idk :P also thanks to snonc41 for the construction joker idea",
                 }
             },
+
         },
         Other = {
-
+            mdj_heximal_slop = {
+                name = "{f:MDJ_arial}btw",
+                text = {
+                    "{f:MDJ_arial}yo ddawg heximal and seximal are just base 6"
+                }
+            }
         },
     },
     misc = {

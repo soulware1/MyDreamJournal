@@ -17,6 +17,16 @@ SMODS.Joker {
         return { vars = {} }
     end,
 }
+SMODS.Font {
+	key = "arial",
+	path = "arimo.ttf",
+	render_scale = 200,
+	TEXT_HEIGHT_SCALE = 0.9,
+	TEXT_OFFSET = { x = 12, y = -24 },
+	FONTSCALE = 0.06,
+	squish = 1,
+	DESCSCALE = 1.25
+}
 SMODS.Joker {
     key = "floatingpoint",
     atlas = 'awesomejokers',
@@ -34,6 +44,7 @@ SMODS.Joker {
 	immutable = true,
     config = {},
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { set = "Other", key = "mdj_heximal_slop", config = {} }
         return { vars = {} }
     end,
     calculate = function (self, card, context)
