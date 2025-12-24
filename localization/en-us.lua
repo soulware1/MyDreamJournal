@@ -290,11 +290,11 @@ return {
     misc = {
         dictionary = {
             MDJ_corrupted = "Corrupted",
-            k_MDJ_veryrare = "Very Rare",
+            k_MDJ_veryrare = "Unrare",
         },
         labels = {
             MDJ_corrupted = "Corrupted",
-            MDJ_veryrare = "Very Rare",
+            MDJ_veryrare = "Unrare",
         }
     }
 }
