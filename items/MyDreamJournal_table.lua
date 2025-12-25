@@ -142,7 +142,7 @@ MyDreamJournal.xchipstoechips = {
 	['Xchip_mod'] = 'Echip_mod',
 }
 
-MyDreamJournal.keysToNumbers = {
+MyDreamJournal.keystonumbers = {
 	["add"] = -1, ["mult"] = 0, ["expo"] = 1, ["tetra"] = 2, ["penta"] = 3, ["hyper"] = 4
 }
 G.C.veryrare = HEX('FF0000')
