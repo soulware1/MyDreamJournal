@@ -100,3 +100,72 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "graph",
+    pos = { x = 4, y = 3 },
+    atlas = 'awesomejokers',
+    rarity = 1,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+    cost = 3,
+    discovered = true,
+    config = { extra = { expo = 0.3 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.expo, colours = { G.C.DARK_EDITION } } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                mult = G.GAME.blind.chips^card.ability.extra.expo
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "graph3",
+    pos = { x = 6, y = 3 },
+    atlas = 'awesomejokers',
+    rarity = 1,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+    cost = 3,
+    discovered = true,
+    config = { extra = { add = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.add } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                sin_mult = card.ability.extra.add
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "graph4",
+    pos = { x = 7, y = 3 },
+    atlas = 'awesomejokers',
+    rarity = 1,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+    cost = 3,
+    discovered = true,
+    config = { extra = { add = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.add } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                cos_chips = card.ability.extra.add
+            }
+        end
+    end
+}

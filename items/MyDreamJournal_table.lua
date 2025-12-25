@@ -70,6 +70,10 @@ MyDreamJournal.chipmultopswap = {
     ['base_sum_chips'] = 'base_sum_mult',
     ['sum_mult'] = 'sum_chips',
     ['sum_chips'] = 'sum_mult',
+	['sin_chips'] = 'sin_mult',
+	['cos_chips'] = 'cos_mult',
+	['sin_mult'] = 'sin_chips',
+	['cos_mult'] = 'cos_chips',
 	-- Other mods can add their custom operations to this table.
 }
 

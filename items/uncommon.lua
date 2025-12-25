@@ -155,6 +155,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+	demicolon_compat = true,
     cost = 9,
     config = { extra = {decrease = -1}, },
     loc_vars = function(self, info_queue, card)
@@ -432,5 +433,28 @@ SMODS.Joker {
             end
         end
         return false
+    end
+}
+SMODS.Joker {
+    key = "graph2",
+    pos = { x = 5, y = 3 },
+    atlas = 'awesomejokers',
+    rarity = 2,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+    cost = 6,
+    discovered = true,
+    config = { extra = { expo = 0.07 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.expo, colours = { G.C.DARK_EDITION } } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                xmult = G.GAME.blind.chips^card.ability.extra.expo
+            }
+        end
     end
 }

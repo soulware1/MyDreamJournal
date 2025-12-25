@@ -129,7 +129,7 @@ if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
 		table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 	end
 end
-for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult', 'sum_mult', 'sum_chips', 'base_sum_mult', 'base_sum_chips'}) do
+for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult', 'sum_mult', 'sum_chips', 'base_sum_mult', 'base_sum_chips', 'sin_chips', 'cos_chips', 'sin_mult', 'cos_mult'}) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
 
@@ -373,6 +373,46 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if key == "sum_chips" then
 		key = "chips"
 		amount = SumOfDigits(SMODS.Scoring_Parameters.chips.current)
+	end
+	if key == "sin_chips" then
+		key = "xchips"
+		local current = tonumber(SMODS.Scoring_Parameters.chips.current)
+		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
+		if not current then
+			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
+		else
+			amount = math.sin(SMODS.Scoring_Parameters.chips.current)+amount
+		end
+	end
+	if key == "cos_chips" then
+		key = "xchips"
+		local current = tonumber(SMODS.Scoring_Parameters.chips.current)
+		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
+		if not current then
+			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
+		else
+			amount = math.cos(SMODS.Scoring_Parameters.chips.current)+amount
+		end
+	end
+	if key == "sin_mult" then
+		key = "xmult"
+		local current = tonumber(SMODS.Scoring_Parameters.mult.current)
+		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
+		if not current then
+			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
+		else
+			amount = math.sin(SMODS.Scoring_Parameters.mult.current)+amount
+		end
+	end
+	if key == "cos_mult" then
+		key = "xmult"
+		local current = tonumber(SMODS.Scoring_Parameters.mult.current)
+		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
+		if not current then
+			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
+		else
+			amount = math.cos(SMODS.Scoring_Parameters.mult.current)+amount
+		end
 	end
 	-- add in the equals if no entropy :sob:
 	if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then

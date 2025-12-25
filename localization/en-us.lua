@@ -250,6 +250,30 @@ return {
                 "{C:inactive,s:0.8}also {}{X:glop,C:inactive,s:0.8}+#2#{}{C:inactive,s:0.8} to default Glop{}",
                 }
             },
+            j_MDJ_graph = {
+                name = "f(x) = x^#1#",
+                text = {
+                    "{B:1,C:white}+Blind Requirement^#1#{} Mult",
+                }
+            },
+            j_MDJ_graph2 = {
+                name = "y = x^#1#",
+                text = {
+                    "{B:1,C:white}XBlind Requirement^#1#{} Mult",
+                }
+            },
+            j_MDJ_graph3 = {
+                name = "sin(x)+#1#",
+                text = {
+                    "{X:dark_edition,C:white}XSin(Mult)+#1#{} Mult",
+                }
+            },
+            j_MDJ_graph4 = {
+                name = "math.cos(x)+#1#",
+                text = {
+                    "{X:dark_edition,C:white}XCos(Chips)+#1#{} Chips",
+                }
+            },
         },
         Back = {
             b_MDJ_cyclic = {
