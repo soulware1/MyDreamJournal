@@ -444,7 +444,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
-				local op_number = MyDreamJournal.keysto_numbers[operation]
+				local op_number = MyDreamJournal.keystonumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -467,7 +467,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
-				local op_number = MyDreamJournal.keysto_numbers[operation]
+				local op_number = MyDreamJournal.keystonumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -497,7 +497,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
-				local op_number = MyDreamJournal.keysto_numbers[operation]
+				local op_number = MyDreamJournal.keystonumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -520,7 +520,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
-				local op_number = MyDreamJournal.keysto_numbers[operation]
+				local op_number = MyDreamJournal.keystonumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -548,7 +548,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		for i = 1, #jans do
 			local v = jans[i]
 			local operation = MyDreamJournal.glopmodkeys[key]
-			local op_number = MyDreamJournal.keysto_numbers[operation]
+			local op_number = MyDreamJournal.keystonumbers[operation]
 			if operation and op_number then
 				-- handle generalized higher order hyperoperations
 				local is_hyper = false
@@ -576,7 +576,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
-				local op_number = MyDreamJournal.keysto_numbers[operation]
+				local op_number = MyDreamJournal.keystonumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -599,7 +599,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
-				local op_number = MyDreamJournal.keysto_numbers[operation]
+				local op_number = MyDreamJournal.keystonumbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
