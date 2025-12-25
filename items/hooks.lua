@@ -111,7 +111,7 @@ function SumOfDigits(n)
 	-- count in decimals if lower then scientific_notation
 	if n < scientific_notation then
 		n = string.gsub(tostring(n), "%.", "")
-		n = math.floor(to_big(tonumber(n)))
+		n = math.floor(to_big(to_number(n)))
 	end
     local sum = to_big(0)
     while n ~= to_big(0) do
@@ -376,42 +376,42 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if key == "sin_chips" then
 		key = "xchips"
-		local current = tonumber(SMODS.Scoring_Parameters.chips.current)
+		local current = to_number(SMODS.Scoring_Parameters.chips.current)
 		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
 		if not current then
 			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
 		else
-			amount = math.sin(SMODS.Scoring_Parameters.chips.current)+amount
+			amount = math.sin(current)+amount
 		end
 	end
 	if key == "cos_chips" then
 		key = "xchips"
-		local current = tonumber(SMODS.Scoring_Parameters.chips.current)
+		local current = to_number(SMODS.Scoring_Parameters.chips.current)
 		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
 		if not current then
 			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
 		else
-			amount = math.cos(SMODS.Scoring_Parameters.chips.current)+amount
+			amount = math.cos(current)+amount
 		end
 	end
 	if key == "sin_mult" then
 		key = "xmult"
-		local current = tonumber(SMODS.Scoring_Parameters.mult.current)
+		local current = to_number(SMODS.Scoring_Parameters.mult.current)
 		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
 		if not current then
 			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
 		else
-			amount = math.sin(SMODS.Scoring_Parameters.mult.current)+amount
+			amount = math.sin(current)+amount
 		end
 	end
 	if key == "cos_mult" then
 		key = "xmult"
-		local current = tonumber(SMODS.Scoring_Parameters.mult.current)
+		local current = to_number(SMODS.Scoring_Parameters.mult.current)
 		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
 		if not current then
 			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
 		else
-			amount = math.cos(SMODS.Scoring_Parameters.mult.current)+amount
+			amount = math.cos(current)+amount
 		end
 	end
 	-- add in the equals if no entropy :sob:
@@ -441,7 +441,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
-				local op_number = MyDreamJournal.keysToNumbers[operation]
+				local op_number = MyDreamJournal.keysto_numbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -464,7 +464,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
-				local op_number = MyDreamJournal.keysToNumbers[operation]
+				local op_number = MyDreamJournal.keysto_numbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -494,7 +494,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
-				local op_number = MyDreamJournal.keysToNumbers[operation]
+				local op_number = MyDreamJournal.keysto_numbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -517,7 +517,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
-				local op_number = MyDreamJournal.keysToNumbers[operation]
+				local op_number = MyDreamJournal.keysto_numbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -545,7 +545,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		for i = 1, #jans do
 			local v = jans[i]
 			local operation = MyDreamJournal.glopmodkeys[key]
-			local op_number = MyDreamJournal.keysToNumbers[operation]
+			local op_number = MyDreamJournal.keysto_numbers[operation]
 			if operation and op_number then
 				-- handle generalized higher order hyperoperations
 				local is_hyper = false
@@ -573,7 +573,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
-				local op_number = MyDreamJournal.keysToNumbers[operation]
+				local op_number = MyDreamJournal.keysto_numbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
@@ -596,7 +596,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				end
 			else
 				local operation = MyDreamJournal.chipmodkeys[key]
-				local op_number = MyDreamJournal.keysToNumbers[operation]
+				local op_number = MyDreamJournal.keysto_numbers[operation]
 				if operation and op_number then
 					-- handle generalized higher order hyperoperations
 					local is_hyper = false
