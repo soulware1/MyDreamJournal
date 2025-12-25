@@ -207,27 +207,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			end
 		end
 	end
-	if theres_a_mindware and not effect.from_mindware then
-		local new_effect = Copy3(effect)
-		new_effect[key] = nil
-		new_effect.from_mindware = true
-		local is_chips = MyDreamJournal.chipmodkeys[key]
-		local is_mult = MyDreamJournal.multmodkeys[key]
-		local swapped = MyDreamJournal.chipmultopswap[key]
-		if not is_chips and not is_mult and not swapped then
-			goto skip
-		end
-		local is_additive = ((is_chips == "add") and true) or ((is_mult == "add") and true)
-		local new_amount = amount
-		if is_additive and is_chips then
-			new_amount = new_amount/7.5
-		elseif is_additive and is_mult then
-			new_amount = new_amount*7.5
-		end
-		new_effect[swapped] = new_amount
-		SMODS.calculate_effect(new_effect, scored_card, from_edition)
-		::skip::
-	end
 	if next(haxors) and MyDreamJournal.dollarmodkeys[key] then
 		for i = 1, #haxors do
 			amount = amount+haxors[i].ability.extra.add
@@ -622,6 +601,27 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				end
 			end
 		end
+	end
+	if theres_a_mindware and not effect.from_mindware then
+		local new_effect = Copy3(effect)
+		new_effect[key] = nil
+		new_effect.from_mindware = true
+		local is_chips = MyDreamJournal.chipmodkeys[key]
+		local is_mult = MyDreamJournal.multmodkeys[key]
+		local swapped = MyDreamJournal.chipmultopswap[key]
+		if not is_chips and not is_mult and not swapped then
+			goto skip
+		end
+		local is_additive = ((is_chips == "add") and true) or ((is_mult == "add") and true)
+		local new_amount = amount
+		if is_additive and is_chips then
+			new_amount = new_amount/7.5
+		elseif is_additive and is_mult then
+			new_amount = new_amount*7.5
+		end
+		new_effect[swapped] = new_amount
+		SMODS.calculate_effect(new_effect, scored_card, from_edition)
+		::skip::
 	end
 	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)
 	if ret then return ret end
