@@ -142,10 +142,18 @@ return {
             j_MDJ_latin = {
                 name = "Latin Script",
                 text = {
-                    "{C:mult}+Mult{} is converted to {X:mult,C:white}XMult",
-                    "using this formula",
-                    "{C:inactive}(CMult+Mult)/CMult+#1#",
-                    "{C:inactive,s:0.85}CMult being Current Mult"
+                    {
+                        "{C:mult}+Mult{} is converted to {X:mult,C:white}XMult",
+                        "using this formula",
+                        "{C:inactive}(CMult+Mult)/CMult+#1#",
+                        "{C:inactive,s:0.85}CMult being Current Mult"
+                    },
+                    {
+                        "{X:mult,C:white}XMult{} is converted to {X:dark_edition,C:white}^Mult",
+                        "using this formula",
+                        "{C:inactive}log(CMult*Mult)/log(CMult)+#1#",
+                        "{C:inactive,s:0.85}CMult being Current Mult"
+                    }
                 }
             },
             j_MDJ_leet = {
@@ -232,10 +240,16 @@ return {
                     "{f:MDJ_pokemon}Convert {C:mult,f:MDJ_pokemon}Mult{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}THE SUM OF DIGITS IN MULT",
                 }
             },
-            MDJ_heximal_slop = {
-                name = "",
-                text = { "yo ddawg heximal and seximal are just base 6" }
-            }
+            j_MDJ_jannasa = {
+                name = '{f:MDJ_fairfaxpona}AB{}',
+                text = {
+                "{X:glop,C:white}+#1#{} to all {C:glop}+Glop{}",
+                "{X:glop,C:white}+#1#{} to all {X:glop,C:white}XGlop{}",
+                "{X:glop,C:white}+(#1#/N){} to all {C:attention}higher-operation{} Glop",
+                "{C:inactive,s:0.9}N being 10^ the used operation{}",
+                "{C:inactive,s:0.8}also {}{X:glop,C:inactive,s:0.8}+#2#{}{C:inactive,s:0.8} to default Glop{}",
+                }
+            },
         },
         Back = {
             b_MDJ_cyclic = {
@@ -279,7 +293,7 @@ return {
 
         },
         Other = {
-            mdj_heximal_slop = {
+            MDJ_heximal_slop = {
                 name = "{f:MDJ_arial}btw",
                 text = {
                     "{f:MDJ_arial}yo ddawg heximal and seximal are just base 6"
@@ -291,10 +305,12 @@ return {
         dictionary = {
             MDJ_corrupted = "Corrupted",
             k_MDJ_veryrare = "Unrare",
+            k_MDJ_verylegendary = "Unlegendary"
         },
         labels = {
             MDJ_corrupted = "Corrupted",
             MDJ_veryrare = "Unrare",
+            MDJ_verylegendary = "Unlegendary"
         }
     }
 }

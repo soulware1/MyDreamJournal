@@ -118,6 +118,25 @@ MyDreamJournal.pluschipstoxchips = {
 	['h_chips'] = 'xchips',
 	['chip_mod'] = 'Xchip_mod',
 }
+MyDreamJournal.xtoe = {
+	['x_mult'] = 'e_mult',
+	['xmult'] = 'emult',
+	['x_mult_mod'] = 'Emult_mod',
+	['x_chips'] = 'e_chips',
+	['xchips'] = 'echips',
+	['Xchip_mod'] = 'Echip_mod',
+    ['xglop'] = "eglop"
+}
+MyDreamJournal.xmulttoemult = {
+	['x_mult'] = 'e_mult',
+	['xmult'] = 'emult',
+	['x_mult_mod'] = 'Emult_mod',
+}
+MyDreamJournal.xchipstoechips = {
+	['x_chips'] = 'e_chips',
+	['xchips'] = 'echips',
+	['Xchip_mod'] = 'Echip_mod',
+}
 
 MyDreamJournal.keysToNumbers = {
 	["add"] = -1, ["mult"] = 0, ["expo"] = 1, ["tetra"] = 2, ["penta"] = 3, ["hyper"] = 4

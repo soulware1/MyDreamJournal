@@ -44,7 +44,7 @@ SMODS.Joker {
 	immutable = true,
     config = {},
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = { set = "Other", key = "mdj_heximal_slop", config = {} }
+        info_queue[#info_queue+1] = { set = "Other", key = "MDJ_heximal_slop", config = {} }
         return { vars = {} }
     end,
     calculate = function (self, card, context)

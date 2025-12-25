@@ -56,10 +56,10 @@ function Base10_to_base_less_then_10(n, b)
     if n == to_big(0) then return to_big(0) end
     b = math.floor(b)
     n = math.floor(n)
-	if b > 10 then
+	if b > to_big(10) then
 		return BaseB_to_base_10(n, b)
 	-- silly goose
-	elseif b == 10 then
+	elseif b == to_big(10) then
 		return n
 	end
     -- this is a VERY rough approximation of what would happen during a base conversion, only use for when /10 doesn't reduce the tailsman number or it just takes too long man...
@@ -73,14 +73,14 @@ function Base10_to_base_less_then_10(n, b)
     local result = to_big(0)
     local place = to_big(1)
     
-    if b == 1 then
+    if b == to_big(1) then
         for i = 1, n do
             result = result * to_big(10) + to_big(1)
         end
         goto base1_skip
     end
 
-    while n > 0 do
+    while n > to_big(0) do
         local remainder = n % to_big(b)
         result = result + remainder * place
         n = math.floor(n / to_big(b))
@@ -113,8 +113,8 @@ function SumOfDigits(n)
 		n = string.gsub(tostring(n), "%.", "")
 		n = math.floor(to_big(tonumber(n)))
 	end
-    local sum = 0
-    while n ~= 0 do
+    local sum = to_big(0)
+    while n ~= to_big(0) do
         local last = n % 10
         sum = sum + last
         n = math.floor(n / 10)
@@ -256,26 +256,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			end
 		end
 	end
-	if next(latins) and MyDreamJournal.plustox[key] then
-		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
-		for i = 1, #latins do
-			local v = latins[i]
-			local converted_key = MyDreamJournal.plustox[key]
- 			---@diagnostic disable-next-line: redefined-local
-			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
-			if is_corrupted and MyDreamJournal.pluschipstoxchips[key] then
-				local cchips = SMODS.Scoring_Parameters.chips.current
-				local achips = cchips+amount
-				amount = achips/cchips+v.ability.extra.add
-				key = converted_key
-			elseif not is_corrupted and MyDreamJournal.plusmulttoxmult[key] then
-				local cmult = SMODS.Scoring_Parameters.mult.current
-				local amult = cmult+amount
-				amount = amult/cmult+v.ability.extra.add
-				key = converted_key
-			end
-		end
-	end
 	if is_corrupted then
 		local msg
 		if string.find(key, 'chip') then
@@ -294,6 +274,41 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			card_eval_status_text(scored_card, 'extra', nil, nil, nil, {message = msg, colour = string.find(key, 'chip') and G.C.CHIPS or string.find(key, 'mult') and G.C.MULT, delay = 0.2})
 		end
 		key = MyDreamJournal.chipmultopswap[key]
+	end
+	if next(latins) and ( MyDreamJournal.plustox[key] or MyDreamJournal.xtoe[key]) then
+		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
+		for i = 1, #latins do
+			local v = latins[i]
+			local converted_key = MyDreamJournal.plustox[key]
+ 			---@diagnostic disable-next-line: redefined-local
+			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			if not converted_key then
+				local converted_key = MyDreamJournal.xtoe[key]
+				if is_corrupted and MyDreamJournal.xchipstoechips[key] then
+					local cchips = SMODS.Scoring_Parameters.chips.current
+					local achips = cchips*amount
+					amount = math.log(achips, cchips)+v.ability.extra.add
+					key = converted_key
+				elseif not is_corrupted and MyDreamJournal.xmulttoemult[key] then
+					local cmult = SMODS.Scoring_Parameters.mult.current
+					local amult = cmult*amount
+					amount = math.log(amult, cmult)+v.ability.extra.add
+					key = converted_key
+				end
+			else
+				if is_corrupted and MyDreamJournal.pluschipstoxchips[key] then
+					local cchips = SMODS.Scoring_Parameters.chips.current
+					local achips = cchips+amount
+					amount = achips/cchips+v.ability.extra.add
+					key = converted_key
+				elseif not is_corrupted and MyDreamJournal.plusmulttoxmult[key] then
+					local cmult = SMODS.Scoring_Parameters.mult.current
+					local amult = cmult+amount
+					amount = amult/cmult+v.ability.extra.add
+					key = converted_key
+				end
+			end
+		end
 	end
 	-- stuff that depends on current state of mult/chips
 	if key == 'base_mult' then
