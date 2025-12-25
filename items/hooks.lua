@@ -2,6 +2,9 @@
 local to_big = to_big or function(n)
 	return n
 end
+local to_number = to_number or function(x, e)
+	return tonumber(x, e)
+end
 function SMODS.current_mod.calculate(self, context)
 	-- setup
 	if not G.GAME.current_round.MDJ_construction_jokers_ranks and not G.GAME.current_round.MDJ_construction_jokers_temp_ranks and not G.GAME.current_round.MDJ_construction_jokers_displayed_ranks and not G.GAME.current_round.MDJ_construction_jokers_first_hand then
