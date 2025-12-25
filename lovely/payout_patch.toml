@@ -1,7 +1,7 @@
 [manifest]
 version = "1.0.0"
 dump_lua = true
-priority = -1
+priority = 1
 
 # Make sure that leet runs after all other possible bonuses
 [[patches]]
@@ -36,45 +36,5 @@ pattern = "local result = pseudorandom(seed) < numerator / denominator"
 position = "at"
 payload = '''
 local result = pseudorandom(seed) <= numerator / denominator
-'''
-match_indent = true
-
-# Sprite in description
-[[patches]]
-[patches.pattern]
-target = "functions/misc_functions.lua"
-pattern = "elseif part.control.E then"
-position = "before"
-payload = '''
-elseif part.control.IMG then
-    local sprite_mod = (part.control.s and tonumber(part.control.s) or 1) * desc_scale
-    local atlas = SMODS.get_atlas(part.control.IMG)
-    local w_mod = atlas.px / atlas.py
-    final_line[#final_line + 1] = {
-        n = G.UIT.O,
-        config = {
-            object = SMODS.create_sprite(0, 0, sprite_mod * w_mod, sprite_mod, atlas, {x = 0, y = 0})
-        }
-    }
-'''
-match_indent = true
-
-# Sprite in description box
-[[patches]]
-[patches.pattern]
-target = '=[SMODS _ "src/utils.lua"]'
-pattern = "elseif part.control.X or part.control.B then"
-position = "before"
-payload = '''
-elseif part.control.IMG then
-    local sprite_mod = (part.control.s and tonumber(part.control.s) or 1) * desc_scale
-    local atlas = SMODS.get_atlas(part.control.IMG)
-    local w_mod = atlas.px / atlas.py
-    final_line[#final_line + 1] = {
-        n = G.UIT.O,
-        config = {
-            object = SMODS.create_sprite(0, 0, sprite_mod * w_mod, sprite_mod, atlas, {x = 0, y = 0})
-        }
-    }
 '''
 match_indent = true
