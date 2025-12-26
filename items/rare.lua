@@ -115,9 +115,11 @@ SMODS.Joker {
     end,
 	calculate = function(self, card, context)
         if context.after and not context.blueprint then
+            print(card.ability.extra.hands_played)
 			card.ability.extra.hands_played = card.ability.extra.hands_played+1
 		end
-		if (context.ante_change and context.end_of_round and context.main_eval) or context.forcetrigger then
+		if ( context.ante_end and context.ante_change ) or context.forcetrigger then
+            print(card.ability.extra.hands_played)
 			if card.ability.extra.hands_played < 4 then
 				for i = 1, 3 do
 					local consumable = SMODS.add_card{ -- For a random one

@@ -20,18 +20,21 @@ SMODS.Consumable {
     end,
     use = function(self, card, area, copier)
         if G.jokers.highlighted[1] then
-            local rarity = G.jokers.highlighted[1].config.center.rarity
+            local joker = G.jokers.highlighted[1]
+            local rarity = joker.config.center.rarity
             local probablities = rarity_probablities[rarity]
             if not probablities then
                 probablities = {1, 2}
             end
-            if SMODS.pseudorandom_probability(card.center.config.key, probablities[1], probablities[2], nil, true) then
+            print(probablities)
+            if SMODS.pseudorandom_probability(card, pseudoseed(tostring({})), probablities[1], probablities[2], nil, true) then
                 G.E_MANAGER:add_event(Event({
                     trigger = 'after',
                     delay = 0.4,
                     func = function()
                         play_sound('timpani')
-                        SMODS.add_card({ set = 'Joker', [MyDreamJournal.veryrare] = true })
+                        SMODS.destroy_cards(joker)
+                        SMODS.add_card({ set = 'Joker', rarity = MyDreamJournal.epic })
                         card:juice_up(0.3, 0.5)
                         return true
                     end
@@ -43,7 +46,8 @@ SMODS.Consumable {
                     delay = 0.4,
                     func = function()
                         play_sound('timpani')
-                        SMODS.add_card({ set = 'Joker', [MyDreamJournal.exotic] = true })
+                        SMODS.destroy_cards(joker)
+                        SMODS.add_card({ set = 'Joker', rarity = MyDreamJournal.exotic })
                         card:juice_up(0.3, 0.5)
                         return true
                     end
@@ -51,13 +55,13 @@ SMODS.Consumable {
                 delay(0.6)
             end
         else -- no jokers
-            if SMODS.pseudorandom_probability(card.center.config.key, 1, 2, nil, true) then
+            if SMODS.pseudorandom_probability(card, pseudoseed(tostring({})), 1, 2, nil, true) then
                 G.E_MANAGER:add_event(Event({
                     trigger = 'after',
                     delay = 0.4,
                     func = function()
                         play_sound('timpani')
-                        SMODS.add_card({ set = 'Joker', [MyDreamJournal.veryrare] = true })
+                        SMODS.add_card({ set = 'Joker', rarity = MyDreamJournal.epic })
                         card:juice_up(0.3, 0.5)
                         return true
                     end
@@ -69,7 +73,7 @@ SMODS.Consumable {
                     delay = 0.4,
                     func = function()
                         play_sound('timpani')
-                        SMODS.add_card({ set = 'Joker', [MyDreamJournal.exotic] = true })
+                        SMODS.add_card({ set = 'Joker', rarity = MyDreamJournal.exotic })
                         card:juice_up(0.3, 0.5)
                         return true
                     end
