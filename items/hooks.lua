@@ -1,4 +1,4 @@
----@diagnostic disable: duplicate-set-field
+---@diagnostic disable: duplicate-set-field, redefined-local
 local to_big = to_big or function(n)
 	return n
 end
@@ -125,6 +125,45 @@ function SumOfDigits(n)
     return sum
 end
 
+local function sin(x)
+    -- normalize x to range [-pi, pi]
+    local pi = to_big(math.pi)
+    x = x % (2 * pi)
+    if x > pi then
+        x = x - 2 * pi
+    end
+
+    local term = x
+    local sum = x
+    local x2 = x * x
+
+    for i = 3, 15, 2 do
+        term = -term * x2 / ((i - 1) * i)
+        sum = sum + term
+    end
+
+    return sum
+end
+local function cos(x)
+    -- normalize x to range [-pi, pi]
+    local pi = to_big(math.pi)
+    x = x % (2 * pi)
+    if x > pi then
+        x = x - 2 * pi
+    end
+
+    local term = 1
+    local sum = 1
+    local x2 = x * x
+
+    for i = 2, 14, 2 do
+        term = -term * x2 / ((i - 1) * i)
+        sum = sum + term
+    end
+
+    return sum
+end
+
 
 
 if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
@@ -189,15 +228,17 @@ end
 local calcindiveffectref = SMODS.calculate_individual_effect
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
 	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
+	local is_dark = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_dark")
 	local unicodes = SMODS.find_card("j_MDJ_unicode")
 	local emojis = SMODS.find_card("j_MDJ_emoji")
 	local jans = SMODS.find_card("j_MDJ_jannasa")
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
-	local theres_a_bitplane = next(SMODS.find_card("j_MDJ_bitplane"))
+	local bitplanes = SMODS.find_card("j_MDJ_bitplane")
 	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
 	local marks = SMODS.find_card("j_MDJ_mark")
 	local latins = SMODS.find_card("j_MDJ_latin")
 	local haxors = SMODS.find_card("j_MDJ_leet")
+	local colors =  SMODS.find_card("j_MDJ_rgb")
 	local is_demicolon = nil
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
 	if scored_card then
@@ -209,20 +250,25 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if next(haxors) and MyDreamJournal.dollarmodkeys[key] then
 		for i = 1, #haxors do
-			amount = amount+haxors[i].ability.extra.add
+			local is_dark = haxors[i] and (haxors[i].edition and haxors[i].edition.key == "e_MDJ_dark")
+			amount = amount+((not is_dark and haxors[i].ability.extra.add) or haxors[i].ability.extra.add*2)
 		end
 	end
-	if theres_a_bitplane and (MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]) == "add" then
-		-- round to the nearest power of two
-		local amount_is_negative = (amount < 0)
-		if amount_is_negative then
-			amount = math.abs(amount)
-		end
-		local log2 = math.log(amount, 2)
-		local ceiling = math.ceil(log2)
-		amount = 2^ceiling
-		if amount_is_negative then
-			amount = -amount
+	if next(bitplanes) and (MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]) == "add" then
+		-- round to the nearest power of two, or four if dark
+		for i = 1, #bitplanes do
+			local is_dark = bitplanes[i] and (bitplanes[i].edition and bitplanes[i].edition.key == "e_MDJ_dark")
+			local power_of = (not is_dark and 2) or 4
+			local amount_is_negative = (amount < 0)
+			if amount_is_negative then
+				amount = math.abs(amount)
+			end
+			local log = math.log(amount, power_of)
+			local ceiling = math.ceil(log)
+			amount = power_of^ceiling
+			if amount_is_negative then
+				amount = -amount
+			end
 		end
 	end
 	if next(marks) and MyDreamJournal.plustox[key] then
@@ -231,9 +277,10 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local v = marks[i]
 			local converted_key = MyDreamJournal.plustox[key]
 			if converted_key then
+				local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
 				local cglop = SMODS.Scoring_Parameters.kali_glop.current
 				local aglop = cglop+amount
-				amount = aglop/cglop+v.ability.extra.add
+				amount = aglop/cglop+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
 				key = converted_key
 			end
 		end
@@ -257,6 +304,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 		key = MyDreamJournal.chipmultopswap[key]
 	end
+	if is_dark and type(amount) == "number" then
+		amount = amount*2
+	end
 	if next(latins) and ( MyDreamJournal.plustox[key] or MyDreamJournal.xtoe[key]) then
 		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
 		for i = 1, #latins do
@@ -264,29 +314,30 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local converted_key = MyDreamJournal.plustox[key]
  			---@diagnostic disable-next-line: redefined-local
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
 			if not converted_key then
 				local converted_key = MyDreamJournal.xtoe[key]
 				if is_corrupted and MyDreamJournal.xchipstoechips[key] then
 					local cchips = SMODS.Scoring_Parameters.chips.current
 					local achips = cchips*amount
-					amount = math.log(achips, cchips)+v.ability.extra.add
+					amount = math.log(achips, cchips)+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
 					key = converted_key
 				elseif not is_corrupted and MyDreamJournal.xmulttoemult[key] then
 					local cmult = SMODS.Scoring_Parameters.mult.current
 					local amult = cmult*amount
-					amount = math.log(amult, cmult)+v.ability.extra.add
+					amount = math.log(amult, cmult)+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
 					key = converted_key
 				end
 			else
 				if is_corrupted and MyDreamJournal.pluschipstoxchips[key] then
 					local cchips = SMODS.Scoring_Parameters.chips.current
 					local achips = cchips+amount
-					amount = achips/cchips+v.ability.extra.add
+					amount = achips/cchips+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
 					key = converted_key
 				elseif not is_corrupted and MyDreamJournal.plusmulttoxmult[key] then
 					local cmult = SMODS.Scoring_Parameters.mult.current
 					local amult = cmult+amount
-					amount = amult/cmult+v.ability.extra.add
+					amount = amult/cmult+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
 					key = converted_key
 				end
 			end
@@ -359,9 +410,8 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if key == "sin_chips" then
 		key = "xchips"
 		local current = to_number(SMODS.Scoring_Parameters.chips.current)
-		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
 		if not current then
-			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
+			amount = sin(current)+amount
 		else
 			amount = math.sin(current)+amount
 		end
@@ -369,9 +419,8 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if key == "cos_chips" then
 		key = "xchips"
 		local current = to_number(SMODS.Scoring_Parameters.chips.current)
-		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
 		if not current then
-			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
+			amount = cos(current)+amount
 		else
 			amount = math.cos(current)+amount
 		end
@@ -379,9 +428,8 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if key == "sin_mult" then
 		key = "xmult"
 		local current = to_number(SMODS.Scoring_Parameters.mult.current)
-		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
 		if not current then
-			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
+			amount = sin(current)+amount
 		else
 			amount = math.sin(current)+amount
 		end
@@ -389,9 +437,8 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if key == "cos_mult" then
 		key = "xmult"
 		local current = to_number(SMODS.Scoring_Parameters.mult.current)
-		-- fake sin/cos if too big since tailsman doesn't support math.sin/cos
 		if not current then
-			amount = pseudorandom(pseudoseed(tostring(math.sin)))+pseudorandom(pseudoseed(tostring(math.cos)))+amount
+			amount = cos(current)+amount
 		else
 			amount = math.cos(current)+amount
 		end
@@ -421,6 +468,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		for i = 1, #unicodes do
 			local v = unicodes[i]
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
 				local op_number = MyDreamJournal.keystonumbers[operation]
@@ -437,6 +485,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 						op_number = v.ability.extra.add
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add/10
+					end
+					if is_dark then
+						op_number = op_number*2
 					end
 					if not is_hyper then
 						amount = amount + op_number
@@ -461,6 +512,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add/10
 					end
+					if is_dark then
+						op_number = op_number*2
+					end
 					if not is_hyper then
 						amount = amount + op_number
 					else
@@ -474,6 +528,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		for i = 1, #emojis do
 			local v = emojis[i]
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
 			if is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
 				local op_number = MyDreamJournal.keystonumbers[operation]
@@ -491,6 +546,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add/100
 					end
+					if is_dark then
+						op_number = op_number*2
+					end
 					if not is_hyper then
 						amount = amount + op_number
 					else
@@ -514,6 +572,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add/100
 					end
+					if is_dark then
+						op_number = op_number*2
+					end
 					if not is_hyper then
 						amount = amount + op_number
 					else
@@ -528,6 +589,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			local v = jans[i]
 			local operation = MyDreamJournal.glopmodkeys[key]
 			local op_number = MyDreamJournal.keystonumbers[operation]
+			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
 			if operation and op_number then
 				-- handle generalized higher order hyperoperations
 				local is_hyper = false
@@ -541,6 +603,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				else
 					op_number = v.ability.extra.add
 				end
+				if is_dark then
+					op_number = op_number*2
+				end
 				if not is_hyper then
 					amount = amount + op_number
 				else
@@ -553,6 +618,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		for i = 1, #soulwares do
 			local v = soulwares[i]
 			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
 			if not is_corrupted then
 				local operation = MyDreamJournal.multmodkeys[key]
 				local op_number = MyDreamJournal.keystonumbers[operation]
@@ -569,6 +635,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 						op_number = v.ability.extra.add
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add*0.8333333333333334
+					end
+					if is_dark then
+						op_number = op_number*2
 					end
 					if not is_hyper then
 						amount = amount * op_number
@@ -593,6 +662,9 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 					elseif op_number == 0 then
 						op_number = v.ability.extra.add*0.8333333333333334
 					end
+					if is_dark then
+						op_number = op_number*2
+					end
 					if not is_hyper then
 						amount = amount * op_number
 					else
@@ -602,7 +674,44 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			end
 		end
 	end
-	if theres_a_mindware and not effect.from_mindware then
+	if next(colors) and not is_demicolon then
+		for i = 1, #colors do
+			local v = colors[i]
+			local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
+			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
+			if MyDreamJournal.dollarmodkeys[key] then
+				amount = amount^v.ability.extra.add
+				goto money_tongue_emoji
+			end
+			local op_number = MyDreamJournal.keystonumbers[operation]
+			if operation and op_number then
+				-- handle generalized higher order hyperoperations
+				local is_hyper = false
+				if op_number == 4 then
+					op_number = amount[1]
+					is_hyper = true
+				end
+				-- mult has the same amount to add as add
+				if op_number ~= -1 and op_number ~= 0 then
+					op_number = v.ability.extra.add/(10^op_number)
+				elseif op_number == -1 then
+					op_number = v.ability.extra.add
+				else
+					op_number = v.ability.extra.mult
+				end
+				if is_dark then
+					op_number = op_number*2
+				end
+				if not is_hyper then
+					amount = amount^op_number
+				else
+					amount[2] = amount[2]^op_number
+				end
+			end
+			::money_tongue_emoji::
+		end
+	end
+	if theres_a_mindware and not effect.from_mindware and key then
 		local new_effect = Copy3(effect)
 		new_effect[key] = nil
 		new_effect.from_mindware = true
@@ -645,11 +754,11 @@ function pseudorandom(seed, min, max)
 			-- the number right before 1 in float32
 			min = 0.00000000099999997171806853657471947371959686279
 			-- the lowest number that doesn't have a e in it
-			probablities[#probablities+1] = max
 			probablities[#probablities+1] = min
-			probablities[#probablities+1] = 0.75
 			probablities[#probablities+1] = 0.25
 			probablities[#probablities+1] = 0.5
+			probablities[#probablities+1] = 0.75
+			probablities[#probablities+1] = max
 		else
 			for i = 1, 3 do
 				local actual_i = i+2
@@ -660,23 +769,23 @@ function pseudorandom(seed, min, max)
 				end
 			end
 			if max_probablity == 2 then
-				probablities[#probablities+1] = max
 				probablities[#probablities+1] = min
-			elseif max_probablity == 3 then
 				probablities[#probablities+1] = max
+			elseif max_probablity == 3 then
 				probablities[#probablities+1] = min
 				probablities[#probablities+1] = lerp(min,max,0.5)
-			elseif max_probablity == 4 then
 				probablities[#probablities+1] = max
+			elseif max_probablity == 4 then
 				probablities[#probablities+1] = min
 				probablities[#probablities+1] = math.ceil(lerp(min,max,0.333333333333333333333333333333333333333))
 				probablities[#probablities+1] = math.ceil(lerp(min,max,0.666666666666666666666666666666666666666))
-			else
 				probablities[#probablities+1] = max
+			else
 				probablities[#probablities+1] = min
+				probablities[#probablities+1] = lerp(min,max,0.25)
 				probablities[#probablities+1] = lerp(min,max,0.5)
 				probablities[#probablities+1] = lerp(min,max,0.75)
-				probablities[#probablities+1] = lerp(min,max,0.25)
+				probablities[#probablities+1] = max
 			end
 		end
 		return probablities[OLDgambling(seed, 1, max_probablity)]

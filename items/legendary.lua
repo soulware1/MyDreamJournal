@@ -44,16 +44,6 @@ SMODS.Joker {
         return { vars = {  } }
     end,
 }
-SMODS.Font {
-	key = "pokemon",
-	path = "pokemon-font.ttf",
-	render_scale = 200,
-	TEXT_HEIGHT_SCALE = 0.9,
-	TEXT_OFFSET = { x = 12, y = -24 },
-	FONTSCALE = 0.06,
-	squish = 1,
-	DESCSCALE = 1.25
-}
 if next(SMODS.find_mod("cardpronouns")) then
 ---@diagnostic disable-next-line: undefined-global
 	CardPronouns.Pronoun {

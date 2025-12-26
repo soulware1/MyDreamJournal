@@ -260,6 +260,7 @@ return {
                 name = "y = x^#1#",
                 text = {
                     "{B:1,C:white}XBlind Requirement^#1#{} Mult",
+                    "{C:inactive,s:0.85}(Can't be copied or retriggered)"
                 }
             },
             j_MDJ_graph3 = {
@@ -274,6 +275,39 @@ return {
                     "{X:dark_edition,C:white}XCos(Chips)+#1#{} Chips",
                 }
             },
+            j_MDJ_rgb = {
+                name = '{C:red}R{C:green}G{C:blue}B',
+                text = {
+                    "{X:dark_edition,C:white}^#1#{} to all {C:mult}+Mult{}, {C:chips}+Chips{} and {C:money}+$",
+                    "{X:dark_edition,C:white}^#2#{} to all {X:mult,C:white}XMult{} and {X:chips,C:white}XChips{}",
+                    "{X:dark_edition,C:white}^(1+1/(N+2)^2){} to all {C:attention}higher-operation{} Mult and Chips",
+                    "{C:inactive,s:0.9}N being the used operation{}"
+                }
+            },
+            j_MDJ_tme = {
+                name = {
+                    'The Mind Electric',
+                    '{s:0.75}By {s:1,f:MDJ_japan,C:MDJ_rainbow10}ミ{s:1,f:MDJ_japan,C:MDJ_rainbow9}ラ{s:1,f:MDJ_japan,C:MDJ_rainbow8}ク{s:1,f:MDJ_japan,C:MDJ_rainbow7}ル{s:1,f:MDJ_japan,C:MDJ_rainbow6}ミ{s:1,f:MDJ_japan,C:MDJ_rainbow5}ュ{s:1,f:MDJ_japan,C:MDJ_rainbow4}ー{s:1,f:MDJ_japan,C:MDJ_rainbow3}ジ{s:1,f:MDJ_japan,C:MDJ_rainbow2}カ{s:1,f:MDJ_japan,C:MDJ_rainbow1}ル',
+                },
+                text = {
+                    "Give {C:attention}all{} cards a {C:dark_edition}edition",
+                    "Give {C:attention}all{} playing cards a {C:dark_edition}enhancement{} and {C:dark_edition}seal",
+                    "Before scoring, if {C:attention}any{} card doesn't have",
+                    "a {C:dark_edition}edition{}, {C:dark_edition}enhancement{}, or {C:dark_edition}seal{}, give it one"
+                }
+            },
+        },
+        Spectral = {
+            c_MDJ_ware = {
+                name = "Ware",
+                text = {
+                    "Select the {C:rare,E:1}rarest{} Joker",
+                    "{C:attention}destroy{} it and create a",
+                    "{C:MDJ_veryrare,E:1}Unrare{} or {C:MDJ_unlegendary,E:1}Unlegendary{} Joker",
+                    "{C:inactive}(Must have room)",
+                    "{C:inactive,s:0.85}(Unlegendary not counted)"
+                }
+            }
         },
         Back = {
             b_MDJ_cyclic = {
@@ -284,6 +318,12 @@ return {
             }
         },
         Edition = {
+            e_MDJ_dark = {
+                name = "Dark",
+                text = {
+                    "{X:mult,C:white}X#1#{} {C:attention}operations{}",
+                }
+            },
             e_MDJ_corrupted = {
                 name = "Corrupted",
                 text = {
@@ -328,11 +368,13 @@ return {
     misc = {
         dictionary = {
             MDJ_corrupted = "Corrupted",
+            MDJ_dark = "Dark",
             k_MDJ_veryrare = "Unrare",
             k_MDJ_verylegendary = "Unlegendary"
         },
         labels = {
             MDJ_corrupted = "Corrupted",
+            MDJ_dark = "Dark",
             MDJ_veryrare = "Unrare",
             MDJ_verylegendary = "Unlegendary"
         }

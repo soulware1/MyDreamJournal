@@ -145,15 +145,25 @@ MyDreamJournal.xchipstoechips = {
 MyDreamJournal.keystonumbers = {
 	["add"] = -1, ["mult"] = 0, ["expo"] = 1, ["tetra"] = 2, ["penta"] = 3, ["hyper"] = 4
 }
-G.C.veryrare = HEX('FF0000')
+G.C.veryrare = HEX('01A0AA')
+G.C.unlegendary = HEX('4D9344')
+G.ARGS.LOC_COLOURS["MDJ_veryrare"] = G.C.veryrare
+G.ARGS.LOC_COLOURS["MDJ_unlegendary"] = G.C.unlegendary
 if (SMODS.Mods["Cryptid"] or {}).can_load then
     MyDreamJournal.epic = "cry_epic"
+	MyDreamJournal.exotic = "cry_exotic"
 elseif (SMODS.Mods["vallkarri"] or {}).can_load then
     MyDreamJournal.epic = "valk_renowned"
+	MyDreamJournal.exotic = "valk_exquisite"
 else
     MyDreamJournal.epic = "MDJ_veryrare"
+	MyDreamJournal.exotic = "MDJ_unlegendary"
     SMODS.Rarity {
         key = 'veryrare',
+		-- the terrible, horrible, no good, very bad fix
+		loc_txt = {
+			name = "Unrare"
+		},
         badge_colour = G.C.veryrare,
         pools = { ["Joker"] = true },
         default_weight = 0.01,
@@ -162,6 +172,21 @@ else
 			return weight
 		end,
         --approx 3x more common than a cryptid epic joker
+    }
+    SMODS.Rarity {
+        key = 'unlegendary',
+		-- the terrible, horrible, no good, very bad fix
+		loc_txt = {
+			name = "Unlegendary"
+		},
+        badge_colour = G.C.unlegendary,
+        pools = { ["Joker"] = true },
+        default_weight = 0,
+		get_weight = function(self, weight, object_type)
+			-- genius!
+			return weight
+		end,
+        --approx 0x more common than a cryptid exotic joker :ujel:
     }
 end
 

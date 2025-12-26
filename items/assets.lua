@@ -11,8 +11,20 @@ SMODS.Atlas({
     py = 95
  })
   SMODS.Atlas({
+    key = "exotic",
+    path = "unlegendary.png",
+    px = 71,
+    py = 95
+ })
+  SMODS.Atlas({
     key = "placeholder",
     path = "stolenplaceholder.png",
+    px = 71,
+    py = 95
+ })
+   SMODS.Atlas({
+    key = "eplaceholder",
+    path = "exoticplaceholder.png",
     px = 71,
     py = 95
  })
@@ -28,4 +40,215 @@ SMODS.Atlas({
     px = 38,
     py = 38
  })
+ SMODS.Font {
+	key = "pokemon",
+	path = "pokemon-font.ttf",
+	render_scale = 200,
+	TEXT_HEIGHT_SCALE = 0.9,
+	TEXT_OFFSET = { x = 12, y = -24 },
+	FONTSCALE = 0.06,
+	squish = 1,
+	DESCSCALE = 1.25
+}
+ SMODS.Font {
+	key = "japan",
+	path = "Nosutaru-dotMPlusH-10-Regular.ttf",
+	render_scale = 200,
+	TEXT_HEIGHT_SCALE = 1,
+	TEXT_OFFSET = { x = 0, y = 0 },
+	FONTSCALE = 0.075,
+	squish = 1,
+	DESCSCALE = 1.25
+}
+local gradient = SMODS.Gradient {
+   key = "rainbow1",
+   colours = {
+      HEX("FF0000"),
+      HEX("FF6100"),
+      HEX("FFC700"),
+      HEX("CCFF00"),
+      HEX("65FF00"),
+      HEX("00FF00"),
+      HEX("00FF65"),
+      HEX("00FFCB"),
+      HEX("00CBFF"),
+      HEX("0065FF"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow1 = gradient
+local gradient = SMODS.Gradient {
+   key = "rainbow2",
+   colours = {
+      HEX("FF6100"),
+      HEX("FFC700"),
+      HEX("CCFF00"),
+      HEX("65FF00"),
+      HEX("00FF00"),
+      HEX("00FF65"),
+      HEX("00FFCB"),
+      HEX("00CBFF"),
+      HEX("0065FF"),
+      HEX("FF0000"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow2 = gradient
+local gradient = SMODS.Gradient {
+   key = "rainbow3",
+   colours = {
+      HEX("FFC700"),
+      HEX("CCFF00"),
+      HEX("65FF00"),
+      HEX("00FF00"),
+      HEX("00FF65"),
+      HEX("00FFCB"),
+      HEX("00CBFF"),
+      HEX("0065FF"),
+      HEX("FF0000"),
+      HEX("FF6100"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow3 = gradient
+local gradient = SMODS.Gradient {
+   key = "rainbow4",
+   colours = {
+      HEX("CCFF00"),
+      HEX("65FF00"),
+      HEX("00FF00"),
+      HEX("00FF65"),
+      HEX("00FFCB"),
+      HEX("00CBFF"),
+      HEX("0065FF"),
+      HEX("FF0000"),
+      HEX("FF6100"),
+      HEX("FFC700"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow4 = gradient
+local gradient = SMODS.Gradient {
+   key = "rainbow5",
+   colours = {
+      HEX("65FF00"),
+      HEX("00FF00"),
+      HEX("00FF65"),
+      HEX("00FFCB"),
+      HEX("00CBFF"),
+      HEX("0065FF"),
+      HEX("FF0000"),
+      HEX("FF6100"),
+      HEX("FFC700"),
+      HEX("CCFF00"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow5 = gradient
+local gradient = SMODS.Gradient {
+   key = "rainbow6",
+   colours = {
+      HEX("00FF00"),
+      HEX("00FF65"),
+      HEX("00FFCB"),
+      HEX("00CBFF"),
+      HEX("0065FF"),
+      HEX("FF0000"),
+      HEX("FF6100"),
+      HEX("FFC700"),
+      HEX("CCFF00"),
+      HEX("65FF00"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow6 = gradient
+local gradient = SMODS.Gradient {
+   key = "rainbow7",
+   colours = {
+      HEX("00FF65"),
+      HEX("00FFCB"),
+      HEX("00CBFF"),
+      HEX("0065FF"),
+      HEX("FF0000"),
+      HEX("FF6100"),
+      HEX("FFC700"),
+      HEX("CCFF00"),
+      HEX("65FF00"),
+      HEX("00FF00"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow7 = gradient
+local gradient = SMODS.Gradient {
+   key = "rainbow8",
+   colours = {
+      HEX("00FFCB"),
+      HEX("00CBFF"),
+      HEX("0065FF"),
+      HEX("FF0000"),
+      HEX("FF6100"),
+      HEX("FFC700"),
+      HEX("CCFF00"),
+      HEX("65FF00"),
+      HEX("00FF00"),
+      HEX("00FF65"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow8 = gradient
+local gradient = SMODS.Gradient {
+   key = "rainbow9",
+   colours = {
+      HEX("00CBFF"),
+      HEX("0065FF"),
+      HEX("FF0000"),
+      HEX("FF6100"),
+      HEX("FFC700"),
+      HEX("CCFF00"),
+      HEX("65FF00"),
+      HEX("00FF00"),
+      HEX("00FF65"),
+      HEX("00FFCB"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow9 = gradient
+local gradient = SMODS.Gradient {
+   key = "rainbow10",
+   colours = {
+      HEX("0065FF"),
+      HEX("FF0000"),
+      HEX("FF6100"),
+      HEX("FFC700"),
+      HEX("CCFF00"),
+      HEX("65FF00"),
+      HEX("00FF00"),
+      HEX("00FF65"),
+      HEX("00FFCB"),
+      HEX("00CBFF"),
+   },
+   cycle = 10,
+   interpolation = "linear"
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_rainbow10 = gradient
  SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
+SMODS.Shader({ key = 'dark', path = 'dark.fs' })

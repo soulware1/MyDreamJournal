@@ -440,18 +440,18 @@ SMODS.Joker {
     pos = { x = 5, y = 3 },
     atlas = 'awesomejokers',
     rarity = 2,
-    blueprint_compat = true,
+    blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
 	demicolon_compat = true,
     cost = 6,
     discovered = true,
-    config = { extra = { expo = 0.07 }, },
+    config = { extra = { expo = 0.12 }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.expo, colours = { G.C.DARK_EDITION } } }
     end,
     calculate = function(self, card, context)
-        if context.joker_main or context.forcetrigger then
+        if (context.joker_main or context.forcetrigger) and not context.retrigger_joker_check and not context.blueprint then
             return {
                 xmult = G.GAME.blind.chips^card.ability.extra.expo
             }
