@@ -321,7 +321,7 @@ return {
             e_MDJ_dark = {
                 name = "Dark",
                 text = {
-                    "{X:MDJ_operations,C:white}X#1#{} {C:MDJ_operations}operations{}",
+                    "{X:MDJ_operations,C:white}X#1#{} {C:MDJ_operations}Operations{}",
                 }
             },
             e_MDJ_corrupted = {
