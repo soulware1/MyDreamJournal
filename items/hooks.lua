@@ -304,8 +304,15 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 		key = MyDreamJournal.chipmultopswap[key]
 	end
-	if is_dark and type(amount) == "number" then
-		amount = amount*2
+	if is_dark and amount and ((type(amount) ~= "string") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) then
+		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
+		if not operation then
+			amount = amount*2
+		elseif MyDreamJournal.keystonumbers[operation] == 4 then
+			amount[2] = amount[2]*2
+		else
+			amount = amount*2
+		end
 	end
 	if next(latins) and ( MyDreamJournal.plustox[key] or MyDreamJournal.xtoe[key]) then
 		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
