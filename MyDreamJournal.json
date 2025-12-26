@@ -8,5 +8,8 @@
 	"main_file": "MyDreamJournal.lua",
 	"priority": 2147483648,
 	"badge_colour": "00FF00",
-	"version": "1.0.0"
+	"version": "1.0.0",
+	"dependencies": [
+        "Steamodded (>=1.0.0~BETA-1224a)"
+    ]
 }

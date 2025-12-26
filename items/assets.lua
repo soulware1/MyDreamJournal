@@ -17,6 +17,15 @@ SMODS.Atlas({
     py = 95
  })
   SMODS.Atlas({
+    key = "nine",
+    path = "large.png",
+    px = 71,
+    py = 95,
+    atlas_table = 'ANIMATION_ATLAS', -- this line tells SMODS that this is an animated atlas
+    frames = 9, -- the number of frames in your animation
+    fps = 9 -- the fps to play your animation in (defaults to 10 if not included)
+ })
+  SMODS.Atlas({
     key = "placeholder",
     path = "stolenplaceholder.png",
     px = 71,

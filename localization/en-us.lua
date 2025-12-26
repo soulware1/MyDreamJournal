@@ -296,6 +296,13 @@ return {
                     "a {C:dark_edition}edition{}, {C:dark_edition}enhancement{}, or {C:dark_edition}seal{}, give it one"
                 }
             },
+            j_MDJ_tln = {
+                name = '{C:mult}The Largest Number',
+                text = {
+                    "Sets all of the digits in",
+                    "{C:mult}Mult{}, {C:chips}Chips{}, and {C:purple}Score{} to {C:red}#1#"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {

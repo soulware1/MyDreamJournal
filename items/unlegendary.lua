@@ -171,3 +171,31 @@ SMODS.Joker {
         end
 	end
 }
+-- sets all digits in mult, chips, and score to 9
+SMODS.Joker {
+    key = "tln",
+    pos = {x = 0, y = 0 },
+    atlas = "nine",
+	discovered = true,
+    rarity = MyDreamJournal.exotic,
+	pronouns = 'they_them',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    immutable = true,
+    cost = 100,
+    config = { extra = { set = 9 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.set } }
+    end,
+	calculate = function(self, card, context)
+		if context.joker_main or context.forcetrigger then
+			return {
+                set_mult = card.ability.extra.set,
+                set_chips = card.ability.extra.set,
+                set_score = card.ability.extra.set
+			}
+		end
+	end
+}

@@ -124,6 +124,35 @@ function SumOfDigits(n)
     end
     return sum
 end
+function SetDigits(n, x)
+	if x < 0 then
+		warn("Number Negative!")
+		x = math.abs(x)
+	end
+	if x > to_big(9) then
+		error("Unsupported Number: Above 9")
+	elseif x ~= math.floor(x) then
+		error("Unsupported Number: Not Integer")
+	end
+	if n == to_big(0) then
+		return x
+	elseif x == to_big(0) then
+		return x
+	end
+	n = math.floor(n)
+	local digits = to_big(math.floor(to_big(math.log(to_big(n), to_big(10))+1)))
+	if x == 9 then
+		return to_big(10)^digits-1
+	elseif digits < 1001 then
+		local sum = 0
+		for i = 1, digits do
+			sum = sum * to_big(10) + to_big(x)
+		end
+		return sum
+	else
+		return x/9*to_big(10)^digits
+	end
+end
 
 local function sin(x)
     -- normalize x to range [-pi, pi]
@@ -171,7 +200,7 @@ if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
 		table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 	end
 end
-for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult', 'sum_mult', 'sum_chips', 'base_sum_mult', 'base_sum_chips', 'sin_chips', 'cos_chips', 'sin_mult', 'cos_mult'}) do
+for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult', 'sum_mult', 'sum_chips', 'base_sum_mult', 'base_sum_chips', 'sin_chips', 'cos_chips', 'sin_mult', 'cos_mult', 'set_mult', 'set_chips', 'set_score'}) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
 
@@ -304,6 +333,39 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 		key = MyDreamJournal.chipmultopswap[key]
 	end
+	if key == 'set_mult' then
+		local mult = SMODS.Scoring_Parameters["mult"]
+		mult.current = SetDigits(mult.current, amount)
+		update_hand_text({delay = 0}, {mult = mult.current})
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = "..mult.current, G.C.RED)
+		end
+		return true
+	end
+	if key == 'set_chips' then
+		local chips = SMODS.Scoring_Parameters["chips"]
+		chips.current = SetDigits(chips.current, amount)
+		update_hand_text({delay = 0}, {chips = chips.current})
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = "..chips.current, G.C.BLUE)
+		end
+		return true
+	end
+	if key == 'set_score' then
+		local score = SetDigits(G.GAME.chips, 9)
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				G.GAME.chips = score
+				G.HUD:get_UIE_by_ID('chip_UI_count'):juice_up(0.3, 0.3)
+
+				return true
+			end
+		}))
+		if not Talisman.config_file.disable_anims then
+			card_eval_status_text(scored_card, "extra", nil, nil, nil, { message = "Score = " .. number_format(score), colour = G.C.PURPLE })
+		end
+		return true
+	end
 	if is_dark and amount and ((type(amount) ~= "string") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) then
 		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
 		if not operation then
@@ -312,42 +374,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			amount[2] = amount[2]*2
 		else
 			amount = amount*2
-		end
-	end
-	if next(latins) and ( MyDreamJournal.plustox[key] or MyDreamJournal.xtoe[key]) then
-		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
-		for i = 1, #latins do
-			local v = latins[i]
-			local converted_key = MyDreamJournal.plustox[key]
- 			---@diagnostic disable-next-line: redefined-local
-			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
-			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
-			if not converted_key then
-				local converted_key = MyDreamJournal.xtoe[key]
-				if is_corrupted and MyDreamJournal.xchipstoechips[key] then
-					local cchips = SMODS.Scoring_Parameters.chips.current
-					local achips = cchips*amount
-					amount = math.log(achips, cchips)+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
-					key = converted_key
-				elseif not is_corrupted and MyDreamJournal.xmulttoemult[key] then
-					local cmult = SMODS.Scoring_Parameters.mult.current
-					local amult = cmult*amount
-					amount = math.log(amult, cmult)+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
-					key = converted_key
-				end
-			else
-				if is_corrupted and MyDreamJournal.pluschipstoxchips[key] then
-					local cchips = SMODS.Scoring_Parameters.chips.current
-					local achips = cchips+amount
-					amount = achips/cchips+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
-					key = converted_key
-				elseif not is_corrupted and MyDreamJournal.plusmulttoxmult[key] then
-					local cmult = SMODS.Scoring_Parameters.mult.current
-					local amult = cmult+amount
-					amount = amult/cmult+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
-					key = converted_key
-				end
-			end
 		end
 	end
 	-- stuff that depends on current state of mult/chips
@@ -469,6 +495,42 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "="..amount.. " Chips", G.C.BLUE)
 			end
 			return true
+		end
+	end
+	if next(latins) and ( MyDreamJournal.plustox[key] or MyDreamJournal.xtoe[key]) then
+		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
+		for i = 1, #latins do
+			local v = latins[i]
+			local converted_key = MyDreamJournal.plustox[key]
+ 			---@diagnostic disable-next-line: redefined-local
+			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
+			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
+			if not converted_key then
+				local converted_key = MyDreamJournal.xtoe[key]
+				if is_corrupted and MyDreamJournal.xchipstoechips[key] then
+					local cchips = SMODS.Scoring_Parameters.chips.current
+					local achips = cchips*amount
+					amount = math.log(achips, cchips)+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
+					key = converted_key
+				elseif not is_corrupted and MyDreamJournal.xmulttoemult[key] then
+					local cmult = SMODS.Scoring_Parameters.mult.current
+					local amult = cmult*amount
+					amount = math.log(amult, cmult)+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
+					key = converted_key
+				end
+			else
+				if is_corrupted and MyDreamJournal.pluschipstoxchips[key] then
+					local cchips = SMODS.Scoring_Parameters.chips.current
+					local achips = cchips+amount
+					amount = achips/cchips+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
+					key = converted_key
+				elseif not is_corrupted and MyDreamJournal.plusmulttoxmult[key] then
+					local cmult = SMODS.Scoring_Parameters.mult.current
+					local amult = cmult+amount
+					amount = amult/cmult+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
+					key = converted_key
+				end
+			end
 		end
 	end
 	if next(unicodes) and not is_demicolon then
