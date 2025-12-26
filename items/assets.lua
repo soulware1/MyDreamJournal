@@ -250,5 +250,16 @@ local gradient = SMODS.Gradient {
 }
 loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow10 = gradient
+local gradient = SMODS.Gradient {
+   key = "operations",
+   colours = {
+      G.C.MULT,
+      G.C.CHIPS,
+      G.C.MONEY,
+   },
+   cycle = 3,
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_operations = gradient
  SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
 SMODS.Shader({ key = 'dark', path = 'dark.fs' })
