@@ -2,8 +2,8 @@
 local to_big = to_big or function(n)
 	return n
 end
-local to_number = to_number or function(x, e)
-	return tonumber(x, e)
+local to_number = to_number or function(x)
+	return x
 end
 function SMODS.current_mod.calculate(self, context)
 	-- setup
@@ -54,7 +54,7 @@ function Copy3(obj, seen)
 end
 
 local big_ass_number = to_big(10)^1000
-local scientific_notation = to_big(10)^11
+local scientific_notation = to_big(10)^14
 function Base10_to_base_less_then_10(n, b)
     if n == to_big(0) then return to_big(0) end
     b = math.floor(b)
@@ -114,7 +114,7 @@ function SumOfDigits(n)
 	-- count in decimals if lower then scientific_notation
 	if n < scientific_notation then
 		n = string.gsub(tostring(n), "%.", "")
-		n = math.floor(to_big(to_number(n)))
+		n = math.floor(to_big(tonumber(n)))
 	end
     local sum = to_big(0)
     while n ~= to_big(0) do
@@ -124,6 +124,7 @@ function SumOfDigits(n)
     end
     return sum
 end
+
 function SetDigits(n, x)
 	if x < 0 then
 		warn("Number Negative!")
@@ -139,7 +140,15 @@ function SetDigits(n, x)
 	elseif x == to_big(0) then
 		return x
 	end
-	n = math.floor(n)
+	if n ~= math.floor(n) and n < scientific_notation then
+		if Talisman then
+			return to_big(string.gsub(tostring(n), "%d", "9"))
+		else
+			return tonumber(string.gsub(tostring(n), "%d", "9"))
+		end
+	else
+		n = math.floor(n)
+	end
 	local digits = to_big(math.floor(to_big(math.log(to_big(n), to_big(10))+1)))
 	if x == 9 then
 		return to_big(10)^digits-1
@@ -150,47 +159,29 @@ function SetDigits(n, x)
 		end
 		return sum
 	else
-		return x/9*to_big(10)^digits
+		return x/9*((to_big(10)^digits)-1)
 	end
 end
-
-local function sin(x)
-    -- normalize x to range [-pi, pi]
-    local pi = to_big(math.pi)
-    x = x % (2 * pi)
-    if x > pi then
-        x = x - 2 * pi
-    end
-
-    local term = x
-    local sum = x
-    local x2 = x * x
-
-    for i = 3, 15, 2 do
-        term = -term * x2 / ((i - 1) * i)
-        sum = sum + term
-    end
-
-    return sum
-end
-local function cos(x)
-    -- normalize x to range [-pi, pi]
-    local pi = to_big(math.pi)
-    x = x % (2 * pi)
-    if x > pi then
-        x = x - 2 * pi
-    end
-
-    local term = 1
-    local sum = 1
-    local x2 = x * x
-
-    for i = 2, 14, 2 do
-        term = -term * x2 / ((i - 1) * i)
-        sum = sum + term
-    end
-
-    return sum
+function SetVisibleDigits(n, x)
+	if n < scientific_notation then
+		return SetDigits(n, x)
+	end
+	if x < 0 then
+		warn("Number Negative!")
+		x = math.abs(x)
+	end
+	if x > to_big(9) then
+		error("Unsupported Number: Above 9")
+	elseif x ~= math.floor(x) then
+		error("Unsupported Number: Not Integer")
+	end
+	n = tostring(n)
+	n = string.gsub(n, "%d", "9")
+	if Talisman then
+		return to_big(n)
+	else
+		return tonumber(n)
+	end
 end
 
 
@@ -200,7 +191,7 @@ if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
 		table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 	end
 end
-for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult', 'sum_mult', 'sum_chips', 'base_sum_mult', 'base_sum_chips', 'sin_chips', 'cos_chips', 'sin_mult', 'cos_mult', 'set_mult', 'set_chips', 'set_score'}) do
+for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult', 'sum_mult', 'sum_chips', 'base_sum_mult', 'base_sum_chips', 'sin_chips', 'cos_chips', 'sin_mult', 'cos_mult', 'set_mult', 'set_chips', 'set_score', 'set_visible_mult', 'set_visible_chips', 'set_visible_score'}) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
 
@@ -366,7 +357,40 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 		return true
 	end
-	if is_dark and amount and ((type(amount) ~= "string") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) then
+	if key == 'set_visible_mult' then
+		local mult = SMODS.Scoring_Parameters["mult"]
+		mult.current = SetVisibleDigits(mult.current, amount)
+		update_hand_text({delay = 0}, {mult = mult.current})
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = "..mult.current, G.C.RED)
+		end
+		return true
+	end
+	if key == 'set_visible_chips' then
+		local chips = SMODS.Scoring_Parameters["chips"]
+		chips.current = SetVisibleDigits(chips.current, amount)
+		update_hand_text({delay = 0}, {chips = chips.current})
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = "..chips.current, G.C.BLUE)
+		end
+		return true
+	end
+	if key == 'set_visible_score' then
+		local score = SetVisibleDigits(G.GAME.chips, 9)
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				G.GAME.chips = score
+				G.HUD:get_UIE_by_ID('chip_UI_count'):juice_up(0.3, 0.3)
+
+				return true
+			end
+		}))
+		if not Talisman.config_file.disable_anims then
+			card_eval_status_text(scored_card, "extra", nil, nil, nil, { message = "Score = " .. number_format(score), colour = G.C.PURPLE })
+		end
+		return true
+	end
+	if is_dark and amount and ((type(amount) == "table" or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) then
 		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
 		if not operation then
 			amount = amount*2
@@ -442,39 +466,19 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if key == "sin_chips" then
 		key = "xchips"
-		local current = to_number(SMODS.Scoring_Parameters.chips.current)
-		if not current then
-			amount = sin(current)+amount
-		else
-			amount = math.sin(current)+amount
-		end
+		amount = math.sin(to_number(SMODS.Scoring_Parameters.chips.current % (2*math.pi)))+amount
 	end
 	if key == "cos_chips" then
 		key = "xchips"
-		local current = to_number(SMODS.Scoring_Parameters.chips.current)
-		if not current then
-			amount = cos(current)+amount
-		else
-			amount = math.cos(current)+amount
-		end
+		amount = math.cos(to_number(SMODS.Scoring_Parameters.chips.current % (2*math.pi)))+amount
 	end
 	if key == "sin_mult" then
 		key = "xmult"
-		local current = to_number(SMODS.Scoring_Parameters.mult.current)
-		if not current then
-			amount = sin(current)+amount
-		else
-			amount = math.sin(current)+amount
-		end
+		amount = math.sin(to_number(SMODS.Scoring_Parameters.mult.current % (2*math.pi)))+amount
 	end
 	if key == "cos_mult" then
 		key = "xmult"
-		local current = to_number(SMODS.Scoring_Parameters.mult.current)
-		if not current then
-			amount = cos(current)+amount
-		else
-			amount = math.cos(current)+amount
-		end
+		amount = math.cos(to_number(SMODS.Scoring_Parameters.mult.current % (2*math.pi)))+amount
 	end
 	-- add in the equals if no entropy :sob:
 	if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then

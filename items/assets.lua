@@ -270,5 +270,7 @@ local gradient = SMODS.Gradient {
 }
 loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_operations = gradient
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_damage = HEX('FF6969')
  SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
 SMODS.Shader({ key = 'dark', path = 'dark.fs' })

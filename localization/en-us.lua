@@ -298,10 +298,10 @@ return {
             },
             j_MDJ_tln = {
                 -- https://toby.fangamer.com/interviews/letter/
-                name = '{C:mult}The Largest Number',
+                name = '{C:MDJ_damage}The Largest Number',
                 text = {
-                    "Sets all of the digits in",
-                    "{C:mult}Mult{}, {C:chips}Chips{}, and {C:purple}Score{} to {C:red}#1#"
+                    "Sets all of the {C:attention}visible{} digits in",
+                    "{C:mult}Mult{}, {C:chips}Chips{}, and {C:purple}Score{} to {C:MDJ_damage}#1#"
                 }
             },
         },

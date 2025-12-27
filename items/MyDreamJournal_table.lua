@@ -74,6 +74,10 @@ MyDreamJournal.chipmultopswap = {
 	['cos_chips'] = 'cos_mult',
 	['sin_mult'] = 'sin_chips',
 	['cos_mult'] = 'cos_chips',
+	['set_mult'] = 'set_chips',
+	['set_chips'] = 'set_mult',
+	['set_visible_mult'] = 'set_visible_chips',
+	['set_visible_chips'] = 'set_visible_mult',
 	-- Other mods can add their custom operations to this table.
 }
 
