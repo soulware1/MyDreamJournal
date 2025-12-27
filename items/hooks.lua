@@ -59,6 +59,8 @@ function Base10_to_base_less_then_10(n, b)
     if n == to_big(0) then return to_big(0) end
     b = math.floor(b)
     n = math.floor(n)
+	b = to_big(b)
+	n = to_big(n)
 	if b > to_big(10) then
 		return BaseB_to_base_10(n, b)
 	-- silly goose
@@ -70,7 +72,7 @@ function Base10_to_base_less_then_10(n, b)
     if n >= big_ass_number and b ~= 1 then
         return n^approximation
 	elseif n >= 1001 and b == 1 then
-		return 10^n
+		return (10^n-1)/9
     end
 	n = math.floor(to_big(n))
     local result = to_big(0)
@@ -126,7 +128,9 @@ function SumOfDigits(n)
 end
 
 function SetDigits(n, x)
-	if x < 0 then
+	x = to_big(x)
+	n = to_big(n)
+	if x < to_big(0) then
 		warn("Number Negative!")
 		x = math.abs(x)
 	end
@@ -163,6 +167,8 @@ function SetDigits(n, x)
 	end
 end
 function SetVisibleDigits(n, x)
+	n = to_big(n)
+	x = to_big(x)
 	if n < scientific_notation then
 		return SetDigits(n, x)
 	end
