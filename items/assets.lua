@@ -69,6 +69,36 @@ SMODS.Atlas({
 	squish = 1,
 	DESCSCALE = 1.25
 }
+ SMODS.Font {
+	key = "vcr",
+	path = "VCR_OSD_MONO_1.001.ttf",
+	render_scale = 200,
+	TEXT_HEIGHT_SCALE = 1,
+	TEXT_OFFSET = { x = 0, y = 0 },
+	FONTSCALE = 0.075,
+	squish = 1,
+	DESCSCALE = 1.25
+}
+ SMODS.Font {
+	key = "unifont",
+	path = "UnifontExMono.ttf",
+	render_scale = 200,
+	TEXT_HEIGHT_SCALE = 1,
+	TEXT_OFFSET = { x = 0, y = 0 },
+	FONTSCALE = 0.075,
+	squish = 1,
+	DESCSCALE = 1.25
+}
+ SMODS.Font {
+	key = "omori",
+	path = "OMORI_GAME2.ttf",
+	render_scale = 300,
+	TEXT_HEIGHT_SCALE = 1,
+	TEXT_OFFSET = { x = 0, y = 0 },
+	FONTSCALE = 0.075,
+	squish = 1,
+	DESCSCALE = 1.25
+}
 local gradient = SMODS.Gradient {
    key = "rainbow1",
    colours = {
@@ -270,6 +300,29 @@ local gradient = SMODS.Gradient {
 }
 loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_operations = gradient
+local gradient = SMODS.Gradient {
+   key = "scoreparams",
+   colours = {
+      G.C.MULT,
+      G.C.CHIPS,
+   },
+   cycle = 2,
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_scoreparams = gradient
+G.ARGS.LOC_COLOURS.MDJ_operations = gradient
+local gradient = SMODS.Gradient {
+   key = "suits",
+   colours = {
+      G.C.SUITS.Spades,
+      G.C.SUITS.Hearts,
+      G.C.SUITS.Diamonds,
+      G.C.SUITS.Clubs,
+   },
+   cycle = 4,
+}
+loc_colour()
+G.ARGS.LOC_COLOURS.MDJ_suits = gradient
 loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_damage = HEX('FF6969')
  SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })

@@ -304,6 +304,60 @@ return {
                     "{C:mult}Mult{}, {C:chips}Chips{}, and {C:purple}Score{} to {C:MDJ_damage}#1#"
                 }
             },
+            j_MDJ_smfw = {
+                name = {
+                    "See {f:MDJ_pokemon}M' {f:MDJ_japan}- {f:MDJ_vcr}f{f:MDJ_arial}■ {f:MDJ_unifont}Wh▩m",
+                    '{s:0.75,f:MDJ_arial}By S. M. Bowers',
+                },
+                text = {
+                    "{C:attention,f:MDJ_japan}Rankless{f:MDJ_japan} cards are no longer rankless",
+                    '{C:attention,f:MDJ_omori}Suitless{f:MDJ_omori} cards are no longer suitless'
+                }
+            },
+            j_MDJ_spaces = {
+                name = {
+                    "{f:MDJ_omori}Spaces In-between",
+                    '{s:0.75,f:MDJ_omori}Composed by Pedro Silva',
+                },
+                text = {
+                    "{X:chips,C:white,f:MDJ_omori}X#1#{f:MDJ_omori} Chips for each {C:attention,f:MDJ_omori}unique{f:MDJ_omori} rank",
+                    '{f:MDJ_omori}in scored hand',
+                    '{X:mult,C:white,f:MDJ_omori}X#1#{f:MDJ_omori} Mult for each {C:attention,f:MDJ_omori}missing{f:MDJ_omori} rank',
+                    '{f:MDJ_omori}in scored hand'
+                }
+            },
+            j_MDJ_mass = {
+                name = 'Mass of Jokers',
+                text = {
+                    "Cards with an {C:dark_edition}edition{}, {C:red}seal{}, or {C:attention}enhancement{}",
+                    "have a {C:green}#1# in #2#{} to spread one of them",
+                    "to an {C:attention}adjacent{} card before scoring"
+                }
+            },
+            j_MDJ_heartware = {
+                name = 'Heartware',
+                text = {
+                    "{C:mult}+Mult{} and {C:chips}+Chips{} are converted to",
+                    "{C:mult}+Mult%{} and {C:chips}+Chips%{} using this forumla",
+                    "{C:MDJ_scoreparams}N{C:inactive}x10"
+                }
+            },
+            j_MDJ_urotsuki = {
+                name = 'Urotsuki',
+                text = {
+                    "{X:dark_edition,C:white}^0.1{} Chips for each",
+                    "unique played poker hand",
+                    "{C:inactive}(Currently {X:dark_edition,C:white}^#1#{C:inactive} Chips)"
+                }
+            },
+            j_MDJ_dither = {
+                name = '3-Bit',
+                text = {
+                    "{C:MDJ_suits}Suits{} count as Ranks in",
+                    "Poker Hands",
+                    "{C:inactive}(ex: {C:spades}S S {C:hearts}H H H{C:inactive} = {C:attention}Full House{C:inactive})"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -370,7 +424,13 @@ return {
                 text = {
                     "{f:MDJ_arial}yo ddawg heximal and seximal are just base 6"
                 }
-            }
+            },
+            MDJ_precent = {
+                name = "{f:MDJ_arial}btw",
+                text = {
+                    "{f:MDJ_arial,C:mult}+4%{f:MDJ_arial} Mult = {f:MDJ_arial,C:mult}+4%{f:MDJ_arial} of Current Mult"
+                }
+            },
         },
     },
     misc = {

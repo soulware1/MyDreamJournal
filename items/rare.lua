@@ -170,7 +170,6 @@ SMODS.Joker {
 		end
 	end
 }
-
 SMODS.Joker {
     key = "base",
     atlas = 'awesomejokers',
@@ -194,6 +193,127 @@ SMODS.Joker {
             return {
                 base_chips = 9,
             }
+        end
+    end
+}
+SMODS.Joker {
+    key = "mass",
+    atlas = 'awesomejokers',
+    pos = { x = 0, y = 4 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'they_them',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 9,
+	-- so no one gets any funnny ideas!
+    config = { extra = { odds = 4 } },
+    loc_vars = function(self, info_queue, card)
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds,
+            'j_MDJ_mass')
+        return { vars = { numerator, denominator } }
+    end,
+    calculate = function (self, card, context)
+        if context.before or context.forcetrigger then
+            local jokers_with_editions = {}
+            local consumables_with_editions = {}
+            local playing_cards_with_editions = {}
+            local playing_cards_with_enhancements = {}
+            local playing_cards_with_seals = {}
+            for i = 1, #G.jokers.cards do
+                local joker = G.jokers.cards[i]
+                if joker.edition then
+                    jokers_with_editions[#jokers_with_editions+1] = i
+                end
+            end
+            for i = 1, #G.consumeables.cards do
+                local consumable = G.consumeables.cards[i]
+                if consumable.edition then
+                    consumables_with_editions[#consumables_with_editions+1] = i
+                end
+            end
+            for i = 1, #context.full_hand do
+                local playing_card = context.full_hand[i]
+                if playing_card.edition then
+                    playing_cards_with_editions[#playing_cards_with_editions+1] = {i, "scored"}
+                end
+                if playing_card.config.center.key ~= "m_base" then
+                    playing_cards_with_enhancements[#playing_cards_with_enhancements+1] = {i, "scored"}
+                end
+                if playing_card.seal then
+                    playing_cards_with_seals[#playing_cards_with_seals+1] = {i, "scored"}
+                end
+            end
+            for i = 1, #G.hand.cards do
+                local playing_card = G.hand.cards[i]
+                if playing_card.edition then
+                    playing_cards_with_editions[#playing_cards_with_editions+1] = {i, "inhand"}
+                end
+                if playing_card.config.center.key ~= "m_base" then
+                    playing_cards_with_enhancements[#playing_cards_with_enhancements+1] = {i, "inhand"}
+                end
+                if playing_card.seal then
+                    playing_cards_with_seals[#playing_cards_with_seals+1] = {i, "inhand"}
+                end
+            end
+            for i = 1, #jokers_with_editions do
+                local index = jokers_with_editions[i]
+                local joker = G.jokers.cards[index]
+                if G.jokers.cards[index-1] and not G.jokers.cards[index-1].edition and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    G.jokers.cards[index-1]:set_edition(joker.edition)
+                end
+                if G.jokers.cards[index+1] and not G.jokers.cards[index+1].edition and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    G.jokers.cards[index+1]:set_edition(joker.edition)
+                end
+            end
+            for i = 1, #consumables_with_editions do
+                local index = consumables_with_editions[i]
+                local consumable = G.consumeables.cards[index]
+                if G.consumeables.cards[index-1] and not G.consumeables.cards[index-1].edition and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    G.consumeables.cards[index-1]:set_edition(consumable.edition)
+                end
+                if G.consumeables.cards[index+1] and not G.consumeables.cards[index+1].edition and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    G.consumeables.cards[index+1]:set_edition(consumable.edition)
+                end
+            end
+            for i = 1, #playing_cards_with_editions do
+                local tab = playing_cards_with_editions[i]
+                local index = tab[1]
+                local origin = ( (tab[2] == "scored") and context.full_hand) or G.hand.cards
+                local playing_card = origin[index]
+                if origin[index-1] and not origin[index-1].edition and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    origin[index-1]:set_edition(playing_card.edition)
+                end
+                if origin[index+1] and not origin[index+1].edition and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    origin[index+1]:set_edition(playing_card.edition)
+                end
+            end
+            for i = 1, #playing_cards_with_enhancements do
+                local tab = playing_cards_with_enhancements[i]
+                local index = tab[1]
+                local origin = ( (tab[2] == "scored") and context.full_hand) or G.hand.cards
+                local playing_card = origin[index]
+                if origin[index-1] and origin[index-1].config.center.key == "m_base" and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    origin[index-1]:set_ability(playing_card.config.center.key, true)
+                end
+                if origin[index+1] and origin[index+1].config.center.key == "m_base" and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    origin[index+1]:set_ability(playing_card.config.center.key, true)
+                end
+            end
+            for i = 1, #playing_cards_with_seals do
+                local tab = playing_cards_with_seals[i]
+                local index = tab[1]
+                local origin = ( (tab[2] == "scored") and context.full_hand) or G.hand.cards
+                local playing_card = origin[index]
+                if origin[index-1] and not origin[index-1].seal and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    origin[index-1]:set_seal(playing_card.seal)
+                end
+                if origin[index+1] and not origin[index+1].seal and SMODS.pseudorandom_probability(card, 'j_MDJ_mass', 1, card.ability.extra.odds) then
+                    origin[index+1]:set_seal(playing_card.seal)
+                end
+            end
         end
     end
 }

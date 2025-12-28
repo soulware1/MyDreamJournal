@@ -439,6 +439,7 @@ SMODS.Joker {
     key = "graph2",
     pos = { x = 5, y = 3 },
     atlas = 'awesomejokers',
+	pronouns = 'it_its',
     rarity = 2,
     blueprint_compat = false,
     eternal_compat = true,
@@ -457,4 +458,21 @@ SMODS.Joker {
             }
         end
     end
+}
+SMODS.Joker {
+    key = "dither",
+    pos = { x = 1, y = 4 },
+    atlas = 'awesomejokers',
+	pronouns = 'he_they',
+    rarity = 2,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = false,
+    cost = 6,
+    discovered = true,
+    config = { extra = {  }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
 }

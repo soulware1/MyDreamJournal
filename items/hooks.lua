@@ -11,6 +11,8 @@ function SMODS.current_mod.calculate(self, context)
 		G.GAME.current_round.MDJ_construction_jokers_ranks = {}
 		G.GAME.current_round.MDJ_construction_jokers_temp_ranks = {}
 		G.GAME.current_round.MDJ_construction_jokers_displayed_ranks = "None"
+		G.GAME.current_round.played_poker_hands = {}
+		G.GAME.current_round.played_poker_hands_hash = {}
 	end
 	local ranks = G.GAME.current_round.MDJ_construction_jokers_ranks
 	local ranks2 = G.GAME.current_round.MDJ_construction_jokers_temp_ranks
@@ -31,7 +33,10 @@ function SMODS.current_mod.calculate(self, context)
 		end
 		G.GAME.current_round.MDJ_construction_jokers_displayed_ranks = table.concat(ranks2, ", ")
 	end
-
+	if context.final_scoring_step and context.scoring_name and not G.GAME.current_round.played_poker_hands_hash[context.scoring_name] then
+		G.GAME.current_round.played_poker_hands_hash[context.scoring_name] = true
+		G.GAME.current_round.played_poker_hands[#G.GAME.current_round.played_poker_hands+1] = context.scoring_name
+	end
 	if context.ante_change then
 		G.GAME.current_round.MDJ_construction_jokers_ranks = {}
 		G.GAME.current_round.MDJ_construction_jokers_temp_ranks = {}
@@ -197,13 +202,45 @@ if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
 		table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 	end
 end
-for _, v in ipairs({'base_chips', 'base_mult', 'digit_chips', 'digit_mult', 'sum_mult', 'sum_chips', 'base_sum_mult', 'base_sum_chips', 'sin_chips', 'cos_chips', 'sin_mult', 'cos_mult', 'set_mult', 'set_chips', 'set_score', 'set_visible_mult', 'set_visible_chips', 'set_visible_score'}) do
+-- keys that are "converted" to another key, for example digit_chips converting to chips
+local converted_keys = {
+	'digit_chips',
+	'digit_mult',
+	'sum_mult',
+	'sum_chips',
+	'sin_chips',
+	'cos_chips',
+	'sin_mult',
+	'cos_mult',
+	'percent_chips',
+	'percent_mult',
+	-- calcuated after every other modifer
+	'heartware_percent_chips',
+	'heartware_percent_mult'
+}
+-- keys that makes a scoring param equal to something, usually based off of the scoring param itself
+local equals_key = {
+	'base_chips',
+	'base_mult',
+	'base_sum_mult',
+	'base_sum_chips',
+	'set_mult',
+	'set_chips',
+	'set_score',
+	'set_visible_mult',
+	'set_visible_chips',
+	'set_visible_score'
+}
+for _, v in ipairs({converted_keys}) do
+	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
+end
+for _, v in ipairs({equals_key}) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
 
 local suitless = SMODS.has_no_suit
 SMODS.has_no_suit = function(card)
-	if next(SMODS.find_card("j_MDJ_etykiw")) then
+	if next(SMODS.find_card("j_MDJ_etykiw")) or next(SMODS.find_card("j_MDJ_smfw")) then
 		return false
 	end
 	return suitless(card)
@@ -220,6 +257,7 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 	local anarchy = next(SMODS.find_card("j_MDJ_anarchy"))
 	local suit_shuffle = next(SMODS.find_card("j_MDJ_suitshuffle"))
 	local everything_you_know_is_wrong = next(SMODS.find_card("j_MDJ_etykiw"))
+	local smfw = next(SMODS.find_card("j_MDJ_smfw"))
 	local anarchy_suit = 'Hearts'
 	if suit_shuffle then
 		anarchy_suit = 'Spades'
@@ -230,6 +268,9 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 	end
 	if everything_you_know_is_wrong and suitless(self) then
 		return true
+	end
+	if smfw and suitless(self) then
+		return self.base.suit == suit
 	end
 	if suit_shuffle then
 		local clubs = "Clubs"
@@ -243,10 +284,20 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 	end
 	return g
 end
+local rankless = SMODS.has_no_rank
+function SMODS.has_no_rank(card)
+	if next(SMODS.find_card("j_MDJ_smfw")) then
+		return false
+	end
+	return rankless(card)
+end
 local oldrank = Card.get_id
 function Card:get_id()
 	if next(SMODS.find_card("j_MDJ_etykiw")) and SMODS.has_no_rank(self) then
 		return -21
+	end
+	if next(SMODS.find_card("j_MDJ_smfw")) and rankless(self) then
+		return self.base.id or -21
 	end
 	return oldrank(self)
 end
@@ -261,6 +312,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local soulwares = SMODS.find_card("j_MDJ_soulware")
 	local bitplanes = SMODS.find_card("j_MDJ_bitplane")
 	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
+	local theres_a_heartware = next(SMODS.find_card("j_MDJ_heartware"))
 	local marks = SMODS.find_card("j_MDJ_mark")
 	local latins = SMODS.find_card("j_MDJ_latin")
 	local haxors = SMODS.find_card("j_MDJ_leet")
@@ -481,6 +533,22 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if key == "cos_mult" then
 		key = "xmult"
 		amount = math.cos(to_number(SMODS.Scoring_Parameters.mult.current % (2*math.pi)))+amount
+	end
+	if key == 'percent_mult' then
+		local mult = SMODS.Scoring_Parameters["mult"]
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "+"..amount.."% Mult", G.C.RED)
+		end
+		amount = mult.current*(amount/100)
+		key = "mult_mod"
+	end
+	if key == 'percent_chips' then
+		local chips = SMODS.Scoring_Parameters["chips"]
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "+"..amount.."%", G.C.BLUE)
+		end
+		amount = chips.current*(amount/100)
+		key = "chip_mod"
 	end
 	-- add in the equals if no entropy :sob:
 	if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
@@ -804,6 +872,30 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		new_effect[swapped] = new_amount
 		SMODS.calculate_effect(new_effect, scored_card, from_edition)
 		::skip::
+	end
+	if theres_a_heartware and key and MyDreamJournal.plustox[key] and key ~= "glop" then
+		if MyDreamJournal.plusmulttoxmult[key] then
+			key = 'heartware_percent_mult'
+		end
+		if MyDreamJournal.pluschipstoxchips[key] then
+			key = 'heartware_percent_chips'
+		end
+	end
+	if key == 'heartware_percent_mult' then
+		local mult = SMODS.Scoring_Parameters["mult"]
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "+"..amount.."% Mult", G.C.RED)
+		end
+		amount = mult.current*(amount/100)
+		key = "mult_mod"
+	end
+	if key == 'heartware_percent_chips' then
+		local chips = SMODS.Scoring_Parameters["chips"]
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "+"..amount.."%", G.C.BLUE)
+		end
+		amount = chips.current*(amount/100)
+		key = "chip_mod"
 	end
 	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)
 	if ret then return ret end

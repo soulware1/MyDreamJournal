@@ -1,0 +1,46 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "for i=#hand, 1, -1 do"
+position = "before"
+payload = '''
+    if next(SMODS.find_card("j_MDJ_dither")) then
+        for i = 1, #SMODS.Suit.obj_buffer do
+            vals[#vals+i] = {}
+        end
+    end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "for j=1, #hand do"
+position = "before"
+payload = '''
+    if next(SMODS.find_card("j_MDJ_dither")) then
+        local altcurr = {}
+        table.insert(altcurr, hand[i])
+        for j=1, #hand do
+            for k=1, #SMODS.Suit.obj_buffer do
+                if hand[i]:is_suit(SMODS.Suit.obj_buffer[k]) and hand[j]:is_suit(SMODS.Suit.obj_buffer[k]) and i ~= j then
+                    table.insert(altcurr, hand[j])
+                end
+            end
+        end
+        if or_more and (#altcurr >= num) or (#altcurr == num) then
+            for j=1, #SMODS.Suit.obj_buffer do
+                if altcurr[1]:is_suit(SMODS.Suit.obj_buffer[j]) then
+                    -- pretend its a rank beyond the max one
+                    vals[SMODS.Rank.max_id.value+j] = altcurr
+                end
+            end
+        end
+    end
+'''
+match_indent = true

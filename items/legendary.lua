@@ -84,3 +84,20 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "heartware",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'she_her',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 20,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { set = "Other", key = "MDJ_precent", config = {} }
+        return { vars = {  } }
+    end,
+}

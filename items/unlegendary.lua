@@ -199,3 +199,32 @@ SMODS.Joker {
 		end
 	end
 }
+SMODS.Joker {
+    key = "urotsuki",
+    pos = {x = 0, y = 0 },
+    soul_pos = { x = 1, y = 0, extra = { x = 2, y = 0 } },
+    atlas = "eplaceholder",
+	discovered = true,
+    rarity = MyDreamJournal.exotic,
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 100,
+    config = { extra = { per = 0.1 }, },
+    loc_vars = function(self, info_queue, card)
+        if G.GAME and G.GAME.current_round and G.GAME.current_round.played_poker_hands then
+            return { vars = { 1+#G.GAME.current_round.played_poker_hands*card.ability.extra.per } }
+        else
+            return { vars = { 1 } }
+        end
+    end,
+	calculate = function(self, card, context)
+		if context.joker_main or context.forcetrigger then
+			return {
+                echips = 1+#G.GAME.current_round.played_poker_hands*card.ability.extra.per,
+			}
+		end
+	end
+}

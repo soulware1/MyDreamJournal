@@ -1,0 +1,44 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if _c.name == 'Stone Card' or _c.replace_base_card then full_UI_table.name = true"
+position = "at"
+payload = '''
+if (_c.name == 'Stone Card' or _c.replace_base_card) and not next(SMODS.find_card("j_MDJ_smfw")) then full_UI_table.name = true
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if card_type == 'Default' or card_type == 'Enhanced' and not _c.replace_base_card and card and card.base then"
+position = "at"
+payload = '''
+if card_type == 'Default' or card_type == 'Enhanced' and ( next(SMODS.find_card("j_MDJ_smfw")) or not _c.replace_base_card ) and card and card.base then
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if not _c.no_suit then"
+position = "at"
+payload = '''
+if next(SMODS.find_card("j_MDJ_smfw")) or not _c.no_suit then
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if not _c.no_rank then"
+position = "at"
+payload = '''
+if next(SMODS.find_card("j_MDJ_smfw")) or not _c.no_rank then
+'''
+match_indent = true

@@ -8,6 +8,7 @@
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0905a]
 SMODS.load_file("items/assets.lua")()
 SMODS.load_file("items/MyDreamJournal_table.lua")()
+SMODS.load_file("items/debug.lua")()
 SMODS.load_file("items/editions.lua")()
 SMODS.load_file("items/common.lua")()
 SMODS.load_file("items/uncommon.lua")()

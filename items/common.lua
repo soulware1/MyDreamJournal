@@ -104,6 +104,7 @@ SMODS.Joker {
     key = "graph",
     pos = { x = 4, y = 3 },
     atlas = 'awesomejokers',
+    pronouns = 'it_its',
     rarity = 1,
     blueprint_compat = true,
     eternal_compat = true,
@@ -127,6 +128,7 @@ SMODS.Joker {
     key = "graph3",
     pos = { x = 6, y = 3 },
     atlas = 'awesomejokers',
+    pronouns = 'it_its',
     rarity = 1,
     blueprint_compat = true,
     eternal_compat = true,
@@ -150,6 +152,7 @@ SMODS.Joker {
     key = "graph4",
     pos = { x = 7, y = 3 },
     atlas = 'awesomejokers',
+    pronouns = 'it_its',
     rarity = 1,
     blueprint_compat = true,
     eternal_compat = true,
@@ -168,4 +171,32 @@ SMODS.Joker {
             }
         end
     end
+}
+SMODS.Joker {
+    key = "smfw",
+    pos = { x = 8, y = 3 },
+    atlas = 'awesomejokers',
+    pronouns = 'it_its',
+    rarity = 1,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+    cost = 4,
+    discovered = true,
+    config = { extra = { }, },
+	in_pool = function(self, args)
+        for _, playing_card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_no_suit(playing_card) then
+                return true
+            end
+			if SMODS.has_no_rank(playing_card) then
+				return true
+			end
+        end
+        return false
+    end,
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
 }
