@@ -346,7 +346,7 @@ return {
                 name = 'Urotsuki',
                 text = {
                     "{X:dark_edition,C:white}^0.1{} Chips for each",
-                    "unique played poker hand",
+                    "uniquely named played poker hand",
                     "{C:inactive}(Currently {X:dark_edition,C:white}^#1#{C:inactive} Chips)"
                 }
             },
