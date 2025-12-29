@@ -263,16 +263,13 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 		anarchy_suit = 'Spades'
 	end
 	local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
-	if anarchy then
+	if anarchy and not SMODS.has_no_suit(self) then
 		if self.base.suit == anarchy_suit then return self.base.suit ~= suit end
 	end
 	if everything_you_know_is_wrong and suitless(self) then
 		return true
 	end
-	if smfw and suitless(self) then
-		return self.base.suit == suit
-	end
-	if suit_shuffle then
+	if suit_shuffle and not SMODS.has_no_suit(self) then
 		local clubs = "Clubs"
 		local spades = "Spades"
 		local hearts = "Hearts"
