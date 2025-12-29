@@ -231,10 +231,10 @@ local equals_key = {
 	'set_visible_chips',
 	'set_visible_score'
 }
-for _, v in ipairs({converted_keys}) do
+for _, v in ipairs(converted_keys) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
-for _, v in ipairs({equals_key}) do
+for _, v in ipairs(equals_key) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
 
@@ -518,22 +518,24 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = "chips"
 		amount = SumOfDigits(SMODS.Scoring_Parameters.chips.current)
 	end
+	print(key)
 	if key == "sin_chips" then
 		key = "xchips"
-		amount = math.sin(to_number(SMODS.Scoring_Parameters.chips.current % (2*math.pi)))+amount
+		amount = to_big(math.sin(to_number(SMODS.Scoring_Parameters.chips.current % (2*math.pi)))+amount)
 	end
 	if key == "cos_chips" then
 		key = "xchips"
-		amount = math.cos(to_number(SMODS.Scoring_Parameters.chips.current % (2*math.pi)))+amount
+		amount = to_big(math.cos(to_number(SMODS.Scoring_Parameters.chips.current%(2*math.pi)))+amount)
 	end
 	if key == "sin_mult" then
 		key = "xmult"
-		amount = math.sin(to_number(SMODS.Scoring_Parameters.mult.current % (2*math.pi)))+amount
+		amount = to_big(math.sin(to_number(SMODS.Scoring_Parameters.mult.current % (2*math.pi)))+amount)
 	end
 	if key == "cos_mult" then
 		key = "xmult"
-		amount = math.cos(to_number(SMODS.Scoring_Parameters.mult.current % (2*math.pi)))+amount
+		amount = to_big(math.cos(to_number(SMODS.Scoring_Parameters.mult.current % (2*math.pi)))+amount)
 	end
+	print(key)
 	if key == 'percent_mult' then
 		local mult = SMODS.Scoring_Parameters["mult"]
 		if not Talisman or not Talisman.config_file.disable_anims then
