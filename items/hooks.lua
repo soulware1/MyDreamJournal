@@ -518,7 +518,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = "chips"
 		amount = SumOfDigits(SMODS.Scoring_Parameters.chips.current)
 	end
-	print(key)
 	if key == "sin_chips" then
 		key = "xchips"
 		amount = to_big(math.sin(to_number(SMODS.Scoring_Parameters.chips.current % (2*math.pi)))+amount)
@@ -535,7 +534,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = "xmult"
 		amount = to_big(math.cos(to_number(SMODS.Scoring_Parameters.mult.current % (2*math.pi)))+amount)
 	end
-	print(key)
 	if key == 'percent_mult' then
 		local mult = SMODS.Scoring_Parameters["mult"]
 		if not Talisman or not Talisman.config_file.disable_anims then
