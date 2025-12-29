@@ -331,7 +331,8 @@ return {
                 text = {
                     "Cards with an {C:dark_edition}edition{}, {C:red}seal{}, or {C:attention}enhancement{}",
                     "have a {C:green}#1# in #2#{} to spread one of them",
-                    "to an {C:attention}adjacent{} card before scoring"
+                    "to an {C:attention}adjacent{} card before scoring",
+                    "{C:inactive}(Excludes negative)"
                 }
             },
             j_MDJ_heartware = {

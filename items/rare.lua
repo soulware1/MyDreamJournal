@@ -236,7 +236,7 @@ SMODS.Joker {
             end
             for i = 1, #context.full_hand do
                 local playing_card = context.full_hand[i]
-                if playing_card.edition then
+                if playing_card.edition and playing_card.edition.key ~= "e_negative" then
                     playing_cards_with_editions[#playing_cards_with_editions+1] = {i, "scored"}
                 end
                 if playing_card.config.center.key ~= "m_base" then
