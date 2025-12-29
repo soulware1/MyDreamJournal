@@ -224,13 +224,13 @@ SMODS.Joker {
             local playing_cards_with_seals = {}
             for i = 1, #G.jokers.cards do
                 local joker = G.jokers.cards[i]
-                if joker.edition then
+                if joker.edition and joker.edition.key ~= "e_negative" then
                     jokers_with_editions[#jokers_with_editions+1] = i
                 end
             end
             for i = 1, #G.consumeables.cards do
                 local consumable = G.consumeables.cards[i]
-                if consumable.edition then
+                if consumable.edition and consumable.edition.key ~= "e_negative" then
                     consumables_with_editions[#consumables_with_editions+1] = i
                 end
             end
