@@ -623,3 +623,27 @@ SMODS.Joker {
         return { vars = { } }
     end,
 }
+SMODS.Joker {
+    key = "green",
+	atlas = "awesomejokers",
+    rarity = 2,
+	blueprint_compat = false,
+	eternal_compat = true,
+    perishable_compat = false,
+	discovered = true,
+    cost = 6,
+    pos = { x = 2, y = 4 },
+    config = { extra = { dollars = 0, scale = 1 } },
+    loc_vars = function(self, info_queue, card)
+		-- the player might be fooled if its not a scale above what its currrently
+        return { vars = { card.ability.extra.scale, card.ability.extra.dollars+card.ability.extra.scale } }
+    end,
+	calculate = function (self, card, context)
+		if context.end_of_round and context.main_eval then
+			card.ability.extra.dollars = card.ability.extra.dollars+card.ability.extra.scale
+		end
+	end,
+    calc_dollar_bonus = function(self, card)
+        return card.ability.extra.dollars
+    end
+}

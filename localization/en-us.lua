@@ -359,6 +359,14 @@ return {
                     "{C:inactive}(ex: {C:spades}S S {C:hearts}H H H{C:inactive} = {C:attention}Full House{C:inactive})"
                 }
             },
+            j_MDJ_green = {
+                name = 'What if it was green?',
+                text = {
+                    "This Joker gains {C:money}$#1#{}",
+                    "in payout every round",
+                    "{C:inactive}(Currently $#2#)"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
