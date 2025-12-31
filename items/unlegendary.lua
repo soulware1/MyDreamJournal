@@ -1,4 +1,3 @@
----@diagnostic disable: need-check-nil
 -- ^2 to all +mult, +chips, and +$
 -- ^1.5 to all xmult and xchips
 -- ^(1+1/(N+2)^2) to all higher operation mult and chips
@@ -10,7 +9,7 @@ SMODS.Joker {
 	discovered = true,
     rarity = MyDreamJournal.exotic,
 	pronouns = 'it_its',
-    blueprint_compat = false,
+    blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
 	demicolon_compat = true,
@@ -33,6 +32,44 @@ SMODS.Joker {
                 eechips = 1.1111111111^(1+(1/16)),
 				eeemult = 1.0625^(1+(1/25)),
                 eeechips = 1.0625^(1+(1/25)),
+			}
+		end
+		if context.MDJ_mod_key_and_amount then
+			local is_dark = card and (card.edition and card.edition.key == "e_MDJ_dark")
+			local key = context.MDJ_key
+			local amount = context.MDJ_amount
+            -- should skip over the rest of the code
+            if MyDreamJournal.dollarmodkeys[key] then
+				amount = amount^card.ability.extra.add
+			end
+            local operation = MyDreamJournal.multmodkeys[key] or MyDreamJournal.chipmodkeys[key]
+            local op_number = MyDreamJournal.keystonumbers[operation]
+            if operation and op_number then
+                -- handle generalized higher order hyperoperations
+                local is_hyper = false
+                if op_number == 4 then
+                    op_number = amount[1]
+                    is_hyper = true
+                end
+                if op_number ~= -1 and op_number ~= 0 then
+                    op_number = 1+ (1 / ((op_number + 2) ^ 2))
+                elseif op_number == -1 then
+                    op_number = card.ability.extra.add
+                elseif op_number == 0 then
+                    op_number = card.ability.extra.mult
+                end
+                if is_dark then
+                    op_number = op_number * 2
+                end
+                if not is_hyper then
+                    amount = amount ^ op_number
+                else
+                    amount[2] = amount[2] ^ op_number
+                end
+            end
+			return {
+				MDJ_amount = amount,
+				MDJ_key = key
 			}
 		end
 	end

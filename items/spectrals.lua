@@ -27,7 +27,7 @@ SMODS.Consumable {
                 probablities = {1, 2}
             end
             print(probablities)
-            if SMODS.pseudorandom_probability(card, pseudoseed(tostring({})), probablities[1], probablities[2], nil, true) then
+            if SMODS.pseudorandom_probability(card, pseudoseed("soupware..."), probablities[1], probablities[2], nil, true) then
                 G.E_MANAGER:add_event(Event({
                     trigger = 'after',
                     delay = 0.4,

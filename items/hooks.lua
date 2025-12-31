@@ -214,9 +214,6 @@ local converted_keys = {
 	'cos_mult',
 	'percent_chips',
 	'percent_mult',
-	-- calcuated after every other modifer
-	'heartware_percent_chips',
-	'heartware_percent_mult'
 }
 -- keys that makes a scoring param equal to something, usually based off of the scoring param itself
 local equals_key = {
@@ -231,11 +228,22 @@ local equals_key = {
 	'set_visible_chips',
 	'set_visible_score'
 }
+-- slop
+local slop_key = {
+	'MDJ_amount',
+	'MDJ_key'
+}
 for _, v in ipairs(converted_keys) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
 for _, v in ipairs(equals_key) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
+end
+for _, v in ipairs(slop_key) do
+	table.insert(SMODS.other_calculation_keys or SMODS.calculation_keys or {}, v)
+	if SMODS.silent_calculation then
+		SMODS.silent_calculation[v] = true
+	end
 end
 
 local suitless = SMODS.has_no_suit
@@ -299,64 +307,18 @@ function Card:get_id()
 	return oldrank(self)
 end
 
+
 local calcindiveffectref = SMODS.calculate_individual_effect
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
 	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
 	local is_dark = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_dark")
-	local unicodes = SMODS.find_card("j_MDJ_unicode")
-	local emojis = SMODS.find_card("j_MDJ_emoji")
-	local jans = SMODS.find_card("j_MDJ_jannasa")
-	local soulwares = SMODS.find_card("j_MDJ_soulware")
-	local bitplanes = SMODS.find_card("j_MDJ_bitplane")
 	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
-	local theres_a_heartware = next(SMODS.find_card("j_MDJ_heartware"))
-	local marks = SMODS.find_card("j_MDJ_mark")
-	local latins = SMODS.find_card("j_MDJ_latin")
-	local haxors = SMODS.find_card("j_MDJ_leet")
-	local colors =  SMODS.find_card("j_MDJ_rgb")
 	local is_demicolon = nil
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
 	if scored_card then
 		if scored_card.config then
 			if scored_card.config.center then
 				is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
-			end
-		end
-	end
-	if next(haxors) and MyDreamJournal.dollarmodkeys[key] then
-		for i = 1, #haxors do
-			local is_dark = haxors[i] and (haxors[i].edition and haxors[i].edition.key == "e_MDJ_dark")
-			amount = amount+((not is_dark and haxors[i].ability.extra.add) or haxors[i].ability.extra.add*2)
-		end
-	end
-	if next(bitplanes) and (MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]) == "add" then
-		-- round to the nearest power of two, or four if dark
-		for i = 1, #bitplanes do
-			local is_dark = bitplanes[i] and (bitplanes[i].edition and bitplanes[i].edition.key == "e_MDJ_dark")
-			local power_of = (not is_dark and 2) or 4
-			local amount_is_negative = (amount < 0)
-			if amount_is_negative then
-				amount = math.abs(amount)
-			end
-			local log = math.log(amount, power_of)
-			local ceiling = math.ceil(log)
-			amount = power_of^ceiling
-			if amount_is_negative then
-				amount = -amount
-			end
-		end
-	end
-	if next(marks) and MyDreamJournal.plustox[key] then
-		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
-		for i = 1, #marks do
-			local v = marks[i]
-			local converted_key = MyDreamJournal.plustox[key]
-			if converted_key then
-				local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
-				local cglop = SMODS.Scoring_Parameters.kali_glop.current
-				local aglop = cglop+amount
-				amount = aglop/cglop+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
-				key = converted_key
 			end
 		end
 	end
@@ -566,289 +528,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			end
 		end
 	end
-	if next(latins) and ( MyDreamJournal.plustox[key] or MyDreamJournal.xtoe[key]) then
-		-- do a loop incase there's a is_corrupted one, shouldn't affect stuff twice
-		for i = 1, #latins do
-			local v = latins[i]
-			local converted_key = MyDreamJournal.plustox[key]
- 			---@diagnostic disable-next-line: redefined-local
-			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
-			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
-			if not converted_key then
-				local converted_key = MyDreamJournal.xtoe[key]
-				if is_corrupted and MyDreamJournal.xchipstoechips[key] then
-					local cchips = SMODS.Scoring_Parameters.chips.current
-					local achips = cchips*amount
-					amount = math.log(achips, cchips)+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
-					key = converted_key
-				elseif not is_corrupted and MyDreamJournal.xmulttoemult[key] then
-					local cmult = SMODS.Scoring_Parameters.mult.current
-					local amult = cmult*amount
-					amount = math.log(amult, cmult)+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
-					key = converted_key
-				end
-			else
-				if is_corrupted and MyDreamJournal.pluschipstoxchips[key] then
-					local cchips = SMODS.Scoring_Parameters.chips.current
-					local achips = cchips+amount
-					amount = achips/cchips+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
-					key = converted_key
-				elseif not is_corrupted and MyDreamJournal.plusmulttoxmult[key] then
-					local cmult = SMODS.Scoring_Parameters.mult.current
-					local amult = cmult+amount
-					amount = amult/cmult+((not is_dark and v.ability.extra.add) or v.ability.extra.add*2)
-					key = converted_key
-				end
-			end
-		end
-	end
-	if next(unicodes) and not is_demicolon then
-		for i = 1, #unicodes do
-			local v = unicodes[i]
-			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
-			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
-			if not is_corrupted then
-				local operation = MyDreamJournal.multmodkeys[key]
-				local op_number = MyDreamJournal.keystonumbers[operation]
-				if operation and op_number then
-					-- handle generalized higher order hyperoperations
-					local is_hyper = false
-					if op_number == 4 then
-						op_number = amount[1]
-						is_hyper = true
-					end
-					if op_number ~= -1 and op_number ~= 0 then
-						op_number = (v.ability.extra.add/10)/(10^op_number)
-					elseif op_number == -1 then
-						op_number = v.ability.extra.add
-					elseif op_number == 0 then
-						op_number = v.ability.extra.add/10
-					end
-					if is_dark then
-						op_number = op_number*2
-					end
-					if not is_hyper then
-						amount = amount + op_number
-					else
-						amount[2] = amount[2] + op_number
-					end
-				end
-			else
-				local operation = MyDreamJournal.chipmodkeys[key]
-				local op_number = MyDreamJournal.keystonumbers[operation]
-				if operation and op_number then
-					-- handle generalized higher order hyperoperations
-					local is_hyper = false
-					if op_number == 4 then
-						op_number = amount[1]
-						is_hyper = true
-					end
-					if op_number ~= -1 and op_number ~= 0 then
-						op_number = (v.ability.extra.add/10)/(10^op_number)
-					elseif op_number == -1 then
-						op_number = v.ability.extra.add
-					elseif op_number == 0 then
-						op_number = v.ability.extra.add/10
-					end
-					if is_dark then
-						op_number = op_number*2
-					end
-					if not is_hyper then
-						amount = amount + op_number
-					else
-						amount[2] = amount[2] + op_number
-					end
-				end
-			end
-		end
-	end
-	if next(emojis) and not is_demicolon then
-		for i = 1, #emojis do
-			local v = emojis[i]
-			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
-			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
-			if is_corrupted then
-				local operation = MyDreamJournal.multmodkeys[key]
-				local op_number = MyDreamJournal.keystonumbers[operation]
-				if operation and op_number then
-					-- handle generalized higher order hyperoperations
-					local is_hyper = false
-					if op_number == 4 then
-						op_number = amount[1]
-						is_hyper = true
-					end
-					if op_number ~= -1 and op_number ~= 0 then
-						op_number = (v.ability.extra.add/100)/(10^op_number)
-					elseif op_number == -1 then
-						op_number = v.ability.extra.add
-					elseif op_number == 0 then
-						op_number = v.ability.extra.add/100
-					end
-					if is_dark then
-						op_number = op_number*2
-					end
-					if not is_hyper then
-						amount = amount + op_number
-					else
-						amount[2] = amount[2] + op_number
-					end
-				end
-			else
-				local operation = MyDreamJournal.chipmodkeys[key]
-				local op_number = MyDreamJournal.keystonumbers[operation]
-				if operation and op_number then
-					-- handle generalized higher order hyperoperations
-					local is_hyper = false
-					if op_number == 4 then
-						op_number = amount[1]
-						is_hyper = true
-					end
-					if op_number ~= -1 and op_number ~= 0 then
-						op_number = (v.ability.extra.add/100)/(10^op_number)
-					elseif op_number == -1 then
-						op_number = v.ability.extra.add
-					elseif op_number == 0 then
-						op_number = v.ability.extra.add/100
-					end
-					if is_dark then
-						op_number = op_number*2
-					end
-					if not is_hyper then
-						amount = amount + op_number
-					else
-						amount[2] = amount[2] + op_number
-					end
-				end
-			end
-		end
-	end
-	if next(jans) and not is_demicolon then
-		for i = 1, #jans do
-			local v = jans[i]
-			local operation = MyDreamJournal.glopmodkeys[key]
-			local op_number = MyDreamJournal.keystonumbers[operation]
-			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
-			if operation and op_number then
-				-- handle generalized higher order hyperoperations
-				local is_hyper = false
-				if op_number == 4 then
-					op_number = amount[1]
-					is_hyper = true
-				end
-				-- mult has the same amount to add as add
-				if op_number ~= -1 and op_number ~= 0 then
-					op_number = v.ability.extra.add/(10^op_number)
-				else
-					op_number = v.ability.extra.add
-				end
-				if is_dark then
-					op_number = op_number*2
-				end
-				if not is_hyper then
-					amount = amount + op_number
-				else
-					amount[2] = amount[2] + op_number
-				end
-			end
-		end
-	end
-	if next(soulwares) and not is_demicolon then
-		for i = 1, #soulwares do
-			local v = soulwares[i]
-			local is_corrupted = v and (v.edition and v.edition.key == "e_MDJ_corrupted")
-			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
-			if not is_corrupted then
-				local operation = MyDreamJournal.multmodkeys[key]
-				local op_number = MyDreamJournal.keystonumbers[operation]
-				if operation and op_number then
-					-- handle generalized higher order hyperoperations
-					local is_hyper = false
-					if op_number == 4 then
-						op_number = amount[1]
-						is_hyper = true
-					end
-					if op_number ~= -1 and op_number ~= 0 then
-						op_number = 1+(v.ability.extra.extra/(2^op_number))
-					elseif op_number == -1 then
-						op_number = v.ability.extra.add
-					elseif op_number == 0 then
-						op_number = v.ability.extra.add*0.8333333333333334
-					end
-					if is_dark then
-						op_number = op_number*2
-					end
-					if not is_hyper then
-						amount = amount * op_number
-					else
-						amount[2] = amount[2] * op_number
-					end
-				end
-			else
-				local operation = MyDreamJournal.chipmodkeys[key]
-				local op_number = MyDreamJournal.keystonumbers[operation]
-				if operation and op_number then
-					-- handle generalized higher order hyperoperations
-					local is_hyper = false
-					if op_number == 4 then
-						op_number = amount[1]
-						is_hyper = true
-					end
-					if op_number ~= -1 and op_number ~= 0 then
-						op_number = v.ability.extra.add/(2^op_number)
-					elseif op_number == -1 then
-						op_number = v.ability.extra.add
-					elseif op_number == 0 then
-						op_number = v.ability.extra.add*0.8333333333333334
-					end
-					if is_dark then
-						op_number = op_number*2
-					end
-					if not is_hyper then
-						amount = amount * op_number
-					else
-						amount[2] = amount[2] * op_number
-					end
-				end
-			end
-		end
-	end
-	if next(colors) and not is_demicolon then
-		for i = 1, #colors do
-			local v = colors[i]
-			local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
-			local is_dark = v and (v.edition and v.edition.key == "e_MDJ_dark")
-			if MyDreamJournal.dollarmodkeys[key] then
-				amount = amount^v.ability.extra.add
-				goto money_tongue_emoji
-			end
-			local op_number = MyDreamJournal.keystonumbers[operation]
-			if operation and op_number then
-				-- handle generalized higher order hyperoperations
-				local is_hyper = false
-				if op_number == 4 then
-					op_number = amount[1]
-					is_hyper = true
-				end
-				-- mult has the same amount to add as add
-				if op_number ~= -1 and op_number ~= 0 then
-					op_number = v.ability.extra.add/(10^op_number)
-				elseif op_number == -1 then
-					op_number = v.ability.extra.add
-				else
-					op_number = v.ability.extra.mult
-				end
-				if is_dark then
-					op_number = op_number*2
-				end
-				if not is_hyper then
-					amount = amount^op_number
-				else
-					amount[2] = amount[2]^op_number
-				end
-			end
-			::money_tongue_emoji::
-		end
-	end
 	if theres_a_mindware and not effect.from_mindware and key then
 		local new_effect = Copy3(effect)
 		new_effect[key] = nil
@@ -870,30 +549,15 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		SMODS.calculate_effect(new_effect, scored_card, from_edition)
 		::skip::
 	end
-	if theres_a_heartware and key and MyDreamJournal.plustox[key] and key ~= "glop" then
-		if MyDreamJournal.plusmulttoxmult[key] then
-			key = 'heartware_percent_mult'
-		end
-		if MyDreamJournal.pluschipstoxchips[key] then
-			key = 'heartware_percent_chips'
-		end
+	if key and amount and key ~= 'MDJ_key' and key ~= 'MDJ_amount' then
+		local alter = SMODS.calculate_context({MDJ_mod_key_and_amount = true, MDJ_amount = amount, MDJ_key = key, demicolon_racism = is_demicolon})
+		key = (alter and alter.MDJ_key) or key
+		amount = (alter and alter.MDJ_amount) or amount
 	end
-	if key == 'heartware_percent_mult' then
-		local mult = SMODS.Scoring_Parameters["mult"]
-		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "+"..amount.."% Mult", G.C.RED)
-		end
-		amount = mult.current*(amount/100)
-		key = "mult_mod"
-	end
-	if key == 'heartware_percent_chips' then
-		local chips = SMODS.Scoring_Parameters["chips"]
-		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "+"..amount.."%", G.C.BLUE)
-		end
-		amount = chips.current*(amount/100)
-		key = "chip_mod"
-	end
+	-- slop
+	if key == 'MDJ_key' or key == 'MDJ_amount' then
+        return { [key] = amount }
+    end
 	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)
 	if ret then return ret end
 end

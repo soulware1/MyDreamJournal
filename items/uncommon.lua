@@ -1,3 +1,4 @@
+---@diagnostic disable: need-check-nil
 local to_big = to_big or function(n)
 	return n
 end
@@ -9,7 +10,7 @@ SMODS.Joker {
 	discovered = true,
     rarity = 2,
 	pronouns = 'it_its',
-    blueprint_compat = false,
+    blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
 	demicolon_compat = true,
@@ -28,6 +29,69 @@ SMODS.Joker {
 				eeemult = 1+(card.ability.extra.add/10000),
 			}
 		end
+		if context.MDJ_mod_key_and_amount then
+			local is_corrupted = card and (card.edition and card.edition.key == "e_MDJ_corrupted")
+			local is_dark = card and (card.edition and card.edition.key == "e_MDJ_dark")
+			local key = context.MDJ_key
+			local amount = context.MDJ_amount
+			if not is_corrupted and not context.demicolon_racism then
+				local operation = MyDreamJournal.multmodkeys[key]
+				local op_number = MyDreamJournal.keystonumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					local is_hyper = false
+					if op_number == 4 then
+						op_number = amount[1]
+						is_hyper = true
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (card.ability.extra.add / 10) / (10 ^ op_number)
+					elseif op_number == -1 then
+						op_number = card.ability.extra.add
+					elseif op_number == 0 then
+						op_number = card.ability.extra.add / 10
+					end
+					if is_dark then
+						op_number = op_number * 2
+					end
+					if not is_hyper then
+						amount = amount + op_number
+					else
+						amount[2] = amount[2] + op_number
+					end
+				end
+			else
+				local operation = MyDreamJournal.chipmodkeys[key]
+				local op_number = MyDreamJournal.keystonumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					local is_hyper = false
+					if op_number == 4 then
+						op_number = amount[1]
+						is_hyper = true
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (card.ability.extra.add / 10) / (10 ^ op_number)
+					elseif op_number == -1 then
+						op_number = card.ability.extra.add
+					elseif op_number == 0 then
+						op_number = card.ability.extra.add / 10
+					end
+					if is_dark then
+						op_number = op_number * 2
+					end
+					if not is_hyper then
+						amount = amount + op_number
+					else
+						amount[2] = amount[2] + op_number
+					end
+				end
+			end
+			return {
+				MDJ_amount = amount,
+				MDJ_key = key
+			}
+		end
 	end
 }
 SMODS.Joker {
@@ -37,7 +101,7 @@ SMODS.Joker {
 	discovered = true,
     rarity = 2,
 	pronouns = 'he_him',
-    blueprint_compat = false,
+    blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
 	demicolon_compat = true,
@@ -52,8 +116,71 @@ SMODS.Joker {
 				chips = card.ability.extra.add,
 				xchips = 1+(card.ability.extra.add/100),
 				echips = 1+((card.ability.extra.add/100)/10),
-				eechips =1+((card.ability.extra.add/100)/100),
+				eechips = 1+((card.ability.extra.add/100)/100),
 				eeechips = 1+((card.ability.extra.add/100)/1000),
+			}
+		end
+		if context.MDJ_mod_key_and_amount then
+			local is_corrupted = card and (card.edition and card.edition.key == "e_MDJ_corrupted")
+			local is_dark = card and (card.edition and card.edition.key == "e_MDJ_dark")
+			local key = context.MDJ_key
+			local amount = context.MDJ_amount
+			if not is_corrupted and not context.demicolon_racism then
+				local operation = MyDreamJournal.multmodkeys[key]
+				local op_number = MyDreamJournal.keystonumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					local is_hyper = false
+					if op_number == 4 then
+						op_number = amount[1]
+						is_hyper = true
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (card.ability.extra.add/100) / (10 ^ op_number)
+					elseif op_number == -1 then
+						op_number = card.ability.extra.add
+					elseif op_number == 0 then
+						op_number = card.ability.extra.add / 10
+					end
+					if is_dark then
+						op_number = op_number * 2
+					end
+					if not is_hyper then
+						amount = amount + op_number
+					else
+						amount[2] = amount[2] + op_number
+					end
+				end
+			else
+				local operation = MyDreamJournal.chipmodkeys[key]
+				local op_number = MyDreamJournal.keystonumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					local is_hyper = false
+					if op_number == 4 then
+						op_number = amount[1]
+						is_hyper = true
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (card.ability.extra.add/100) / (10 ^ op_number)
+					elseif op_number == -1 then
+						op_number = card.ability.extra.add
+					elseif op_number == 0 then
+						op_number = card.ability.extra.add / 10
+					end
+					if is_dark then
+						op_number = op_number * 2
+					end
+					if not is_hyper then
+						amount = amount + op_number
+					else
+						amount[2] = amount[2] + op_number
+					end
+				end
+			end
+			return {
+				MDJ_amount = amount,
+				MDJ_key = key
 			}
 		end
 	end
@@ -299,7 +426,7 @@ SMODS.Joker {
 	discovered = true,
     rarity = 2,
 	pronouns = 'it_its',
-    blueprint_compat = false,
+    blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
     cost = 4,
@@ -307,6 +434,26 @@ SMODS.Joker {
     loc_vars = function(self, info_queue, card)
         return { vars = {} }
     end,
+	calculate = function (self, card, context)
+		if context.MDJ_mod_key_and_amount then
+			local is_dark = card and (card.edition and card.edition.key == "e_MDJ_dark")
+			local power_of = (not is_dark and 2) or 4
+			local amount = context.MDJ_amount
+			local amount_is_negative = (amount < 0)
+			if amount_is_negative then
+				amount = math.abs(amount)
+			end
+			local log = math.log(amount, power_of)
+			local ceiling = math.ceil(log)
+			amount = power_of ^ ceiling
+			if amount_is_negative then
+				amount = -amount
+			end
+			return {
+				MDJ_amount = amount
+			}
+		end
+	end
 }
 SMODS.Joker {
     key = "spiral",

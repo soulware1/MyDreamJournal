@@ -17,7 +17,7 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 		discovered = true,
 		rarity = 3,
 		pronouns = 'they_them',
-		blueprint_compat = false,
+		blueprint_compat = true,
 		perishable_compat = true,
 		eternal_compat = true,
 		demicolon_compat = true,
@@ -45,6 +45,35 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 					eglop = 1+(card.ability.extra.add/10),
 				}
 			end
+			if context.MDJ_mod_key_and_amount then
+				local key = context.MDJ_key
+				local amount = context.MDJ_amount
+				local operation = MyDreamJournal.glopmodkeys[key]
+				local op_number = MyDreamJournal.keystonumbers[operation]
+				local is_dark = card and (card.edition and card.edition.key == "e_MDJ_dark")
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					local is_hyper = false
+					if op_number == 4 then
+						op_number = amount[1]
+						is_hyper = true
+					end
+					-- mult has the same amount to add as add
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = card.ability.extra.add/(10^op_number)
+					else
+						op_number = card.ability.extra.add
+					end
+					if is_dark then
+						op_number = op_number*2
+					end
+					if not is_hyper then
+						amount = amount + op_number
+					else
+						amount[2] = amount[2] + op_number
+					end
+				end
+			end
 		end
 	}
 	SMODS.Joker {
@@ -62,6 +91,20 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 		loc_vars = function(self, info_queue, card)
 			return { vars = { card.ability.extra.add } }
 		end,
+		calculate = function (self, card, context)
+			if context.MDJ_mod_key_and_amount and context.MDJ_key == "glop" then
+				local amount = context.MDJ_amount
+				local key = context.MDJ_key
+				local cglop = SMODS.Scoring_Parameters.kali_glop.current
+				local aglop = cglop * amount
+				amount = math.log(aglop, cglop) + ((not is_dark and card.ability.extra.add) or card.ability.extra.add * 2)
+				key = converted_key
+				return {
+					MDJ_key = key,
+					MDJ_amount = amount
+				}
+			end
+		end
 	}
 end
 -- implment the extra soul layer and tailsman-less emult on our own if neither of these mods are enabled
