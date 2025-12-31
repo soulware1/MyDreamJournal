@@ -642,7 +642,7 @@ SMODS.Joker {
 		if context.end_of_round and context.main_eval then
 			SMODS.scale_card(card, {
 				ref_table = card.ability.extra,
-				ref_value = "mult",
+				ref_value = "dollars",
 				scalar_value = "scale",
 			})
 		end
