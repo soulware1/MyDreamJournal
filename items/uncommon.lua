@@ -636,7 +636,7 @@ SMODS.Joker {
     config = { extra = { dollars = 0, scale = 1 } },
     loc_vars = function(self, info_queue, card)
 		-- the player might be fooled if its not a scale above what its currrently
-        return { vars = { card.ability.extra.scale, card.ability.extra.dollars+((next(SMODS.find_card("j_MDJ_installer") and card.ability.extra.scale*2) or card.ability.extra.scale)) } }
+        return { vars = { card.ability.extra.scale, card.ability.extra.dollars+((next(SMODS.find_card("j_MDJ_installer")) and card.ability.extra.scale*2) or card.ability.extra.scale) } }
     end,
 	calculate = function (self, card, context)
 		if context.end_of_round and context.main_eval then
