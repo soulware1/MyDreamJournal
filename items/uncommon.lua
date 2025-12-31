@@ -640,7 +640,11 @@ SMODS.Joker {
     end,
 	calculate = function (self, card, context)
 		if context.end_of_round and context.main_eval then
-			card.ability.extra.dollars = card.ability.extra.dollars+card.ability.extra.scale
+			SMODS.scale_card(card, {
+				ref_table = card.ability.extra,
+				ref_value = "mult",
+				scalar_value = "scale",
+			})
 		end
 	end,
     calc_dollar_bonus = function(self, card)
