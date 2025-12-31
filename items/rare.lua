@@ -17,16 +17,15 @@ SMODS.Joker {
         return { vars = {} }
     end,
 	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
-
-	if scalar_value > 0 and not args.dont_repeat then
-		return {
-			override_scalar_value = { -- this will override the scalar_value
-				value = scalar_value*2, -- set the scalar_value to X
-				-- other calculation return keys accepted here, timing is before the scaling event
-			},
-		}
-	end
-end
+        if scalar_value > 0 and not args.dont_repeat then
+            return {
+                override_scalar_value = { -- this will override the scalar_value
+                    value = scalar_value*2, -- set the scalar_value to X
+                    -- other calculation return keys accepted here, timing is before the scaling event
+                },
+            }
+        end
+    end
 }
 
 -- stolen from starspace :3c
