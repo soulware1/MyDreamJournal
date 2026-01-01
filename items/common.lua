@@ -172,54 +172,6 @@ SMODS.Joker {
     end
 }
 SMODS.Joker {
-    key = "graph3",
-    pos = { x = 6, y = 3 },
-    atlas = 'awesomejokers',
-    pronouns = 'it_its',
-    rarity = 1,
-    blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
-	demicolon_compat = true,
-    cost = 7,
-    discovered = true,
-    config = { extra = { add = 2 }, },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.add } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main or context.forcetrigger then
-            return {
-                sin_mult = card.ability.extra.add
-            }
-        end
-    end
-}
-SMODS.Joker {
-    key = "graph4",
-    pos = { x = 7, y = 3 },
-    atlas = 'awesomejokers',
-    pronouns = 'it_its',
-    rarity = 1,
-    blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
-	demicolon_compat = true,
-    cost = 7,
-    discovered = true,
-    config = { extra = { add = 2 }, },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.add } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main or context.forcetrigger then
-            return {
-                cos_chips = card.ability.extra.add
-            }
-        end
-    end
-}
-SMODS.Joker {
     key = "smfw",
     pos = { x = 8, y = 3 },
     atlas = 'awesomejokers',
@@ -246,4 +198,30 @@ SMODS.Joker {
     loc_vars = function(self, info_queue, card)
         return { vars = { } }
     end,
+}
+SMODS.Joker {
+    key = "buffer",
+    pos = { x = 0, y = 0 },
+    atlas = 'buffer',
+    pronouns = 'it_its',
+    rarity = 1,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+    cost = 1,
+    discovered = true,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+    calculate = function (self, card, context)
+        if context.end_of_round and context.main_eval then
+            if G.GAME.chips > G.GAME.blind.chips then
+                return {
+                    eq_score = G.GAME.blind.chips
+                }
+            end
+        end
+    end
 }

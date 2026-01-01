@@ -265,3 +265,38 @@ SMODS.Joker {
 		end
 	end
 }
+SMODS.Joker {
+    key = "radix",
+    pos = {x = 3, y = 0 },
+    soul_pos = { x = 5, y = 0, extra = { x = 4, y = 0 } },
+    atlas = "exotic",
+	discovered = true,
+    rarity = MyDreamJournal.exotic,
+	pronouns = 'it_its',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 100,
+	-- so no one gets any funnny ideas!
+	immutable = true,
+    config = { previous_hand_limit = 5 },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function (self, card, context)
+        if (context.joker_main or context.forcetrigger) and to_big(#context.full_hand)%3 == 0  then
+            return {
+                base_chips = 3,
+                base_mult = 3,
+            }
+        end
+    end,
+    add_to_deck = function (self, card, from_debuff)
+        card.ability.previous_hand_limit = G.hand.config.highlighted_limit
+        MyDreamJournal.handlimitchange((math.ceil(G.hand.config.highlighted_limit/3)*3)-G.hand.config.highlighted_limit)
+    end,
+    remove_from_deck = function (self, card, from_debuff)
+        MyDreamJournal.handlimitchange(card.ability.previous_hand_limit-G.hand.config.highlighted_limit)
+    end
+}

@@ -25,9 +25,24 @@ SMODS.Atlas({
     frames = 9, -- the number of frames in your animation
     fps = 9 -- the fps to play your animation in (defaults to 10 if not included)
  })
+   SMODS.Atlas({
+    key = "buffer",
+    path = "buffering.png",
+    px = 71,
+    py = 95,
+    atlas_table = 'ANIMATION_ATLAS', -- this line tells SMODS that this is an animated atlas
+    frames = 8, -- the number of frames in your animation
+    fps = 10 -- the fps to play your animation in (defaults to 10 if not included)
+ })
   SMODS.Atlas({
     key = "placeholder",
     path = "stolenplaceholder.png",
+    px = 71,
+    py = 95
+ })
+   SMODS.Atlas({
+    key = "finity",
+    path = "finity.png",
     px = 71,
     py = 95
  })
@@ -48,6 +63,14 @@ SMODS.Atlas({
     path = "gift.png",
     px = 38,
     py = 38
+ })
+ SMODS.Atlas({
+    key = "blinds",
+    path = "blinds.png",
+    px = 34,
+    py = 34,
+    atlas_table = 'ANIMATION_ATLAS',
+    frames = 21,
  })
  SMODS.Font {
 	key = "pokemon",
@@ -306,7 +329,7 @@ local gradient = SMODS.Gradient {
       G.C.MULT,
       G.C.CHIPS,
    },
-   cycle = 2,
+   cycle = 4,
 }
 loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_scoreparams = gradient

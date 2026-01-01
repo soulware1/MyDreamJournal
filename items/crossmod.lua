@@ -107,6 +107,34 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 		end
 	}
 end
+if SMODS.Mods["finity"] and SMODS.Mods["finity"].can_load then
+	FinisherBossBlindStringMap["bl_MDJ_final_star"] = {"j_MDJ_goldenstar","Golden Star"}
+	SMODS.Joker {
+		key = "goldenstar",
+		name = "Golden Star",
+		atlas = 'finity',
+		pronouns = "they_them",
+		unlocked = true,
+		discovered = true,
+		eternal_compat = true,
+		perishable_compat = true,
+		blueprint_compat = true,
+		rarity = "finity_showdown",
+		pos = { x = 0, y = 0 },
+		cost = 10,
+		calculate = function(self, card, context)
+			if context.MDJ_mod_key_and_amount then
+				local key = context.MDJ_key
+				local amount = context.MDJ_amount
+				if MyDreamJournal.multmodkeys[key] or MyDreamJournal.chipmodkeys[key] or MyDreamJournal.chipmultopswap[key] or (MyDreamJournal.glopmodkeys and MyDreamJournal.glopmodkeys[key]) then
+					return {
+						MDJ_amount = amount^1.5
+					}
+				end
+			end
+		end
+	}
+end
 -- implment the extra soul layer and tailsman-less emult on our own if neither of these mods are enabled
 if not (SMODS.Mods["Cryptid"] or {}).can_load and not (SMODS.Mods["Cryptlib"] or {}).can_load then
 	local set_spritesref = Card.set_sprites

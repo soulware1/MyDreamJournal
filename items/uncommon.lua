@@ -592,7 +592,7 @@ SMODS.Joker {
     eternal_compat = true,
     perishable_compat = true,
 	demicolon_compat = true,
-    cost = 6,
+    cost = 7,
     discovered = true,
     config = { extra = { expo = 0.12 }, },
     loc_vars = function(self, info_queue, card)
@@ -602,6 +602,54 @@ SMODS.Joker {
         if (context.joker_main or context.forcetrigger) and not context.retrigger_joker_check and not context.blueprint then
             return {
                 xmult = G.GAME.blind.chips^card.ability.extra.expo
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "graph3",
+    pos = { x = 6, y = 3 },
+    atlas = 'awesomejokers',
+    pronouns = 'it_its',
+    rarity = 2,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+    cost = 6,
+    discovered = true,
+    config = { extra = { add = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.add } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                sin_mult = card.ability.extra.add
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "graph4",
+    pos = { x = 7, y = 3 },
+    atlas = 'awesomejokers',
+    pronouns = 'it_its',
+    rarity = 2,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+    cost = 6,
+    discovered = true,
+    config = { extra = { add = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.add } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                cos_chips = card.ability.extra.add
             }
         end
     end
@@ -636,7 +684,18 @@ SMODS.Joker {
     config = { extra = { dollars = 0, scale = 1 } },
     loc_vars = function(self, info_queue, card)
 		-- the player might be fooled if its not a scale above what its currrently
-        return { vars = { card.ability.extra.scale, card.ability.extra.dollars+((next(SMODS.find_card("j_MDJ_installer")) and card.ability.extra.scale*(2^#SMODS.find_card("j_MDJ_installer"))) or card.ability.extra.scale) } }
+		local fake_table = {
+			["dollars"] = card.ability.extra.dollars,
+			["scale"] = card.ability.extra.scale
+		}
+		SMODS.scale_card({}, {
+			ref_table = fake_table,
+			ref_value = "dollars",
+			scalar_value = "scale",
+			no_message = true,
+			prediction_scaling = true,
+		})
+        return { vars = { card.ability.extra.scale, fake_table["dollars"] } }
     end,
 	calculate = function (self, card, context)
 		if context.end_of_round and context.main_eval then
@@ -644,6 +703,7 @@ SMODS.Joker {
 				ref_table = card.ability.extra,
 				ref_value = "dollars",
 				scalar_value = "scale",
+				no_message = true
 			})
 		end
 	end,

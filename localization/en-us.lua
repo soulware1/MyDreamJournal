@@ -367,6 +367,40 @@ return {
                     "{C:inactive}(Currently $#2#)"
                 }
             },
+            j_MDJ_goldenstar = {
+                name = "Golden Star",
+                text = {
+                    "{X:MDJ_operations,C:white}^1.5{} to {C:MDJ_operations}Scoring Operations",
+                }
+            },
+            j_MDJ_buffer = {
+                name = 'Buffering',
+                text = {
+                    "After hand is scored,",
+                    "if {C:purple}Score{} is more then{C:attention} Blind Requirement",
+                    "set {C:purple}Score{} to {C:attention}Blind Requirement"
+                }
+            },
+            j_MDJ_shitpost = {
+                name = "Shitpost",
+                text = {
+                    "{C:attention}Retriggers{} the",
+                    "{C:attention}Joker{} to the right",
+                },
+            },
+            j_MDJ_radix = {
+                name = "Radix",
+                text = {
+                    {"If {C:attention,E:1}played hand{} has a",
+                    "number of cards divisible by {C:attention}3",
+                    "Convert {C:chips}Chips{} to {C:attention,E:1}Base 3",
+                    "Convert {C:mult}Mult{} to {C:attention,E:1}Base 3",},
+                    {
+                        "Set Card Selection Limit to",
+                        "the next {C:attention,E:1}multiple of 3"
+                    }
+                },
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -392,7 +426,7 @@ return {
             e_MDJ_dark = {
                 name = "Dark",
                 text = {
-                    "{X:MDJ_operations,C:white}X#1#{} {C:MDJ_operations}Operations{}",
+                    "{X:MDJ_operations,C:white}X#1#{} {C:MDJ_operations}Scoring Operations{}",
                 }
             },
             e_MDJ_corrupted = {
@@ -417,6 +451,21 @@ return {
                     "and now affects Glop instead",
 				},
 			},
+        },
+        Blind = {
+            bl_MDJ_steel = {
+                name = "The Steel",
+                text = {
+                    "+Chips and +Mult",
+                    "are halved",
+                },
+            },
+            bl_MDJ_final_star = {
+                name = "Golden Star",
+                text = {
+                    "^0.5 Scoring Operations",
+                },
+            },
         },
         Mod = {
             MDJ = {

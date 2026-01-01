@@ -202,6 +202,12 @@ if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
 		table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 	end
 end
+if not (SMODS.Mods["Astronomica"] and SMODS.Mods["Astronomica"].can_load) then
+	SMODS.Sound({ key = 'eqscore', path = 'EqualsScore.ogg' })
+	for _, v in ipairs({'eq_score'}) do
+		table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
+	end
+end
 -- keys that are "converted" to another key, for example digit_chips converting to chips
 local converted_keys = {
 	'digit_chips',
@@ -403,16 +409,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		end
 		return true
 	end
-	if is_dark and amount and ((type(amount) == "table" or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) then
-		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
-		if not operation then
-			amount = amount*2
-		elseif MyDreamJournal.keystonumbers[operation] == 4 then
-			amount[2] = amount[2]*2
-		else
-			amount = amount*2
-		end
-	end
 	-- stuff that depends on current state of mult/chips
 	if key == 'base_mult' then
 		local mult = SMODS.Scoring_Parameters["mult"]
@@ -509,6 +505,23 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		amount = chips.current*(amount/100)
 		key = "chip_mod"
 	end
+	if not (SMODS.Mods["Astronomica"] and SMODS.Mods["Astronomica"].can_load) then
+		if (key == 'eq_score') then
+			if not Talisman or not Talisman.config_file.disable_anims then
+					card_eval_status_text(scored_card, "extra", nil, nil, nil,
+			{ message = "=" .. number_format(amount), colour = G.C.PURPLE, sound = "MDJ_eqscore" })
+			end
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					G.GAME.chips = to_big(amount)
+					G.HUD:get_UIE_by_ID('chip_UI_count'):juice_up(0.3, 0.3)
+
+					return true
+				end
+			}))
+			return true
+		end
+	end
 	-- add in the equals if no entropy :sob:
 	if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
 		if (key == 'eq_mult' or key == 'Eqmult_mod') then
@@ -553,6 +566,16 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		local alter = SMODS.calculate_context({MDJ_mod_key_and_amount = true, MDJ_amount = amount, MDJ_key = key, demicolon_racism = is_demicolon})
 		key = (alter and alter.MDJ_key) or key
 		amount = (alter and alter.MDJ_amount) or amount
+	end
+	if is_dark and amount and ((type(amount) == "table" or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) then
+		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
+		if not operation then
+			amount = amount*2
+		elseif MyDreamJournal.keystonumbers[operation] == 4 then
+			amount[2] = amount[2]*2
+		else
+			amount = amount*2
+		end
 	end
 	-- slop
 	if key == 'MDJ_key' or key == 'MDJ_amount' then

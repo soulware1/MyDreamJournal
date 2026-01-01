@@ -1,6 +1,9 @@
 local to_big = to_big or function(n)
 	return n
 end
+local to_number = to_number or function(n)
+	return n
+end
 SMODS.Joker {
     key = "installer",
     atlas = 'awesomejokers',
@@ -314,5 +317,39 @@ SMODS.Joker {
                 end
             end
         end
+    end
+}
+SMODS.Joker {
+    key = "shitpost",
+    atlas = 'awesomejokers',
+    pos = { x = 3, y = 4 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'he_him',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = false,
+    cost = 10,
+    config = {},
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+	calculate = function(self, card, context)
+		if context.retrigger_joker_check and context.other_card ~= self then
+            local other_joker = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end
+            end
+			if context.other_card == other_joker then
+				return {
+					message = localize("k_again_ex"),
+					repetitions = 1,
+					card = card,
+				}
+			else
+				return nil, true
+			end
+		end
     end
 }
