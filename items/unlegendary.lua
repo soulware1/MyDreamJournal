@@ -4,7 +4,7 @@ SMODS.Joker {
     atlas = 'awesomejokers',
     pos = { x = 9, y = 0 },
 	discovered = true,
-    rarity = MyDreamJournal.epic,
+    rarity = MyDreamJournal.exotic,
 	pronouns = 'it_its',
     blueprint_compat = false,
 	perishable_compat = true,
