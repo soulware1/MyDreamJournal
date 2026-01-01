@@ -73,20 +73,17 @@ function Base10_to_base_less_then_10(n, b)
 		return n
 	end
     -- this is a VERY rough approximation of what would happen during a base conversion, only use for when /10 doesn't reduce the tailsman number or it just takes too long man...
-    local approximation = math.log(10, b)
+    local approximation = math.log(to_big(10), b)
     if n >= big_ass_number and b ~= 1 then
         return n^approximation
-	elseif n >= 1001 and b == 1 then
-		return (10^n-1)/9
     end
 	n = math.floor(to_big(n))
     local result = to_big(0)
     local place = to_big(1)
     
     if b == to_big(1) then
-        for i = 1, n do
-            result = result * to_big(10) + to_big(1)
-        end
+		-- 1 ninth of 10^n = a number with N amount of digits, all of them being one
+        result = 1/9*((to_big(10)^n)-1)
         goto base1_skip
     end
 
@@ -102,7 +99,7 @@ function Base10_to_base_less_then_10(n, b)
 end
 function BaseB_to_base_10(n, b)
 	if n >= big_ass_number then
-		return 10^(math.log(n, 10) * math.log(b, 10))
+		return to_big(10)^(math.log(n, 10) * math.log(b, 10))
 	end
 	local result = to_big(0)
     local place = to_big(0)
@@ -115,13 +112,15 @@ function BaseB_to_base_10(n, b)
 	return result
 end
 function SumOfDigits(n)
-    if n >= big_ass_number then
-        return 4.5*n
+	local old_n = n
+    if to_big(math.floor(math.log(n, 10)) + 1) >= to_big(1001) then
+		-- assume uniform random digits
+        return to_big(4.5)*n
     end
-	-- count in decimals if lower then scientific_notation
-	if n < scientific_notation then
+	-- count in decimals only digits and periods
+	if string.match(tostring(n), "^[%d%.]+$") ~= nil then
 		n = string.gsub(tostring(n), "%.", "")
-		n = math.floor(to_big(tonumber(n)))
+		n = math.floor(to_big(to_number(n)))
 	end
     local sum = to_big(0)
     while n ~= to_big(0) do
