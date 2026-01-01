@@ -177,9 +177,7 @@ SMODS.Joker {
 						amount[2] = amount[2] + op_number
 					end
 				end
-				print(amount)
 			end
-			print(amount)
 			return {
 				MDJ_amount = amount,
 				MDJ_key = key
