@@ -117,7 +117,7 @@ function SumOfDigits(n)
 		-- assume uniform random digits
         return to_big(4.5)*n
     end
-	-- count in decimals only digits and periods
+	-- count in decimals if only digits and periods
 	if string.match(tostring(n), "^[%d%.]+$") ~= nil then
 		n = string.gsub(tostring(n), "%.", "")
 		n = math.floor(to_big(to_number(n)))

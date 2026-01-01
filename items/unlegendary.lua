@@ -1,3 +1,20 @@
+-- fucks with pseduorandom
+SMODS.Joker {
+    key = "forcedmove",
+    atlas = 'awesomejokers',
+    pos = { x = 9, y = 0 },
+	discovered = true,
+    rarity = MyDreamJournal.epic,
+	pronouns = 'it_its',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 14,
+    config = {},
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+}
 -- ^2 to all +mult, +chips, and +$
 -- ^1.5 to all xmult and xchips
 -- ^(1+1/(N+2)^2) to all higher operation mult and chips
