@@ -377,7 +377,7 @@ return {
                 name = 'Buffering',
                 text = {
                     "After hand is scored,",
-                    "if {C:purple}Score{} is more then{C:attention} Blind Requirement",
+                    "if {C:purple}Score{} is more than{C:attention} Blind Requirement",
                     "set {C:purple}Score{} to {C:attention}Blind Requirement"
                 }
             },
