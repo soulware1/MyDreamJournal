@@ -312,6 +312,12 @@ function Card:get_id()
 	end
 	return oldrank(self)
 end
+local sslopcalc = SMODS.update_context_flags
+SMODS.update_context_flags = function(context, flags)
+	if flags.MDJ_key then context.MDJ_key = flags.MDJ_key end
+	if flags.MDJ_amount then context.MDJ_amount = flags.MDJ_amount end
+	return sslopcalc(context, flags)
+end
 
 
 local calcindiveffectref = SMODS.calculate_individual_effect

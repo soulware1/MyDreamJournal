@@ -125,7 +125,7 @@ SMODS.Joker {
 			local is_dark = card and (card.edition and card.edition.key == "e_MDJ_dark")
 			local key = context.MDJ_key
 			local amount = context.MDJ_amount
-			if not is_corrupted and not context.demicolon_racism then
+			if is_corrupted and not context.demicolon_racism then
 				local operation = MyDreamJournal.multmodkeys[key]
 				local op_number = MyDreamJournal.keystonumbers[operation]
 				if operation and op_number then
@@ -151,7 +151,7 @@ SMODS.Joker {
 						amount[2] = amount[2] + op_number
 					end
 				end
-			else
+			elseif not context.demicolon_racism then
 				local operation = MyDreamJournal.chipmodkeys[key]
 				local op_number = MyDreamJournal.keystonumbers[operation]
 				if operation and op_number then
@@ -177,7 +177,9 @@ SMODS.Joker {
 						amount[2] = amount[2] + op_number
 					end
 				end
+				print(amount)
 			end
+			print(amount)
 			return {
 				MDJ_amount = amount,
 				MDJ_key = key
