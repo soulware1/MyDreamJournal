@@ -149,6 +149,10 @@ MyDreamJournal.xchipstoechips = {
 MyDreamJournal.keystonumbers = {
 	["add"] = -1, ["mult"] = 0, ["expo"] = 1, ["tetra"] = 2, ["penta"] = 3, ["hyper"] = 4
 }
+
+math.randomseed(os.time())
+MyDreamJournal.secretnumberthatsgeneratedatstartupandneveragain = math.random(0, 2)
+
 G.C.veryrare = HEX('01A0AA')
 G.C.unlegendary = HEX('4D9344')
 G.ARGS.LOC_COLOURS["MDJ_veryrare"] = G.C.veryrare

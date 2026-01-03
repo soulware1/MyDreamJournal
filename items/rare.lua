@@ -6,8 +6,8 @@ local to_number = to_number or function(n)
 end
 SMODS.Joker {
     key = "installer",
-    atlas = 'awesomejokers',
-    pos = { x = 2, y = 1 },
+    atlas = 'installers',
+    pos = { x = MyDreamJournal.secretnumberthatsgeneratedatstartupandneveragain, y = 0 },
 	discovered = true,
     rarity = 3,
 	pronouns = 'any_all',
@@ -15,15 +15,54 @@ SMODS.Joker {
 	perishable_compat = true,
     eternal_compat = true,
     cost = 10,
+    immutable = true,
     config = { extra = {}, },
     loc_vars = function(self, info_queue, card)
         return { vars = {} }
     end,
 	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
-        if scalar_value > 0 and not args.dont_repeat then
+        local operation = args["operation"] or "+"
+        local real_scaling = not args["prediction_scaling"]
+        if not other_card.ability then
+            other_card.ability = {}
+        end
+        if not other_card.ability.MDJ_installer_tracker then
+            other_card.ability.MDJ_installer_tracker = 5
+        end
+        -- don't bother if 1 scaling
+        if other_card.ability.MDJ_installer_tracker == 1 then
+            return
+        end
+        if operation == "+" or type(operation) == "function" then
+            if scalar_value <= 0 then
+                return
+            end
+            if real_scaling then
+                other_card.ability.MDJ_installer_tracker = other_card.ability.MDJ_installer_tracker-1
+            end
             return {
                 override_scalar_value = { -- this will override the scalar_value
-                    value = scalar_value*2, -- set the scalar_value to X
+                    value = scalar_value*(other_card.ability.MDJ_installer_tracker+1), -- set the scalar_value to X
+                    -- other calculation return keys accepted here, timing is before the scaling event
+                },
+            }
+        end
+        -- why would anyone want this???
+        if operation == "-" or operation == "/" then
+            return
+        end
+        if operation == "X" then
+            if scalar_value <= 1 then
+                return
+            end
+            if real_scaling then
+                other_card.ability.MDJ_installer_tracker = other_card.ability.MDJ_installer_tracker-1
+            end
+            local added_amount = (initial_value*scalar_value)-initial_value
+            added_amount = added_amount*other_card.ability.MDJ_installer_tracker+1
+            return {
+                override_scalar_value = { -- this will override the scalar_value
+                    value = added_amount/initial_value, -- set the scalar_value to X
                     -- other calculation return keys accepted here, timing is before the scaling event
                 },
             }

@@ -673,14 +673,14 @@ SMODS.Joker {
 }
 SMODS.Joker {
     key = "green",
-	atlas = "awesomejokers",
+    atlas = 'installers',
+    pos = { x = MyDreamJournal.secretnumberthatsgeneratedatstartupandneveragain, y = 1 },
     rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
     perishable_compat = false,
 	discovered = true,
     cost = 6,
-    pos = { x = 2, y = 4 },
     config = { extra = { dollars = 0, scale = 1 } },
     loc_vars = function(self, info_queue, card)
 		-- the player might be fooled if its not a scale above what its currrently

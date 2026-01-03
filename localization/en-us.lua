@@ -102,7 +102,10 @@ return {
                 -- as in a computer software installer
                 name = 'Installer',
                 text = {
-                    "Scaling {C:attention}Jokers{} scale {C:attention}twice{} as fast"
+                    "Scaling {C:attention}Jokers{} scale {X:mult,C:white}X5{} faster",
+                    "when a scaling Joker {C:attention}scales{}",
+                    "lose {X:mult,C:white}X1{} scaling for that Joker",
+                    "{C:inactive}can't go below X1 scaling{}"
                 }
             },
             j_MDJ_compressed = {
