@@ -572,7 +572,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = (alter and alter.MDJ_key) or key
 		amount = (alter and alter.MDJ_amount) or amount
 	end
-	if is_dark and amount and ((type(amount) == "table" or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) then
+	if is_dark and amount and (((type(amount) == "table" and amount.arrow) or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) then
 		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
 		if not operation then
 			amount = amount*2
