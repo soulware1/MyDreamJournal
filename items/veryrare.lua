@@ -93,3 +93,149 @@ SMODS.Joker {
         end
     end,
 }
+SMODS.Joker {
+    key = "powerstone",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = MyDreamJournal.epic,
+	pronouns = 'he_they',
+    blueprint_compat = false,
+	perishable_compat = false,
+    eternal_compat = false,
+    cost = 10,
+    immutable = true,
+    config = { extra = { timer = 3 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.timer } }
+    end,
+	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
+        local other_joker = nil
+        for i = 1, #G.jokers.cards do
+            if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end
+        end
+        if not other_joker or not other_joker.ability or other_joker.immutable or (other_joker.ability and not other_joker.ability.extra) or other_card == card or args["prediction_scaling"] or other_card.config.center.key == "j_MDJ_powerstone" or args["operation"] == "-" or scalar_value <= 0 then
+            return
+        end
+        local temp = {
+            scalar_value = scalar_value
+        }
+        if type(other_joker.ability.extra) == "number" or (type(other_joker.ability.extra) == "table" and other_joker.ability.extra.arrow) then
+            	SMODS.scale_card(card, {
+                    ref_table = other_joker.ability, -- the table that has the value you are changing in
+                    scalar_table = temp,
+                    ref_value = "extra", -- the key to the value in the ref_table
+                    scalar_value = "scalar_value", -- the key to the value to scale by, in the ref_table by default
+                    scaling_message = {
+                    message = "Upgrade!",
+                    colour = G.C.BLACK
+				}
+				})
+                return {
+                    override_scalar_value = { -- this will override the scalar_value
+                        value = 0, -- set the scalar_value to X
+                        -- other calculation return keys accepted here, timing is before the scaling event
+                    },
+                }
+        end
+        for k, v in pairs(other_joker.ability.extra) do
+            SMODS.scale_card(card, {
+                    ref_table = other_joker.ability.extra, -- the table that has the value you are changing in
+                    scalar_table = temp,
+                    ref_value = k, -- the key to the value in the ref_table
+                    scalar_value = "scalar_value", -- the key to the value to scale by, in the ref_table by default
+                    scaling_message = {
+                    message = "Upgrade!",
+                    colour = G.C.BLACK
+				}
+            })
+        end
+        return {
+            override_scalar_value = { -- this will override the scalar_value
+                value = 0, -- set the scalar_value to X
+                -- other calculation return keys accepted here, timing is before the scaling event
+            },
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.end_of_round and context.main_eval then
+            card.ability.extra.timer = card.ability.extra.timer-1
+            if card.ability.extra.timer <= 0 then
+                SMODS.destroy_cards(card)
+            end
+        end
+    end
+}
+SMODS.Joker {
+    key = "complex",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = MyDreamJournal.epic,
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 4,
+	-- so no one gets any funnnnnnnny ideas!
+	immutable = true,
+    config = {},
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function (self, card, context)
+        if context.mod_probability then
+            return {
+                numerator = context.denominator-context.numerator
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "empty",
+    atlas = 'awesomejokers',
+    pos = { x = 6, y = 4 },
+    blueprint_compat = true,
+    eternal_compat = false,
+    discovered = true,
+    rarity = MyDreamJournal.epic,
+    pronouns = 'it_its',
+    cost = 10,
+    config = { extra = {} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {  } }
+    end,
+    calculate = function(self, card, context)
+        if context.selling_self then
+            G.E_MANAGER:add_event(Event({
+                func = (function()
+                    local other_joker = nil
+                    for i = 1, #G.jokers.cards do
+                        if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end
+                    end
+                    if not other_joker then
+                        attention_text({
+                            text = localize('k_nope_ex'),
+                            scale = 1.3,
+                            hold = 1.4,
+                            major = card,
+                            backdrop_colour = G.C.SECONDARY_SET.Tarot,
+                            align = (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) and
+                                'tm' or 'cm',
+                            offset = { x = 0, y = (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) and -0.2 or 0 },
+                            silent = true
+                        })
+                    else
+                        local copied_joker = copy_card(other_joker, nil, nil, nil, nil)
+                        copied_joker:start_materialize()
+                        copied_joker:add_to_deck()
+                        G.jokers:emplace(copied_joker)
+                    end
+                    return true
+                end)
+            }))
+            return nil, true -- This is for Joker retrigger purposes
+        end
+    end,
+}

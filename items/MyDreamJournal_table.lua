@@ -101,6 +101,22 @@ MyDreamJournal.multmodkeys = {
 	-- Other mods can add their custom operations to this table.
 }
 
+MyDreamJournal.scoreparammodkeys = {
+	['mult'] = 'add', ['h_mult'] = 'add', ['mult_mod'] = 'add',
+	['x_mult'] = 'mult', ['xmult'] = 'mult', ['Xmult'] = 'mult', ['x_mult_mod'] = 'mult', ['Xmult_mod'] = 'mult',
+	['e_mult'] = 'expo', ['emult'] = 'expo', ['Emult_mod'] = 'expo',
+	['ee_mult'] = 'tetra', ['eemult'] = 'tetra', ['EEmult_mod'] = 'tetra',
+	['eee_mult'] = 'penta', ['eeemult'] = 'penta', ['EEEmult_mod'] = 'penta',
+	['hypermult'] = 'hyper', ['hyper_mult'] = 'hyper', ['hypermult_mod'] = 'hyper',
+	['chips'] = 'add', ['h_chips'] = 'add', ['chip_mod'] = 'add',
+	['x_chips'] = 'mult', ['xchips'] = 'mult', ['Xchip_mod'] = 'mult',
+	['e_chips'] = 'expo', ['echips'] = 'expo', ['Echip_mod'] = 'expo',
+	['ee_chips'] = 'tetra', ['eechips'] = 'tetra', ['EEchip_mod'] = 'tetra',
+	['eee_chips'] = 'penta', ['eeechips'] = 'penta', ['EEEchip_mod'] = 'penta',
+	['hyperchips'] = 'hyper', ['hyper_chips'] = 'hyper', ['hyperchip_mod'] = 'hyper',
+	['fauxEmult_mod'] = 'expo', ['fauxEchip_mod'] = 'expo',
+}
+
 MyDreamJournal.dollarmodkeys = {
     ['h_dollars'] = true,
     ['dollars'] = true,
@@ -145,6 +161,24 @@ MyDreamJournal.xchipstoechips = {
 	['xchips'] = 'echips',
 	['Xchip_mod'] = 'Echip_mod',
 }
+MyDreamJournal.plusops = MyDreamJournal.plustox
+MyDreamJournal.xops = MyDreamJournal.xtoe
+MyDreamJournal.eops = {
+	['e_mult'] = 'expo', ['emult'] = 'expo', ['Emult_mod'] = 'expo',
+	['e_chips'] = 'expo', ['echips'] = 'expo', ['Echip_mod'] = 'expo',
+}
+MyDreamJournal.eeops = {
+	['ee_mult'] = 'tetra', ['eemult'] = 'tetra', ['EEmult_mod'] = 'tetra',
+	['ee_chips'] = 'tetra', ['eechips'] = 'tetra', ['EEchip_mod'] = 'tetra',
+}
+MyDreamJournal.eeeops = {
+	['eee_chips'] = 'penta', ['eeechips'] = 'penta', ['EEEchip_mod'] = 'penta',
+	['eee_mult'] = 'penta', ['eeemult'] = 'penta', ['EEEmult_mod'] = 'penta',
+}
+MyDreamJournal.hyperops = {
+	['hyperchips'] = 'hyper', ['hyper_chips'] = 'hyper', ['hyperchip_mod'] = 'hyper',
+	['hypermult'] = 'hyper', ['hyper_mult'] = 'hyper', ['hypermult_mod'] = 'hyper',
+}
 
 MyDreamJournal.keystonumbers = {
 	["add"] = -1, ["mult"] = 0, ["expo"] = 1, ["tetra"] = 2, ["penta"] = 3, ["hyper"] = 4
@@ -157,12 +191,12 @@ G.C.veryrare = HEX('01A0AA')
 G.C.unlegendary = HEX('4D9344')
 G.ARGS.LOC_COLOURS["MDJ_veryrare"] = G.C.veryrare
 G.ARGS.LOC_COLOURS["MDJ_unlegendary"] = G.C.unlegendary
-if (SMODS.Mods["Cryptid"] or {}).can_load then
-    MyDreamJournal.epic = "cry_epic"
-	MyDreamJournal.exotic = "cry_exotic"
-elseif (SMODS.Mods["vallkarri"] or {}).can_load then
+if (SMODS.Mods["vallkarri"] or {}).can_load then
     MyDreamJournal.epic = "valk_renowned"
 	MyDreamJournal.exotic = "valk_exquisite"
+elseif (SMODS.Mods["Cryptid"] or {}).can_load then
+    MyDreamJournal.epic = "cry_epic"
+	MyDreamJournal.exotic = "cry_exotic"
 else
     MyDreamJournal.epic = "MDJ_veryrare"
 	MyDreamJournal.exotic = "MDJ_unlegendary"

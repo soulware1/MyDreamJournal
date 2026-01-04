@@ -38,7 +38,7 @@ SMODS.Blind {
                     }
                 end
                 -- shouldn't be posssible without tailsman
-                if type(amount) == "table" and amount[1] and to_big(amount[1]) <= to_big(4) then
+                if type(amount) == "table" and amount[1] and to_big(amount[1]) <= to_big(4) and amount[2] and type(amount[2]) == "table" and amount[2].arrow then
                     return {
                         MDJ_amount = {amount[1], amount[2]^0.5}
                     }

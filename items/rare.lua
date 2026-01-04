@@ -14,7 +14,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
-    cost = 10,
+    cost = 8,
     immutable = true,
     config = { extra = {}, },
     loc_vars = function(self, info_queue, card)
@@ -390,5 +390,23 @@ SMODS.Joker {
 				return nil, true
 			end
 		end
+    end
+}
+SMODS.Joker {
+    key = "net",
+    atlas = 'awesomejokers',
+    pos = { x = 8, y = 4 },
+    rarity = 3,
+	blueprint_compat = false,
+	eternal_compat = true,
+    perishable_compat = true,
+	discovered = true,
+    cost = 8,
+    config = { extra = { } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { G.GAME.current_round.last_payout and math.ceil(G.GAME.current_round.last_payout/2) or 0 } }
+    end,
+    calc_dollar_bonus = function(self, card)
+        return math.ceil(G.GAME.current_round.last_payout/2)
     end
 }

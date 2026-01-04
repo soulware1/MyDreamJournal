@@ -601,7 +601,7 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if (context.joker_main or context.forcetrigger) and not context.retrigger_joker_check and not context.blueprint then
             return {
-                xmult = G.GAME.blind.chips^card.ability.extra.expo
+                xmult = math.min(G.GAME.blind.chips^card.ability.extra.expo, to_big(20))
             }
         end
     end

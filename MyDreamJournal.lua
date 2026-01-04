@@ -23,6 +23,7 @@ SMODS.load_file("items/spectrals.lua")()
 SMODS.load_file("items/decks.lua")()
 SMODS.load_file("items/blinds.lua")()
 SMODS.load_file("items/crossmod.lua")()
+SMODS.load_file("items/entropycrossmod.lua")()
 SMODS.load_file("items/hooks.lua")()
 
 ----------------------------------------------

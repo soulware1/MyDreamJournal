@@ -225,3 +225,27 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "blackout",
+    pos = { x = 7, y = 4 },
+    atlas = 'awesomejokers',
+	pronouns = 'he_him',
+    rarity = 1,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+	immutable = true,
+    cost = 4,
+    discovered = true,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+	add_to_deck = function (self, card, from_debuff)
+		SMODS.change_discard_limit(1)
+	end,
+	remove_from_deck = function (self, card, from_debuff)
+		SMODS.change_discard_limit(-1)
+	end
+}

@@ -1,6 +1,52 @@
 return {
     descriptions = {
         Joker = {
+            j_MDJ_ZZaZZ = {
+                name = "{f:MDJ_pokemon}ZZ-ZZ`ZZvZZdZZoZZsZZ_ZZQZZAZZMZZjZZtZZgZZfZZHZZ$ZZ1ZZxZZ/ZZnZZ0ZZ:ZZZZZmZZ?ZZ?ZZFZZzZZ:ZZwZZ,ZZ'ZZLZZrZZ&ZZ3ZZZZZMZZoZZkZZ?ZZ&ZZuZZ'ZZmZZ8ZZlZZ-ZZ_ZZOZZ6ZZ>ZZvZZ[ZZ?ZZ3ZZ$ZZOZZ8ZZtZZuZZMZZcZZ&ZZ:ZZ:ZZLZZ;ZZEZZ`ZZBZZ(ZZ(ZZ^ZZ`ZZ ZZTZZ/ZZ8ZZxZZ,ZZ4ZZaZZTZZTZZ#ZZ/ZZmZZ$ZZSZZUZZ`ZZVZZAZZvZZ5ZZ,ZZ3ZZDZZ?ZZ",
+                text = {
+                    "{f:MDJ_pokemon}Convert {C:chips,f:MDJ_pokemon}Chips{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}MULT%#1#+1",
+                    "{f:MDJ_pokemon}Convert {C:mult,f:MDJ_pokemon}Mult{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}CHIPS%#1#+1",
+                    "{f:MDJ_pokemon}Convert {C:chips,f:MDJ_pokemon}Chips{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}MULT%#1#+1",
+                    "{f:MDJ_pokemon}Convert {C:mult,f:MDJ_pokemon}Mult{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}CHIPS%#1#+1",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:chips,f:MDJ_pokemon}CZZpZ{f:MDJ_pokemon}ZTZZBZZeZ{C:attention,E:1,f:MDJ_pokemon}ZUZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}ZZnZZrZZ{C:mult,f:MDJ_pokemon}MZZt{f:MDJ_pokemon}ZZoZZaZZ {C:attention,E:1,f:MDJ_pokemon}ZZIZZ%ZZ5ZZ",
+                    "{f:MDJ_pokemon}Convert {C:chips,f:MDJ_pokemon}Chips{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}MULT%#1#+1",
+                    "{f:MDJ_pokemon}Convert {C:mult,f:MDJ_pokemon}Mult{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}CHIPS%#1#+1",
+                    "{f:MDJ_pokemon}Convert {C:chips,f:MDJ_pokemon}Chips{f:MDJ_pokemon} To Base {C:attention,E:1,f:MDJ_pokemon}MULT%#1#+1",
+                }
+            },
             j_MDJ_eyesjoker = {
                 name = "Let's take a look",
                 text = {
@@ -263,7 +309,8 @@ return {
                 name = "y = x^#1#",
                 text = {
                     "{B:1,C:white}XBlind Requirement^#1#{} Mult",
-                    "{C:inactive,s:0.85}(Can't be copied or retriggered)"
+                    "{C:inactive}(Can't be copied or retriggered)",
+                    "{C:inactive,s:0.85}(Capped at X20)"
                 }
             },
             j_MDJ_graph3 = {
@@ -367,7 +414,7 @@ return {
                 text = {
                     "This Joker gains {C:money}$#1#{}",
                     "in payout every round",
-                    "{C:inactive}(Currently $#2#)"
+                    "{C:inactive}(Next Projected Payment: $#2#)"
                 }
             },
             j_MDJ_goldenstar = {
@@ -404,6 +451,71 @@ return {
                     }
                 },
             },
+            j_MDJ_powerstone = {
+                name = "Powerstone",
+                text = {
+                    "When a Card {C:attention}scales",
+                    "prevent it from scaling and give",
+                    "the {C:attention}scaling{} to the",
+                    "Joker to the right",
+                    "{C:inactive}(Expires in #1# rounds)"
+                },
+            },
+            j_MDJ_brainware = {
+                name = "Brainware",
+                text = {
+                    "When a {C:MDJ_scoreparams}scoring operation{} is triggered",
+                    "repeat all previous operations",
+                    "in increasing order",
+                    "{C:inactive}(Ex: + -> x -> ^)",
+                }
+            },
+            j_MDJ_fervourware = {
+                name = "Fervourware",
+                text = {
+                    "{X:chips,C:white}XMult{} Chips",
+                    "{X:entr_eqmult,C:white}= 1{} Mult",
+                }
+            },
+            j_MDJ_complex = {
+                name = "All sqrt(-1)s!?",
+                text = {
+                    "{C:red}Inverts{} all {C:attention}listed{} {C:green}probabilities{}",
+                    "{C:inactive}(ex: 1 in 15 -> 14 in 15)"
+                }
+            },
+            j_MDJ_liverware = {
+                name = 'Liverware',
+                text = {
+                    "{X:mult,C:white}XMult{} and {X:chips,C:white}XChips{} are converted to",
+                    "{C:mult}+Mult{} and {C:chips}+Chips{} using this forumla",
+                    "{C:inactive}((MC*N)-MC)*#1#",
+                    "{C:inactive}(MC being the targeted score parameter)",
+                    "{C:inactive}(N being the original X amount)"
+                }
+            },
+            j_MDJ_empty = {
+                name = 'Empty Vessel',
+                text = {
+                    "Sell this card to",
+                    "create a copy of the",
+                    "{C:attention}Joker{} to the right",
+                }
+            },
+            j_MDJ_blackout = {
+                name = 'Blackout',
+                text = {
+                    "{C:attention}+1{} Discard Selection Limit",
+                }
+            },
+            j_MDJ_net = {
+                name = 'Safety Net',
+                text = {
+                    "Earn {C:attention}half{} of the previous payout",
+                    "at the end of the round",
+                    "{C:inactive}(Currently $#1#)",
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -423,7 +535,15 @@ return {
                 text = {
                     "When shuffling deck, don't.",
                 }
-            }
+            },
+            b_MDJ_sextuplezero = {
+                name = "#000000 Deck",
+                text = {
+                    "The scoring operator is set to +",
+                    "{X:mult,C:white}X7.5{} all +Mult,",
+                    "per-level Mult, and Base Hand Mult"
+                }
+            },
         },
         Edition = {
             e_MDJ_dark = {
