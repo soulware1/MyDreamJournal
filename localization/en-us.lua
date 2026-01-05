@@ -420,7 +420,7 @@ return {
             j_MDJ_goldenstar = {
                 name = "Golden Star",
                 text = {
-                    "{X:MDJ_operations,C:white}^1.5{} to {C:MDJ_operations}Scoring Operations",
+                    "{X:MDJ_operations,C:white}^1.5{} to {C:MDJ_operations}Score Operations",
                 }
             },
             j_MDJ_buffer = {
@@ -522,8 +522,8 @@ return {
                     '{s:0.75}By Rory in early 20s',
                 },
                 text = {
-                    "{X:MDJ_operations,C:white}X#1#-#2#{} {C:MDJ_operations}+Score Param",
-                    "{X:MDJ_operations,C:white}X#1#-#3#{} {C:MDJ_operations}XScore Param",
+                    "{X:MDJ_operations,C:white}X#1#-#2#{} {C:MDJ_operations}Additive Score Operations",
+                    "{X:MDJ_operations,C:white}X#1#-#3#{} {C:MDJ_operations}Multiplicative Score Operations",
                 }
             },
         },
@@ -559,13 +559,15 @@ return {
             e_MDJ_dark = {
                 name = "Dark",
                 text = {
-                    "{X:MDJ_operations,C:white}X#1#{} {C:MDJ_operations}Scoring Operations{}",
+                    "{X:MDJ_operations,C:white}X#1#{} {C:MDJ_operations}Score Operations{}",
+                    "to this card"
                 }
             },
             e_MDJ_amazing = {
                 name = "Amazing",
                 text = {
-                    "{X:MDJ_operations,C:white}^#1#{} {C:MDJ_operations}Scoring Operations{}",
+                    "{X:MDJ_operations,C:white}^#1#{} {C:MDJ_operations}Score Operations{}",
+                    "to this card"
                 }
             },
             e_MDJ_corrupted = {
