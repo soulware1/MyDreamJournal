@@ -14,6 +14,14 @@
 			volume = 1
 	}
  )
+   SMODS.Sound(
+	{
+			key = "amazing",
+			path = "blastedchrome.ogg",
+			per = 1,
+			volume = 1
+	}
+ )
 SMODS.Edition({
     key = "corrupted",
     sound = {
@@ -60,10 +68,34 @@ SMODS.Edition({
     config = { mult = 2 },
     in_shop = true,
     weight = 3,
-    extra_cost = 0,
+    extra_cost = 6,
     apply_to_float = true,
     loc_vars = function(self)
         local vars = { self.config.mult }
+        return { vars = vars }
+    end,
+})
+SMODS.Edition({
+    key = "amazing",
+    sound = {
+		sound = "MDJ_amazing",
+		per = 1,
+		vol = 0.7,
+	},
+	-- Stop shadow from being rendered under the card
+    disable_shadow = true,
+    -- Stop extra layer from being rendered below the card.
+    -- For edition that modify shape or transparency of the card.
+    shader = "amazing",
+    discovered = true,
+    unlocked = true,
+    config = { expo = 1.5 },
+    in_shop = true,
+    weight = 3,
+    extra_cost = 6,
+    apply_to_float = true,
+    loc_vars = function(self)
+        local vars = { self.config.expo }
         return { vars = vars }
     end,
 })

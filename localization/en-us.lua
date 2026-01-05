@@ -516,6 +516,16 @@ return {
                     "{C:inactive}(Currently $#1#)",
                 }
             },
+            j_MDJ_154 = {
+                name = {
+                    'Various Types Of Ads',
+                    '{s:0.75}By Rory in early 20s',
+                },
+                text = {
+                    "{X:MDJ_operations,C:white}X#1#-#2#{} {C:MDJ_operations}+Score Param",
+                    "{X:MDJ_operations,C:white}X#1#-#3#{} {C:MDJ_operations}XScore Param",
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -550,6 +560,12 @@ return {
                 name = "Dark",
                 text = {
                     "{X:MDJ_operations,C:white}X#1#{} {C:MDJ_operations}Scoring Operations{}",
+                }
+            },
+            e_MDJ_amazing = {
+                name = "Amazing",
+                text = {
+                    "{X:MDJ_operations,C:white}^#1#{} {C:MDJ_operations}Scoring Operations{}",
                 }
             },
             e_MDJ_corrupted = {

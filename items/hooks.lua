@@ -340,16 +340,13 @@ local calcindiveffectref = SMODS.calculate_individual_effect
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
 	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
 	local is_dark = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_dark")
+	local is_amazing = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_amazing")
 	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
 	local theres_a_brainware = next(SMODS.find_card("j_MDJ_brainware"))
 	local is_demicolon = nil
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
-	if scored_card then
-		if scored_card.config then
-			if scored_card.config.center then
-				is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
-			end
-		end
+	if scored_card and scored_card.config and scored_card.config.center then
+		is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
 	end
 	if is_corrupted then
 		local msg
@@ -582,6 +579,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		local is_chips = MyDreamJournal.chipmodkeys[key]
 		local is_mult = MyDreamJournal.multmodkeys[key]
 		local swapped = MyDreamJournal.chipmultopswap[key]
+		local secret = MyDreamJournal.scoreparammodkeys[key]
 		if not is_chips and not is_mult and not swapped then
 			goto skip
 		end
@@ -643,7 +641,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			operations["hyperoperator_hell_is_a_real_place"][#operations["hyperoperator_hell_is_a_real_place"]+1] = operation_table
 		end
 	end
-	if is_dark and amount and (((type(amount) == "table" and amount.arrow) or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) then
+	if is_dark and amount and (((type(amount) == "table" and amount.arrow) or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) and key ~= "fauxEchip_mod" and key ~= "fauxEchip_mod" then
 		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
 		if not operation then
 			amount = amount*2
@@ -651,6 +649,16 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			amount[2] = amount[2]*2
 		else
 			amount = amount*2
+		end
+	end
+	if is_amazing and amount and (((type(amount) == "table" and amount.arrow) or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) and key ~= "fauxEchip_mod" and key ~= "fauxEchip_mod" then
+		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
+		if not operation then
+			amount = amount^1.5
+		elseif MyDreamJournal.keystonumbers[operation] == 4 then
+			amount[2] = amount[2]^1.5
+		else
+			amount = amount^1.5
 		end
 	end
 	if key == 'base_mod_plus_one_mult_then_chips' then

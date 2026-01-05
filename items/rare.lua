@@ -410,3 +410,41 @@ SMODS.Joker {
         return math.ceil(G.GAME.current_round.last_payout/2)
     end
 }
+SMODS.Joker {
+    key = "154",
+    atlas = 'awesomejokers',
+    pos = { x = 9, y = 4 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 10,
+    config = { extra = { min = 1, plus_max = 15.4, x_max = 1.54 }},
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.min, card.ability.extra.plus_max, card.ability.extra.x_max } }
+    end,
+	calculate = function(self, card, context)
+		if context.MDJ_mod_key_and_amount then
+            if MyDreamJournal.plusops[context.MDJ_key] then
+                return {
+                    MDJ_amount = context.MDJ_amount*(card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.plus_max-card.ability.extra.min))
+                }
+            elseif MyDreamJournal.xops[context.MDJ_key] then
+                return {
+                    MDJ_amount = context.MDJ_amount*(card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.x_max-card.ability.extra.min))
+                }
+            end
+        end
+        if context.forcetrigger then
+            return {
+                mult = card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.plus_max-card.ability.extra.min),
+                chips = card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.plus_max-card.ability.extra.min),
+                xmult = card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.x_max-card.ability.extra.min),
+                xchips = card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.x_max-card.ability.extra.min)
+            }
+        end
+    end
+}
