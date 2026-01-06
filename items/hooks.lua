@@ -1,4 +1,182 @@
 ---@diagnostic disable: duplicate-set-field, redefined-local
+-- messed up table below
+local vanilla_jokers = {
+                j_joker = true, 
+				j_jolly = true, 
+				j_greedy_joker = true, 
+				j_lusty_joker = true, 
+				j_wrathful_joker = true, 
+				j_gluttenous_joker = true, 
+
+                j_zany = true, 
+ j_mad = true, 
+ j_crazy = true, 
+ j_droll = true, 
+ j_sly = true, 
+ j_wily = true, 
+ j_clever = true, 
+ j_devious = true, 
+
+                j_crafty = true, 
+ j_half = true, 
+ j_stencil = true, 
+ j_four_fingers = true, 
+ j_mime = true, 
+ j_credit_card = true, 
+
+                j_ceremonial = true, 
+ j_banner = true, 
+ j_mystic_summit = true, 
+ j_marble = true, 
+ j_loyalty_card = true, 
+ j_8_ball = true, 
+
+                j_misprint = true, 
+ j_dusk = true, 
+ j_raised_fist = true, 
+ j_chaos = true, 
+ j_fibonacci = true, 
+ j_steel_joker = true, 
+
+                j_scary_face = true, 
+ j_abstract = true, 
+ j_delayed_grat = true, 
+ j_hack = true, 
+ j_pareidolia = true, 
+ j_gros_michel = true, 
+
+                j_even_steven = true, 
+ j_odd_todd = true, 
+ j_scholar = true, 
+ j_business = true, 
+ j_supernova = true, 
+ j_ride_the_bus = true, 
+
+                j_space = true, 
+ j_egg = true, 
+ j_burglar = true, 
+ j_blackboard = true, 
+ j_runner = true, 
+ j_ice_cream = true, 
+ j_dna = true, 
+
+                j_splash = true, 
+ j_blue_joker = true, 
+ j_sixth_sense = true, 
+ j_constellation = true, 
+ j_hiker = true, 
+ j_faceless = true, 
+
+                j_green_joker = true, 
+ j_superposition = true, 
+ j_todo_list = true, 
+ j_cavendish = true, 
+ j_card_sharp = true, 
+
+                j_red_card = true, 
+ j_madness = true, 
+ j_square = true, 
+ j_seance = true, 
+ j_riff_raff = true, 
+ j_vampire = true, 
+
+                j_shortcut = true, 
+ j_hologram = true, 
+ j_vagabond = true, 
+ j_baron = true, 
+ j_cloud_9 = true, 
+ j_rocket = true, 
+
+                j_obelisk = true, 
+ j_midas_mask = true, 
+ j_luchador = true, 
+ j_photograph = true, 
+ j_gift = true, 
+ j_turtle_bean = true, 
+
+                j_erosion = true, 
+ j_reserved_parking = true, 
+ j_mail = true, 
+ j_to_the_moon = true, 
+ j_hallucination = true, 
+
+                j_fortune_teller = true, 
+ j_juggler = true, 
+ j_drunkard = true, 
+ j_stone = true, 
+ j_golden = true, 
+ j_lucky_cat = true, 
+
+                j_baseball = true, 
+ j_bull = true, 
+ j_diet_cola = true, 
+ j_trading = true, 
+ j_flash = true, 
+ j_popcorn = true, 
+
+                j_trousers = true, 
+ j_ancient = true, 
+ j_ramen = true, 
+ j_walkie_talkie = true, 
+ j_selzer = true, 
+ j_castle = true, 
+
+                j_smiley = true, 
+ j_campfire = true, 
+ j_ticket = true, 
+ j_mr_bones = true, 
+ j_acrobat = true, 
+ j_sock_and_buskin = true, 
+
+                j_swashbuckler = true, 
+ j_troubadour = true, 
+ j_certificate = true, 
+ j_smeared = true, 
+ j_throwback = true, 
+
+                j_hanging_chad = true, 
+ j_rough_gem = true, 
+ j_bloodstone = true, 
+ j_arrowhead = true, 
+ j_onyx_agate = true, 
+
+                j_glass = true, 
+ j_ring_master = true, 
+ j_flower_pot = true, 
+ j_blueprint = true, 
+ j_wee = true, 
+ j_merry_andy = true, 
+
+                j_oops = true, 
+ j_idol = true, 
+ j_seeing_double = true, 
+ j_matador = true, 
+ j_hit_the_road = true, 
+ j_duo = true, 
+
+                j_trio = true, 
+ j_family = true, 
+ j_order = true, 
+ j_tribe = true, 
+ j_stuntman = true, 
+ j_invisible = true, 
+
+                j_brainstorm = true, 
+ j_satellite = true, 
+ j_shoot_the_moon = true, 
+ j_drivers_license = true, 
+
+                j_cartomancer = true, 
+ j_astronomer = true, 
+ j_burnt = true, 
+ j_bootstraps = true, 
+ j_caino = true, 
+
+                j_triboulet = true, 
+ j_yorick = true, 
+ j_chicot = true, 
+ j_perkeo = true,
+            }
 local to_big = to_big or function(n)
 	return n
 end
@@ -334,6 +512,21 @@ SMODS.update_context_flags = function(context, flags)
 	if flags.MDJ_amount then context.MDJ_amount = flags.MDJ_amount end
 	return sslopcalc(context, flags)
 end
+local vanilla_jank_fixer = Card.calculate_joker
+function Card.calculate_joker(self, context)
+	local ret = vanilla_jank_fixer(self, context)
+	if vanilla_jokers[self.config.key] and ret then
+        if ret.Xmult_mod then
+    	    ret.x_mult = ret.Xmult_mod
+                ret.message = nil
+            end
+            if ret.mult_mod then
+                ret.mult = ret.mult_mod
+                ret.message = nil
+            end
+	end
+	return ret
+end
 
 
 local calcindiveffectref = SMODS.calculate_individual_effect
@@ -579,7 +772,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		local is_chips = MyDreamJournal.chipmodkeys[key]
 		local is_mult = MyDreamJournal.multmodkeys[key]
 		local swapped = MyDreamJournal.chipmultopswap[key]
-		local secret = MyDreamJournal.scoreparammodkeys[key]
+		local secret = MyDreamJournal.specilscoreparammodkeys[key]
 		if not is_chips and not is_mult and not swapped then
 			goto skip
 		end
@@ -594,7 +787,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		SMODS.calculate_effect(new_effect, scored_card, from_edition)
 		::skip::
 	end
-	if theres_a_brainware and MyDreamJournal.scoreparammodkeys[key] and not effect.frombrainware then
+	if theres_a_brainware and ( MyDreamJournal.scoreparammodkeys[key] or MyDreamJournal.specilscoreparammodkeys[key] ) and not effect.frombrainware then
 		local operations = G.GAME.current_round.previous_operations
 		local operation_table = {
 			scored_card.unique_val,
@@ -626,7 +819,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				SMODS.calculate_effect(effect, awesome_card, from_edition)
 			end
 		end
-		local heaven_or_hell = MyDreamJournal.scoreparammodkeys[key]
+		local heaven_or_hell = MyDreamJournal.scoreparammodkeys[key] or MyDreamJournal.specilscoreparammodkeys[key]
 		if heaven_or_hell == "add" then
 			operations["plus"][#operations["plus"]+1] = operation_table
 		elseif heaven_or_hell == "mult" then
@@ -664,8 +857,8 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	if key == 'base_mod_plus_one_mult_then_chips' then
 		local mult = SMODS.Scoring_Parameters["mult"]
 		local chips = SMODS.Scoring_Parameters["chips"]
-		local modmult = (mult.current%amount)+1
-		local modchips = (chips.current%amount)+1
+		local modmult = ((mult.current-1)%(amount-1))+1
+		local modchips = ((chips.current-1)%(amount-1))+1
 		amount = Base10_to_base_less_then_10(mult.current, modchips)-mult.current
 		local otheramount = Base10_to_base_less_then_10(chips.current, modmult)-chips.current
 		local othereffect = { fauxEchip_mod = otheramount }

@@ -101,6 +101,13 @@ MyDreamJournal.multmodkeys = {
 	-- Other mods can add their custom operations to this table.
 }
 
+MyDreamJournal.normalized_random = function(mu, sigma, seed)
+    local u1 = pseudorandom(seed)
+    local u2 = pseudorandom(seed)
+    local z0 = math.sqrt(-2 * math.log(u1)) * math.cos(2 * math.pi * u2)
+    return z0 * sigma + mu
+end
+
 MyDreamJournal.scoreparammodkeys = {
 	['mult'] = 'add', ['h_mult'] = 'add', ['mult_mod'] = 'add',
 	['x_mult'] = 'mult', ['xmult'] = 'mult', ['Xmult'] = 'mult', ['x_mult_mod'] = 'mult', ['Xmult_mod'] = 'mult',
@@ -114,6 +121,10 @@ MyDreamJournal.scoreparammodkeys = {
 	['ee_chips'] = 'tetra', ['eechips'] = 'tetra', ['EEchip_mod'] = 'tetra',
 	['eee_chips'] = 'penta', ['eeechips'] = 'penta', ['EEEchip_mod'] = 'penta',
 	['hyperchips'] = 'hyper', ['hyper_chips'] = 'hyper', ['hyperchip_mod'] = 'hyper',
+	['glop'] = 'add', ['xglop'] = 'mult', ['eglop'] = 'expo',
+    ['sfark'] = 'add', ['xsfark'] = 'mult', ['esfark'] = 'expo',
+}
+MyDreamJournal.specilscoreparammodkeys = {
 	['fauxEmult_mod'] = 'expo', ['fauxEchip_mod'] = 'expo',
 }
 

@@ -404,10 +404,10 @@ SMODS.Joker {
     cost = 8,
     config = { extra = { } },
     loc_vars = function(self, info_queue, card)
-        return { vars = { G.GAME.current_round.last_payout and math.ceil(G.GAME.current_round.last_payout/2) or 0 } }
+        return { vars = { G.GAME.current_round.last_payout and math.ceil(G.GAME.current_round.last_payout/4) or 0 } }
     end,
     calc_dollar_bonus = function(self, card)
-        return math.ceil(G.GAME.current_round.last_payout/2)
+        return math.ceil(G.GAME.current_round.last_payout/4)
     end
 }
 SMODS.Joker {
@@ -430,20 +430,20 @@ SMODS.Joker {
 		if context.MDJ_mod_key_and_amount then
             if MyDreamJournal.plusops[context.MDJ_key] then
                 return {
-                    MDJ_amount = context.MDJ_amount*(card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.plus_max-card.ability.extra.min))
+                    MDJ_amount = context.MDJ_amount*math.max(card.ability.extra.min, math.min(card.ability.extra.plus_max, MyDreamJournal.normalized_random(card.ability.extra.min, 3, pseudoseed("154"))))
                 }
             elseif MyDreamJournal.xops[context.MDJ_key] then
                 return {
-                    MDJ_amount = context.MDJ_amount*(card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.x_max-card.ability.extra.min))
+                    MDJ_amount = context.MDJ_amount*math.max(card.ability.extra.min, math.min(card.ability.extra.x_max, MyDreamJournal.normalized_random(card.ability.extra.min, 3, pseudoseed("154"))))
                 }
             end
         end
         if context.forcetrigger then
             return {
-                mult = card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.plus_max-card.ability.extra.min),
-                chips = card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.plus_max-card.ability.extra.min),
-                xmult = card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.x_max-card.ability.extra.min),
-                xchips = card.ability.extra.min+pseudorandom(pseudoseed("154"))*(card.ability.extra.x_max-card.ability.extra.min)
+                mult = math.max(card.ability.extra.min, math.min(card.ability.extra.plus_max, MyDreamJournal.normalized_random(card.ability.extra.min, 3, pseudoseed("154")))),
+                chips = math.max(card.ability.extra.min, math.min(card.ability.extra.plus_max, MyDreamJournal.normalized_random(card.ability.extra.min, 3, pseudoseed("154")))),
+                xmult = math.max(card.ability.extra.min, math.min(card.ability.extra.x_max, MyDreamJournal.normalized_random(card.ability.extra.min, 3, pseudoseed("154")))),
+                xchips = math.max(card.ability.extra.min, math.min(card.ability.extra.x_max, MyDreamJournal.normalized_random(card.ability.extra.min, 3, pseudoseed("154"))))
             }
         end
     end

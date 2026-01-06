@@ -436,22 +436,24 @@ SMODS.Joker {
     end,
 	calculate = function (self, card, context)
 		if context.MDJ_mod_key_and_amount then
-			local is_dark = card and (card.edition and card.edition.key == "e_MDJ_dark")
-			local power_of = (not is_dark and 2) or 4
-			local amount = context.MDJ_amount
-			local amount_is_negative = (amount < 0)
-			if amount_is_negative then
-				amount = math.abs(amount)
+			if MyDreamJournal.pluschipstoxchips[context.MDJ_key] or MyDreamJournal.plusmulttoxmult[context.MDJ_key] then
+				local is_dark = card and (card.edition and card.edition.key == "e_MDJ_dark")
+				local power_of = (not is_dark and 2) or 4
+				local amount = context.MDJ_amount
+				local amount_is_negative = (amount < 0)
+				if amount_is_negative then
+					amount = math.abs(amount)
+				end
+				local log = math.log(amount, power_of)
+				local ceiling = math.ceil(log)
+				amount = power_of ^ ceiling
+				if amount_is_negative then
+					amount = -amount
+				end
+				return {
+					MDJ_amount = amount
+				}
 			end
-			local log = math.log(amount, power_of)
-			local ceiling = math.ceil(log)
-			amount = power_of ^ ceiling
-			if amount_is_negative then
-				amount = -amount
-			end
-			return {
-				MDJ_amount = amount
-			}
 		end
 	end
 }
@@ -709,5 +711,64 @@ SMODS.Joker {
 	end,
     calc_dollar_bonus = function(self, card)
         return card.ability.extra.dollars
+    end
+}
+SMODS.Joker {
+    key = "forbidden",
+    atlas = 'pretty',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 6,
+    config = { extra = { min = 0, max = 34 }},
+    loc_vars = function(self, info_queue, card)
+        local r_mults = {}
+        for i = card.ability.extra.min, card.ability.extra.max do
+            r_mults[#r_mults + 1] = tostring(i)
+        end
+        local loc_mult = ' ' .. (localize('k_MDJ_addscoreop')) .. ' '
+        main_start = {
+            { n = G.UIT.T, config = { text = '  +', colour = G.C.MULT, scale = 0.32 } },
+            { n = G.UIT.O, config = { object = DynaText({ string = r_mults, colours = { G.C.RED }, pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.11, scale = 0.32, min_cycle_time = 0 }) } },
+            {
+                n = G.UIT.O,
+                config = {
+                    object = DynaText({
+                        string = {
+                            { string = 'nil', colour = G.C.JOKER_GREY }, { string = "#." .. "j" .. "pg", colour = G.C.RED }, { string = "Watch my skin erupt in a CYNTHONI of flames", colour = G.C.PURPLE },
+                            loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult,
+                            loc_mult, loc_mult, loc_mult, loc_mult },
+                        colours = { G.C.UI.TEXT_DARK },
+                        pop_in_rate = 9999999,
+                        silent = true,
+                        random_element = true,
+                        pop_delay = 0.11,
+                        scale = 0.32,
+                        min_cycle_time = 0
+                    })
+                }
+            },
+        }
+        return { main_start = main_start }
+    end,
+	calculate = function(self, card, context)
+		if context.MDJ_mod_key_and_amount then
+            if MyDreamJournal.plusops[context.MDJ_key] then
+                return {
+                    MDJ_amount = context.MDJ_amount+pseudorandom('vremade_misprint', card.ability.extra.min, card.ability.extra.max)
+                }
+            end
+        end
+        if context.forcetrigger then
+            return {
+                mult = pseudorandom('vremade_misprint', card.ability.extra.min, card.ability.extra.max),
+                chips = pseudorandom('vremade_misprint', card.ability.extra.min, card.ability.extra.max)
+            }
+        end
     end
 }
