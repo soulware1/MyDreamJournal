@@ -516,14 +516,21 @@ local vanilla_jank_fixer = Card.calculate_joker
 function Card.calculate_joker(self, context)
 	local ret = vanilla_jank_fixer(self, context)
 	if vanilla_jokers[self.config.key] and ret then
-        if ret.Xmult_mod then
-    	    ret.x_mult = ret.Xmult_mod
-                ret.message = nil
-            end
-            if ret.mult_mod then
-                ret.mult = ret.mult_mod
-                ret.message = nil
-            end
+		if ret.Xmult_mod then
+			ret.x_mult = ret.Xmult_mod
+			ret.Xmult_mod = nil
+			ret.message = nil
+		end
+		if ret.mult_mod then
+			ret.mult = ret.mult_mod
+			ret.mult_mod = nil
+			ret.message = nil
+		end
+		if ret.chip_mod then
+			ret.chips = ret.chip_mod
+			ret.chip_mod = nil
+			ret.message = nil
+		end
 	end
 	return ret
 end
