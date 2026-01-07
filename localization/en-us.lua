@@ -574,9 +574,11 @@ return {
             b_MDJ_sextuplezero = {
                 name = "#000000 Deck",
                 text = {
-                    "The scoring operator is set to +",
-                    "{X:mult,C:white}X7.5{} all +Mult,",
-                    "per-level Mult, and Base Hand Mult"
+                    "Each selected card costs 0.2",
+                    "{C:blue}Hands{} to play or 0.2",
+                    "{C:red}Discards{} to discard",
+                    "{C:attention}Unlimited-ish card selection",
+                    "{C:inactive}(Can't go into hands/discard debt)"
                 }
             },
         },

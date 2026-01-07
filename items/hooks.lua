@@ -270,7 +270,7 @@ function Base10_to_base_less_then_10(n, b)
 		return n
 	end
     -- this is a VERY rough approximation of what would happen during a base conversion, only use for when /10 doesn't reduce the tailsman number or it just takes too long man...
-    local approximation = math.log(to_big(10), b)
+    local approximation = math.log(b, to_big(10))
     if n >= big_ass_number and b ~= 1 then
         return n^approximation
     end
@@ -296,7 +296,7 @@ function Base10_to_base_less_then_10(n, b)
 end
 function BaseB_to_base_10(n, b)
 	if n >= big_ass_number then
-		return to_big(10)^(math.log(n, 10) * math.log(b, 10))
+		return (n/10^math.floor(math.log(n, to_big(10))))*b^math.floor(math.log(n, to_big(10)))
 	end
 	local result = to_big(0)
     local place = to_big(0)
