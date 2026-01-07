@@ -249,3 +249,39 @@ SMODS.Joker {
 		SMODS.change_discard_limit(-1)
 	end
 }
+local function gcd(a, b)
+    while b ~= 0 do
+        a, b = b, a % b
+    end
+    return math.abs(a)
+end
+local function simplify(n, d)
+    local c = gcd(n, d)
+    return n / c, d / c
+end
+SMODS.Joker {
+    key = "cube",
+    pos = { x = 1, y = 5 },
+    atlas = 'awesomejokers',
+    pronouns = 'he_him',
+    rarity = 1,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = false,
+    cost = 2,
+    discovered = true,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+    calculate = function (self, card, context)
+        if context.mod_probability then
+            local numerator, denominator = simplify(math.ceil(context.numerator), math.floor(context.denominator))
+            return {
+                numerator = numerator,
+                denominator = denominator
+            }
+        end
+    end
+}

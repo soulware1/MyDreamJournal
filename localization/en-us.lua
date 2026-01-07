@@ -535,6 +535,22 @@ return {
                     "",
                 }
             },
+            j_MDJ_steel = {
+                name = 'The Steel',
+                text = {
+                    "{X:MDJ_operations,C:white}X#1#{} {C:chips}+Chips{} and {C:mult}+Mult",
+                }
+            },
+            j_MDJ_cube = {
+                name = 'Blender Cube',
+                text = {
+                    "Probabilities roll with",
+                    "a rounded up {C:green}Numerator{}, and",
+                    "a rounded down {C:green}Denominator",
+                    "then simplify the probability",
+                    "{C:inactive}(ex: 2 in 4 chance -> 1 in 2 chance)"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -647,7 +663,9 @@ return {
             MDJ_dark = "Dark",
             k_MDJ_veryrare = "Unrare",
             k_MDJ_verylegendary = "Unlegendary",
-            k_MDJ_addscoreop = "Additive Score Operations"
+            k_MDJ_addscoreop = "Additive Score Operations",
+            -- Ceaser Cipher shift of +3 
+            k_MDJ_eviladdscoreop = "Dgglwlyh Vfruh Rshudwlrqv",
         },
         labels = {
             MDJ_corrupted = "Corrupted",

@@ -135,6 +135,33 @@ if SMODS.Mods["finity"] and SMODS.Mods["finity"].can_load then
 		end
 	}
 end
+if SMODS.Mods["GrabBag"] and SMODS.Mods["GrabBag"].can_load then
+	SMODS.Joker{
+		key = "steel",
+		blueprint_compat = true,
+		atlas = 'awesomejokers',
+		pos = { x = 0, y = 5 },
+		config = { extra = { mult = 2 }},
+		loc_vars = function(self, info_queue, card)
+			return { vars = { card.ability.extra.mult } }
+		end,
+		discovered = true,
+		rarity = "gb_boss",
+		cost = 6,
+		calculate = function(self, card, context)
+			if context.MDJ_mod_key_and_amount then
+				if MyDreamJournal.pluschipstoxchips[context.MDJ_key] or MyDreamJournal.plusmulttoxmult[context.MDJ_key] then
+					return {
+						MDJ_amount = context.MDJ_amount*card.ability.extra.mult
+					}
+				end
+			end
+		end,
+		in_pool = function(self, args)
+			return gb_is_blind_defeated("bl_MDJ_steel")
+		end
+	}
+end
 -- implment the extra soul layer and tailsman-less emult on our own if neither of these mods are enabled
 if not (SMODS.Mods["Cryptid"] or {}).can_load and not (SMODS.Mods["Cryptlib"] or {}).can_load then
 	local set_spritesref = Card.set_sprites

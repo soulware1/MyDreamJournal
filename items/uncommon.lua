@@ -731,16 +731,17 @@ SMODS.Joker {
         for i = card.ability.extra.min, card.ability.extra.max do
             r_mults[#r_mults + 1] = tostring(i)
         end
-        local loc_mult = ' ' .. (localize('k_MDJ_addscoreop')) .. ' '
+		local awesome_mult = localize('k_MDJ_addscoreop')
+        local loc_mult = ' ' .. awesome_mult .. ' '
         main_start = {
-            { n = G.UIT.T, config = { text = '  +', colour = G.C.MULT, scale = 0.32 } },
-            { n = G.UIT.O, config = { object = DynaText({ string = r_mults, colours = { G.C.RED }, pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.11, scale = 0.32, min_cycle_time = 0 }) } },
+            { n = G.UIT.T, config = { text = '  +', colour = G.C.FILTER, scale = 0.32 } },
+            { n = G.UIT.O, config = { object = DynaText({ string = r_mults, colours = { G.C.FILTER }, pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.11, scale = 0.32, min_cycle_time = 0 }) } },
             {
                 n = G.UIT.O,
                 config = {
                     object = DynaText({
                         string = {
-                            { string = 'nil', colour = G.C.JOKER_GREY }, { string = "#." .. "j" .. "pg", colour = G.C.RED }, { string = "Watch my skin erupt in a CYNTHONI of flames", colour = G.C.PURPLE },
+                            { string = 'nil', colour = G.C.veryrare }, { string = "*.jpg", colour = G.C.RED }, { string = "Watch my skin erupt in a CYNTHONI of flames", colour = G.C.PURPLE }, { string = localize('k_MDJ_eviladdscoreop'), colour = G.C.BLACK },
                             loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult,
                             loc_mult, loc_mult, loc_mult, loc_mult },
                         colours = { G.C.UI.TEXT_DARK },
@@ -770,5 +771,12 @@ SMODS.Joker {
                 chips = pseudorandom('vremade_misprint', card.ability.extra.min, card.ability.extra.max)
             }
         end
-    end
+    end,
+	update = function (self, card, dt)
+		local secret = math.floor(9.99*(G.TIMERS.REAL - dt))%29
+		if card.ability.secret ~= secret then
+			card.children.center:set_sprite_pos({ x = pseudorandom(pseudoseed("cynthoni"), 0, 28), y = 0})
+			card.ability.secret = secret
+		end
+	end
 }
