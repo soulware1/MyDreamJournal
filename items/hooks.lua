@@ -328,7 +328,7 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 		return true
 	end
 	if (love and anarchy) and not SMODS.has_no_suit(self) then
-		return self.base.suit ~= anarchy_suit
+		if suit ~= anarchy_suit then return true else return false end
 	end
 	if love and not SMODS.has_no_suit(self) then
 		if suit == anarchy_suit then return true end
@@ -374,7 +374,7 @@ end
 local vanilla_jank_fixer = Card.calculate_joker
 function Card.calculate_joker(self, context)
 	local ret = vanilla_jank_fixer(self, context)
-	if not (self.config.center.mod or self.config.original_mod) and ret and self.edition ~= "e_MDJ_blackscale" then
+	if not (self.config.center.mod or self.config.original_mod) and ret and ( self.edition and self.edition.key or "" ) ~= "e_MDJ_blackscale" then
 		if ret.Xmult_mod then
 			ret.x_mult = ret.Xmult_mod
 			ret.Xmult_mod = nil
