@@ -35,11 +35,12 @@ SMODS.Joker {
         return { vars = {  } }
     end,
     calculate = function (self, card, context)
-        if context.joker_main or context.forcetrigger then
-            return {
-                xchips = SMODS.Scoring_Parameters["mult"].current,
-                eq_mult = 1
-            }
+        if context.MDJ_mod_key_and_amount then
+            if MyDreamJournal.pluschipstoxchips[context.MDJ_key] then
+                return {
+                    MDJ_amount = context.MDJ_amount*SMODS.Scoring_Parameters["mult"].current,
+                }
+            end
         end
     end
 }

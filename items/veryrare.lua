@@ -64,6 +64,7 @@ SMODS.Joker {
     pos = { x = 9, y = 3 },
 	discovered = true,
     rarity = MyDreamJournal.epic,
+    pools = {Music = true},
 	pronouns = 'he_him',
     blueprint_compat = true,
 	perishable_compat = true,
@@ -236,6 +237,40 @@ SMODS.Joker {
                 end)
             }))
             return nil, true -- This is for Joker retrigger purposes
+        end
+    end,
+}
+
+SMODS.Joker {
+    key = "pacemaker",
+    blueprint_compat = true,
+    atlas = 'awesomejokers',
+    rarity = MyDreamJournal.epic,
+    pronouns = "she_her",
+    cost = 8,
+    discovered = true,
+    pos = { x = 2, y = 5 },
+    immutable = true,
+    config = { extra = { base = to_big(11) } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.base } }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.hand and not context.end_of_round and context.other_card:is_suit("Hearts", true) then
+            if context.other_card.debuff then
+                return {
+                    message = localize('k_debuffed'),
+                    colour = G.C.RED
+                }
+            else
+                card.ability.extra.base = card.ability.extra.base+1
+                return {
+                    base_chips = card.ability.extra.base-1
+                }
+            end
+        end
+        if context.end_of_round and context.main_eval then
+            card.ability.extra.base = to_big(11)
         end
     end,
 }

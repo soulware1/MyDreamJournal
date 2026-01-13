@@ -2,7 +2,7 @@ SMODS.Blind {
     key = "steel",
     dollars = 5,
     mult = 2,
-    pos = { x = 0, y = 0 },
+    pos = { x = 0, y = 1 },
     atlas = "blinds",
     boss = { min = 2 },
     boss_colour = HEX("2faae5"),
@@ -23,7 +23,7 @@ SMODS.Blind {
     key = "final_star",
     dollars = 8,
     mult = 0.1,
-    pos = { x = 0, y = 1 },
+    pos = { x = 0, y = 2 },
     atlas = "blinds",
     boss = { showdown = true },
     boss_colour = HEX("ffd700"),
@@ -45,5 +45,29 @@ SMODS.Blind {
                 end
             end
         end
+    end
+}
+SMODS.Blind {
+    key = "video",
+    dollars = 5,
+    mult = 2,
+    atlas = "blinds",
+    pos = { x = 0, y = 0 },
+    boss = { min = 5 },
+    boss_colour = HEX("2faae5"),
+    recalc_debuff = function(self, card, from_blind)
+        if (card.area == G.jokers) and not G.GAME.blind.disabled and (MyDreamJournal.is_music(card)) then
+            return true
+        end
+        return false
+    end,
+    in_pool = function(self)
+        if not G.jokers then return false end
+        for i, j in pairs(G.jokers.cards) do
+            if (MyDreamJournal.is_music(j)) then
+                return true
+            end
+        end
+        return false
     end
 }

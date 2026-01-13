@@ -24,3 +24,22 @@ SMODS.Back {
         })
     end
 }
+SMODS.Back {
+    key = "sextuplezero",
+    pos = { x = 1, y = 0 },
+    atlas = "decks",
+    config = {},
+    loc_vars = function(self, info_queue, back)
+        return { vars = {} }
+    end,
+    discovered = true,
+    apply = function (self, back)
+        -- when this function runs, G.deck doesn't exist, so we put in a event so it exists by the time that runs
+        G.E_MANAGER:add_event(Event{
+        func = function()
+            oldshuffle(G.deck, tostring(G.deck))
+            return true -- if you do not add this, the event will re-run every single frame until it does return true
+        end
+        })
+    end
+}

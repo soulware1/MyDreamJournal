@@ -161,6 +161,33 @@ if SMODS.Mods["GrabBag"] and SMODS.Mods["GrabBag"].can_load then
 			return gb_is_blind_defeated("bl_MDJ_steel")
 		end
 	}
+	SMODS.Joker{
+		key = "video",
+		blueprint_compat = true,
+		atlas = 'awesomejokers',
+		pos = { x = 9, y = 5 },
+		config = { extra = { }},
+		loc_vars = function(self, info_queue, card)
+			return { vars = { } }
+		end,
+		discovered = true,
+		rarity = "gb_boss",
+		cost = 15,
+		calculate = function(self, card, context)
+			if context.selling_self then
+				G.E_MANAGER:add_event(Event({
+					func = (function()
+						SMODS.add_card({ set = 'Music', area = G.jokers, rarity = "Rare" })
+						return true
+					end)
+				}))
+				return nil, true -- This is for Joker retrigger purposes
+			end
+		end,
+		in_pool = function(self, args)
+			return gb_is_blind_defeated("bl_MDJ_video")
+		end
+	}
 end
 -- implment the extra soul layer and tailsman-less emult on our own if neither of these mods are enabled
 if not (SMODS.Mods["Cryptid"] or {}).can_load and not (SMODS.Mods["Cryptlib"] or {}).can_load then

@@ -417,6 +417,7 @@ SMODS.Joker {
 	discovered = true,
     rarity = 3,
 	pronouns = 'she_her',
+    pools = {Music = true},
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
@@ -444,6 +445,120 @@ SMODS.Joker {
                 chips = math.max(card.ability.extra.min, math.min(card.ability.extra.plus_max, MyDreamJournal.normalized_random(card.ability.extra.min, (card.ability.extra.min+card.ability.extra.plus_max)/2, pseudoseed("154")))),
                 xmult = math.max(card.ability.extra.min, math.min(card.ability.extra.x_max, MyDreamJournal.normalized_random(card.ability.extra.min, (card.ability.extra.min+card.ability.extra.x_max)/2, pseudoseed("154")))),
                 xchips = math.max(card.ability.extra.min, math.min(card.ability.extra.x_max, MyDreamJournal.normalized_random(card.ability.extra.min, (card.ability.extra.min+card.ability.extra.x_max)/2, pseudoseed("154"))))
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "love",
+    atlas = 'awesomejokers',
+    pos = { x = (G.SETTINGS.colourblind_option and 1) or 0, y = 6 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'she_they',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 7,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+}
+SMODS.Joker {
+    key = "you_are_invited",
+    atlas = 'awesomejokers',
+    pos = { x = 8, y = 5 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'they_them',
+    pools = {Music = true},
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 5,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function(self, card, context)
+        if ( context.buying_card and context.card.ability and context.card.ability.set == "Voucher" and context.card.ability.invited ~= "j_MDJ_you_are_invited" ) or context.forcetrigger then
+            local voucher_pool = get_current_pool('Voucher')
+            local selected_voucher = pseudorandom_element(voucher_pool, 'modprefix_seed')
+            local disallowed = {
+                v_tarot_merchant = true,
+                v_planet_merchant = true,
+                v_magic_trick = true,
+                v_tarot_tycoon = true,
+                v_planet_tycoon = true,
+            }
+            local it = 1
+            while selected_voucher == 'UNAVAILABLE' or disallowed[selected_voucher] do
+                it = it + 1
+                selected_voucher = pseudorandom_element(voucher_pool, pseudoseed('MDJ_'..it))
+                if it >= 1001 then
+                    selected_voucher = "v_blank"
+                end
+            end
+            local voucher_card = SMODS.create_card({ area = G.play, key = selected_voucher })
+            -- fuck off need check nil
+            if not voucher_card then
+                error("die")
+            end
+            voucher_card.ability.invited = "j_MDJ_you_are_invited"
+            voucher_card:start_materialize()
+            voucher_card.cost = 0
+            G.play:emplace(voucher_card)
+            delay(0.8)
+            voucher_card:redeem()
+
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.5,
+                func = function()
+                    voucher_card:start_dissolve()
+                    return true
+                end
+            }))
+        end
+    end
+}
+SMODS.Joker {
+    key = "we_didnt_start_the_fire",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'he_him',
+    pools = {Music = true},
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 5,
+    config = { extra = { xmult = 1, gain = 0.2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult, card.ability.extra.gain } }
+    end,
+    calculate = function(self, card, context)
+        if ( context.after and SMODS.last_hand_oneshot ) or context.forcetrigger then
+            SMODS.scale_card(
+                card,
+                {
+                    ref_table = card.ability.extra, -- the table that has the value you are changing in
+                    ref_value = "xmult", -- the key to the value in the ref_table
+                    scalar_value = "gain", -- the key to the value to scale by, in the ref_table by default
+                    scaling_message = {
+                        message = "Upgrade!",
+                        colour = G.C.RED
+                    }
+                }
+            )
+        end
+        if context.joker_main or context.forcetrigger then
+            return {
+                xmult = card.ability.extra.xmult
             }
         end
     end

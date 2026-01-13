@@ -4,6 +4,53 @@ local to_big = to_big or function(n)
 	return n
 end
 
+SMODS.ObjectType({
+	key = "Music",
+	default = "j_MDJ_anarchy",
+	cards = {},
+	inject = function(self)
+		SMODS.ObjectType.inject(self)
+	end,
+})
+
+function MyDreamJournal.mass_concat(strings)
+    local built = ""
+
+    for _,str in ipairs(strings) do
+        built = built .. str
+    end
+
+    return built
+end
+
+function MyDreamJournal.localized_names(area)
+    local names = {}
+	if not area or not area.cards then
+		return {}
+	end
+    for _,card in pairs(area.cards) do
+        table.insert(names, localize({type="name_text",set=card.config.center.set,key=card.config.center.key}))
+    end
+    return names
+end
+
+function MyDreamJournal.is_music(card)
+    local center = type(card) == "string"
+        and G.P_CENTERS[card]
+        or (card.config and card.config.center)
+
+    if not center then
+        return false
+    end
+
+    -- If the center has the Music pool in its definition
+    if center.pools and center.pools.Music then
+        return true
+    end
+
+    return false
+end
+
 MyDreamJournal.rank_shorthands = {
 		"_",
 		"2",
@@ -123,7 +170,16 @@ MyDreamJournal.scoreparammodkeys = {
 	['hyperchips'] = 'hyper', ['hyper_chips'] = 'hyper', ['hyperchip_mod'] = 'hyper',
 	['glop'] = 'add', ['xglop'] = 'mult', ['eglop'] = 'expo',
     ['sfark'] = 'add', ['xsfark'] = 'mult', ['esfark'] = 'expo',
+	-- ascension power is treated as one operator higher
+	['asc'] = "expo", ['asc_mod'] = 'expo', ['x_asc'] = 'expo',
+	['plus_asc'] = 'mult', ['plusasc_mod'] = 'mult',
+	['exp_asc'] = 'tetra', ['exp_asc_mod'] = 'tetra',
+	['hyper_asc'] = 'hyper', ['hyper_asc_mod'] = 'hyper',
+	['hyperasc'] = 'hyper', ['hyperasc_mod'] = 'hyper',
 }
+
+MyDreamJournal.entropyinstalled = (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load)
+
 MyDreamJournal.specilscoreparammodkeys = {
 	['fauxEmult_mod'] = 'expo', ['fauxEchip_mod'] = 'expo',
 }

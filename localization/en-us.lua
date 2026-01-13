@@ -340,10 +340,16 @@ return {
                     '{s:0.75}By {s:1,f:MDJ_japan,C:MDJ_rainbow10}ミ{s:1,f:MDJ_japan,C:MDJ_rainbow9}ラ{s:1,f:MDJ_japan,C:MDJ_rainbow8}ク{s:1,f:MDJ_japan,C:MDJ_rainbow7}ル{s:1,f:MDJ_japan,C:MDJ_rainbow6}ミ{s:1,f:MDJ_japan,C:MDJ_rainbow5}ュ{s:1,f:MDJ_japan,C:MDJ_rainbow4}ー{s:1,f:MDJ_japan,C:MDJ_rainbow3}ジ{s:1,f:MDJ_japan,C:MDJ_rainbow2}カ{s:1,f:MDJ_japan,C:MDJ_rainbow1}ル',
                 },
                 text = {
-                    "Give {C:attention}all{} cards a {C:dark_edition}edition",
-                    "Give {C:attention}all{} playing cards a {C:dark_edition}enhancement{} and {C:dark_edition}seal",
-                    "Before scoring, if {C:attention}any{} card doesn't have",
-                    "a {C:dark_edition}edition{}, {C:dark_edition}enhancement{}, or {C:dark_edition}seal{}, give it one"
+                    {"Give {C:attention}all{} cards a {C:dark_edition}edition",
+                    "Give {C:attention}all{} playing cards a {C:dark_edition}enhancement{} and {C:dark_edition}seal",},
+                    {"Before scoring, if {C:attention}any{} card doesn't have",
+                    "a {C:dark_edition}edition{}, {C:dark_edition}enhancement{}, or {C:dark_edition}seal{}, give it one"},
+                    {
+                        "When a card is spawned",
+                        "attempt to give it a {C:dark_edition}edition",
+                        "if it's a {C:attention}playing card",
+                        "give it a {C:dark_edition}enhancement{} and {C:dark_edition}seal"
+                    }
                 }
             },
             j_MDJ_tln = {
@@ -464,7 +470,7 @@ return {
             j_MDJ_brainware = {
                 name = "Brainware",
                 text = {
-                    "When a {C:MDJ_scoreparams}scoring operation{} is triggered",
+                    "Before a {C:MDJ_scoreparams}scoring operation{} is triggered",
                     "repeat all previous operations",
                     "in increasing order",
                     "{C:inactive}(Ex: + -> x -> ^)",
@@ -473,8 +479,7 @@ return {
             j_MDJ_fervourware = {
                 name = "Fervourware",
                 text = {
-                    "{X:chips,C:white}XMult{} Chips",
-                    "{X:entr_eqmult,C:white}= 1{} Mult",
+                    "{X:chips,C:white}XMult{} to {C:chips}+Chips",
                 }
             },
             j_MDJ_complex = {
@@ -551,6 +556,102 @@ return {
                     "{C:inactive}(ex: 2 in 4 chance -> 1 in 2 chance)"
                 }
             },
+            j_MDJ_love = {
+                name = 'Love is in the air!',
+                text = {
+                    "All {C:attention}suits{} also count as",
+                    "{C:hearts}Hearts"
+                }
+            },
+            j_MDJ_pacemaker = {
+                name = 'Pacemaker',
+                text = {
+                    "Each {C:hearts}Hearts{} held in hand converts",
+                    "{C:chips}Chips{} to Base #1# increase the",
+                    "{C:attention}Base{} by 1 for each trigger",
+                    "Reset at the end of round"
+                }
+            },
+            j_MDJ_flipside = {
+                name = 'The Flipside',
+                text = {
+                    "All {C:red}Invertable{} consumables",
+                    "are automatically {C:red}Inverted",
+                }
+            },
+            j_MDJ_digital = {
+                name = "Psifiako",
+                text = {
+                    "{X:dark_edition,C:white}#1#^N{} to all {C:mult}+Mult{}, {C:chips}+Chips{} and {C:money}+$",
+                    "{X:dark_edition,C:white}#2#^N{} to all {X:mult,C:white}XMult{} and {X:chips,C:white}XChips{}",
+                }
+            },
+            j_MDJ_mcpayout = {
+                name = "Mr. Last Mcpayout",
+                text = {
+                    "Gives {C:mult}Mult{} equal to last round's {C:money}payout",
+                    "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
+                }
+            },
+            j_MDJ_new_normal = {
+                name = {
+                    'New Normal',
+                    '{s:0.75}By Jack Stauber',
+                },
+                text = {
+                    "{C:attention}Debuffed{} cards",
+                    "don't take up room"
+                }
+            },
+            j_MDJ_fake_glop = {
+                name = "Synthetic Glop",
+                text = {
+                    "{X:chips,C:white}XMult{} Chips",
+                    "{X:entr_eqmult,C:white}= 1{} Mult",
+                }
+            },
+            j_MDJ_you_are_invited = {
+                name = {
+                    'You Are Invited',
+                    '{s:0.75}By Dismemberment Plan',
+                },
+                text = {
+                    "{C:attention}Redeeming{} a voucher {C:attention}Redeems{}",
+                    "another random voucher",
+                    -- lua torture
+                    "{C:inactive}(Can't redeem ".."\"".."bad".."\"".." vouchers)"
+                }
+            },
+            j_MDJ_video = {
+                name = "The Video",
+                text = {
+                    "Creates a random {C:rare}rare",
+                    "{C:purple}Music {C:attention}Joker{} card",
+                    "when this card is sold",
+                },
+            },
+            j_MDJ_burgz = {
+                name = {
+                    'Burgz',
+                    '{s:0.75}By Ken Ashcorp',
+                },
+                text = {
+					"When {C:attention}Blind{} is selected",
+                    "create a {C:attention}Pure Food{} Joker",
+					"{C:inactive}(Must have room)"
+                }
+            },
+            j_MDJ_we_didnt_start_the_fire = {
+                name = {
+                    "We Didn't Start The Fire",
+                    '{s:0.75}By Billy Joel',
+                },
+                text = {
+                    "This Joker gains {X:mult,C:white}X#2#{} Mult",
+                    "if the {C:attention}score catches on fire",
+                    "(Currently {X:mult,C:white}X#1#{} Mult)"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -597,6 +698,12 @@ return {
                     "to this card"
                 }
             },
+            e_MDJ_blackscale = {
+                name = "Blackscale",
+                text = {
+                    "Converts {C:mult}Mult{} to Base #1#"
+                }
+            },
             e_MDJ_corrupted = {
                 name = "Corrupted",
                 text = {
@@ -628,10 +735,92 @@ return {
                     "are halved",
                 },
             },
+            bl_MDJ_video = {
+                name = "The Video",
+                text = {
+                    "All Music Jokers",
+                    "are Debuffed"
+                },
+            },
             bl_MDJ_final_star = {
                 name = "Golden Star",
                 text = {
                     "^0.5 Scoring Operations",
+                },
+            },
+        },
+        Hardware = {
+            c_MDJ_hardware_motherboard = {
+                name = "Motherboard",
+                text = {
+                    "Creates the last",
+                    "{C:MDJ_hardware} Hardware {}card",
+                    "used during this run",
+                    "{s:0.8,C:MDJ_hardware} Motherboard {s:0.8} excluded",
+                }
+            },
+            c_MDJ_hardware_speaker = {
+                name = "Speaker",
+                text = {
+                    "Creates a random",
+                    "{C:purple}Music {C:attention}Joker{} card",
+                    "{C:inactive}(Must have room)",
+                },
+            },
+            c_MDJ_hardware_ram = {
+                name = "RAM",
+                text = {
+                    "Add {C:dark_edition}Dark{} or {C:dark_edition}Amazing{} to",
+                    "{C:attention}#1#{} selected card in hand",
+                },
+            },
+            c_MDJ_hardware_hard_drive = {
+                name = "Hard Drive",
+                text = {
+                    "Add {C:dark_edition}Corrupted{} to {C:attention}#1#{} selected",
+                    "playing card or held Joker",
+                },
+            },
+            c_MDJ_hardware_capacitor = {
+                name = "Capacitor",
+                text = {
+                    "Add {C:attention}#2#{} permanent {C:attention}Retrigger{} to",
+                    "{C:attention}#1#{} selected card in hand",
+                    "{C:inactive}(Maxes out at 1)"
+                },
+            },
+            c_MDJ_hardware_keyboard = {
+                name = "Keyboard",
+                text = {
+                    "Enhances {C:attention}#1#{} selected",
+                    "cards into a",
+                    "{C:attention}#2#",
+                },
+            },
+            c_MDJ_hardware_transistor = {
+                name = "Transistor",
+                text = {
+                    "Swaps the {C:dark_edition}editions{} of",
+                    "{C:attention}2{} cards in the same card area"
+                },
+            },
+            c_MDJ_hardware_electron_emitter = {
+                name = "Electron Emitter",
+                text = {
+                    "{C:MDJ_scoreparams}+#1#{} to {C:MDJ_scoreparams}Additive Score Operations",
+                    "{C:MDJ_scoreparams}+#2#{} to {C:MDJ_scoreparams}Multiplicative Score Operations",
+                    "{X:MDJ_scoreparams,C:white}+(#1#/10^(N+1)){} to all {C:MDJ_scoreparams}higher score operations{}",
+                    "{C:inactive,s:0.9}N being the used operation+1{}"
+                },
+            },
+        },
+        Enhanced = {
+            m_MDJ_envelope = {
+                name = "Envelope Card",
+                text = {
+                    "{C:chips}+2{} Chips for every character",
+                    "in the names of all cards played",
+                    "(Currently {C:chips}+#1#{} Chips)",
                 },
             },
         },
@@ -643,6 +832,24 @@ return {
                 }
             },
 
+        },
+        Tag = {
+            tag_MDJ_music_top_up = {
+                name = "Musical Top-up Tag",
+                text = {
+                    "Create up to {C:attention}#1#",
+                    "{C:purple}Music {C:blue}Common{} Jokers",
+                    "{C:inactive}(Must have room)",
+                },
+            },
+            tag_MDJ_ascendant_music_top_up = {
+                name = "Musical Top-up Tag",
+                text = {
+                    "Create up to {C:attention}#1#",
+                    "{C:purple}Music {C:green}Uncommon{} Jokers",
+                    "{C:inactive}(Must have room)",
+                },
+            },
         },
         Other = {
             MDJ_heximal_slop = {
@@ -657,23 +864,64 @@ return {
                     "{f:MDJ_arial,C:mult}+4%{f:MDJ_arial} Mult = {f:MDJ_arial,C:mult}+4%{f:MDJ_arial} of Current Mult"
                 }
             },
+            undiscovered_hardware = {
+                name="Not Discovered",
+                text={
+                    "Purchase or use",
+                    "this card in an",
+                    "unseeded run to",
+                    "learn what it does",
+                },
+            },
+            p_MDJ_hardware_pack_normal = {
+                name="Hardware Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:MDJ_hardware} Hardware {}cards to",
+                    "be used immediately",
+                },
+            },
+            p_MDJ_hardware_pack_jumbo = {
+                name="Jumbo Hardware Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:MDJ_hardware} Hardware {}cards to",
+                    "be used immediately",
+                },
+            },
+            p_MDJ_hardware_pack_mega = {
+                name="Mega Hardware Pack",
+                text={
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{C:MDJ_hardware} Hardware {}cards to",
+                    "be used immediately",
+                },
+            },
         },
     },
     misc = {
         dictionary = {
             MDJ_corrupted = "Corrupted",
             MDJ_dark = "Dark",
+            MDJ_amazing = "Amazing",
+            MDJ_blackscale = "Blackscale",
             k_MDJ_veryrare = "Unrare",
             k_MDJ_verylegendary = "Unlegendary",
             k_MDJ_addscoreop = "Additive Score Operations",
             -- Ceaser Cipher shift of +3 
             k_MDJ_eviladdscoreop = "Dgglwlyh Vfruh Rshudwlrqv",
+            b_hardware_cards = "Hardware Cards",
+            k_hardware = "Hardware",
+            k_MDJ_hardware_pack = "Hardware",
         },
         labels = {
             MDJ_corrupted = "Corrupted",
             MDJ_dark = "Dark",
+            MDJ_amazing = "Amazing",
+            MDJ_blackscale = "Blackscale",
             MDJ_veryrare = "Unrare",
-            MDJ_verylegendary = "Unlegendary"
+            MDJ_verylegendary = "Unlegendary",
+            hardware = "Hardware",
         }
     }
 }

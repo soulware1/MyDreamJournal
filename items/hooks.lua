@@ -1,182 +1,4 @@
 ---@diagnostic disable: duplicate-set-field, redefined-local
--- messed up table below
-local vanilla_jokers = {
-                j_joker = true, 
-				j_jolly = true, 
-				j_greedy_joker = true, 
-				j_lusty_joker = true, 
-				j_wrathful_joker = true, 
-				j_gluttenous_joker = true, 
-
-                j_zany = true, 
- j_mad = true, 
- j_crazy = true, 
- j_droll = true, 
- j_sly = true, 
- j_wily = true, 
- j_clever = true, 
- j_devious = true, 
-
-                j_crafty = true, 
- j_half = true, 
- j_stencil = true, 
- j_four_fingers = true, 
- j_mime = true, 
- j_credit_card = true, 
-
-                j_ceremonial = true, 
- j_banner = true, 
- j_mystic_summit = true, 
- j_marble = true, 
- j_loyalty_card = true, 
- j_8_ball = true, 
-
-                j_misprint = true, 
- j_dusk = true, 
- j_raised_fist = true, 
- j_chaos = true, 
- j_fibonacci = true, 
- j_steel_joker = true, 
-
-                j_scary_face = true, 
- j_abstract = true, 
- j_delayed_grat = true, 
- j_hack = true, 
- j_pareidolia = true, 
- j_gros_michel = true, 
-
-                j_even_steven = true, 
- j_odd_todd = true, 
- j_scholar = true, 
- j_business = true, 
- j_supernova = true, 
- j_ride_the_bus = true, 
-
-                j_space = true, 
- j_egg = true, 
- j_burglar = true, 
- j_blackboard = true, 
- j_runner = true, 
- j_ice_cream = true, 
- j_dna = true, 
-
-                j_splash = true, 
- j_blue_joker = true, 
- j_sixth_sense = true, 
- j_constellation = true, 
- j_hiker = true, 
- j_faceless = true, 
-
-                j_green_joker = true, 
- j_superposition = true, 
- j_todo_list = true, 
- j_cavendish = true, 
- j_card_sharp = true, 
-
-                j_red_card = true, 
- j_madness = true, 
- j_square = true, 
- j_seance = true, 
- j_riff_raff = true, 
- j_vampire = true, 
-
-                j_shortcut = true, 
- j_hologram = true, 
- j_vagabond = true, 
- j_baron = true, 
- j_cloud_9 = true, 
- j_rocket = true, 
-
-                j_obelisk = true, 
- j_midas_mask = true, 
- j_luchador = true, 
- j_photograph = true, 
- j_gift = true, 
- j_turtle_bean = true, 
-
-                j_erosion = true, 
- j_reserved_parking = true, 
- j_mail = true, 
- j_to_the_moon = true, 
- j_hallucination = true, 
-
-                j_fortune_teller = true, 
- j_juggler = true, 
- j_drunkard = true, 
- j_stone = true, 
- j_golden = true, 
- j_lucky_cat = true, 
-
-                j_baseball = true, 
- j_bull = true, 
- j_diet_cola = true, 
- j_trading = true, 
- j_flash = true, 
- j_popcorn = true, 
-
-                j_trousers = true, 
- j_ancient = true, 
- j_ramen = true, 
- j_walkie_talkie = true, 
- j_selzer = true, 
- j_castle = true, 
-
-                j_smiley = true, 
- j_campfire = true, 
- j_ticket = true, 
- j_mr_bones = true, 
- j_acrobat = true, 
- j_sock_and_buskin = true, 
-
-                j_swashbuckler = true, 
- j_troubadour = true, 
- j_certificate = true, 
- j_smeared = true, 
- j_throwback = true, 
-
-                j_hanging_chad = true, 
- j_rough_gem = true, 
- j_bloodstone = true, 
- j_arrowhead = true, 
- j_onyx_agate = true, 
-
-                j_glass = true, 
- j_ring_master = true, 
- j_flower_pot = true, 
- j_blueprint = true, 
- j_wee = true, 
- j_merry_andy = true, 
-
-                j_oops = true, 
- j_idol = true, 
- j_seeing_double = true, 
- j_matador = true, 
- j_hit_the_road = true, 
- j_duo = true, 
-
-                j_trio = true, 
- j_family = true, 
- j_order = true, 
- j_tribe = true, 
- j_stuntman = true, 
- j_invisible = true, 
-
-                j_brainstorm = true, 
- j_satellite = true, 
- j_shoot_the_moon = true, 
- j_drivers_license = true, 
-
-                j_cartomancer = true, 
- j_astronomer = true, 
- j_burnt = true, 
- j_bootstraps = true, 
- j_caino = true, 
-
-                j_triboulet = true, 
- j_yorick = true, 
- j_chicot = true, 
- j_perkeo = true,
-            }
 local to_big = to_big or function(n)
 	return n
 end
@@ -200,6 +22,7 @@ function SMODS.current_mod.calculate(self, context)
 			hyperoperator_hell_is_a_real_place = {}
 		}
 		G.GAME.current_round.last_payout = to_big(0)
+		G.GAME.MDJ_electron_beam = to_big(0)
 	end
 	local ranks = G.GAME.current_round.MDJ_construction_jokers_ranks
 	local ranks2 = G.GAME.current_round.MDJ_construction_jokers_temp_ranks
@@ -237,6 +60,36 @@ function SMODS.current_mod.calculate(self, context)
 			ee = {},
 			eee = {},
 			hyperoperator_hell_is_a_real_place = {}
+		}
+	end
+	if context.MDJ_mod_key_and_amount then
+		local key = context.MDJ_key
+		local amount = context.MDJ_amount
+		local operation = MyDreamJournal.multmodkeys[key] or MyDreamJournal.chipmodkeys[key]
+		local op_number = MyDreamJournal.keystonumbers[operation]
+		if operation and op_number then
+			-- handle generalized higher order hyperoperations
+			local is_hyper = false
+			if op_number == 4 then
+				op_number = amount[1]
+				is_hyper = true
+			end
+			if op_number ~= -1 and op_number ~= 0 then
+				op_number = G.GAME.MDJ_electron_beam/(10^(op_number+1))
+			elseif op_number == -1 then
+				op_number = G.GAME.MDJ_electron_beam
+			elseif op_number == 0 then
+				op_number = G.GAME.MDJ_electron_beam/10
+			end
+			if not is_hyper then
+				amount = amount + op_number
+			else
+				amount[2] = amount[2] + op_number
+			end
+		end
+		return {
+			MDJ_amount = amount,
+			MDJ_key = key
 		}
 	end
 end
@@ -465,17 +318,23 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
 	local anarchy = next(SMODS.find_card("j_MDJ_anarchy"))
 	local suit_shuffle = next(SMODS.find_card("j_MDJ_suitshuffle"))
 	local everything_you_know_is_wrong = next(SMODS.find_card("j_MDJ_etykiw"))
-	local smfw = next(SMODS.find_card("j_MDJ_smfw"))
+	local love = next(SMODS.find_card("j_MDJ_love"))
 	local anarchy_suit = 'Hearts'
 	if suit_shuffle then
 		anarchy_suit = 'Spades'
 	end
 	local g = oldcardissuit(self, suit, bypass_debuff, flush_calc)
-	if anarchy and not SMODS.has_no_suit(self) then
-		if self.base.suit == anarchy_suit then return self.base.suit ~= suit end
-	end
 	if everything_you_know_is_wrong and suitless(self) then
 		return true
+	end
+	if (love and anarchy) and not SMODS.has_no_suit(self) then
+		return self.base.suit ~= anarchy_suit
+	end
+	if love and not SMODS.has_no_suit(self) then
+		if suit == anarchy_suit then return true end
+	end
+	if anarchy and not SMODS.has_no_suit(self) then
+		if self.base.suit == anarchy_suit then return self.base.suit ~= suit end
 	end
 	if suit_shuffle and not SMODS.has_no_suit(self) then
 		local clubs = "Clubs"
@@ -515,7 +374,7 @@ end
 local vanilla_jank_fixer = Card.calculate_joker
 function Card.calculate_joker(self, context)
 	local ret = vanilla_jank_fixer(self, context)
-	if vanilla_jokers[self.config.key] and ret then
+	if not (self.config.center.mod or self.config.original_mod) and ret and self.edition ~= "e_MDJ_blackscale" then
 		if ret.Xmult_mod then
 			ret.x_mult = ret.Xmult_mod
 			ret.Xmult_mod = nil
@@ -533,6 +392,127 @@ function Card.calculate_joker(self, context)
 		end
 	end
 	return ret
+end
+
+local create_card_hook = create_card
+function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append, ...)
+    local card = create_card_hook(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append, ...)
+    if not card then
+        return
+    end
+	if next(SMODS.find_card("j_MDJ_tme")) then
+		if card.config.center.set == "Playing Card" then
+			local edition_pool = {}
+			local enchantment_pool = {}
+			local seal_pool = {}
+			for _, ed in pairs(G.P_CENTER_POOLS["Enhanced"]) do
+				if ed.key == "m_base" then
+					goto wof_continue
+				end
+				enchantment_pool[#enchantment_pool + 1] = ed.key
+				::wof_continue::
+			end
+			for _, ed in pairs(G.P_CENTER_POOLS["Seal"]) do
+				seal_pool[#seal_pool + 1] = ed.key
+			end
+			for _, ed in pairs(G.P_CENTER_POOLS["Edition"]) do
+			if ed.key == "e_base" then
+				goto wolf_continue
+			end
+			edition_pool[#edition_pool + 1] = ed.key
+				::wolf_continue::
+			end
+			local edition = pseudorandom_element(edition_pool, pseudoseed(tostring({})))
+            local enchantment = pseudorandom_element(enchantment_pool, pseudoseed(tostring({})))
+            local seal = pseudorandom_element(seal_pool, pseudoseed(tostring({})))
+            if not card.edition then
+                card:set_edition(edition, true)
+            end
+            ---@diagnostic disable-next-line: param-type-mismatch
+            if not next(SMODS.get_enhancements(card)) then
+                card:set_ability(enchantment, true)
+            end
+            if not card.seal then
+                card:set_seal(seal, true)
+            end
+            check_for_unlock({type = 'have_edition'})
+		else
+			local edition_pool = {}
+			for _, ed in pairs(G.P_CENTER_POOLS["Edition"]) do
+			if ed.key == "e_base" then
+				goto wolf_continue
+			end
+			edition_pool[#edition_pool + 1] = ed.key
+				::wolf_continue::
+			end
+			local edition = pseudorandom_element(edition_pool, pseudoseed(tostring({})))
+			if not card.edition then
+                card:set_edition(edition, true)
+            end
+		end
+	end
+	return card
+end
+
+local debuff_hook = Card.set_debuff
+local other_debuff_hook = SMODS.debuff_card
+function Card:set_debuff(debuff)
+	local card = self
+	if card.config.center.key == "j_MDJ_new_normal" then
+		SMODS.calculate_context({
+			idk_a_easier_way_to_do_this_so = true,
+			debuffslop = debuff,
+			targeted_card = card
+		})
+		return
+	end
+	if next(SMODS.find_card("j_MDJ_new_normal", true)) then
+		if card and not card.ability then
+			card.ability = {}
+		end
+		if card.ability.extra_slots_used and not card.ability.new_normal_affected then
+			card.ability.former_extra_slots_used = card.ability.extra_slots_used
+			card.ability.new_normal_affected = true
+		else
+			card.ability.former_extra_slots_used = 0
+		end
+		if debuff and card and card.ability and not ( card.ability.former_extra_slots_used and card.ability.former_extra_slots_used < 0 ) then
+			card.ability.extra_slots_used = -1
+		elseif not debuff and card and card.ability then
+			card.ability.extra_slots_used = card.ability.former_extra_slots_used
+			card.ability.new_normal_affected = false
+		end
+	end
+	return debuff_hook(card, debuff)
+end
+
+function SMODS.debuff_card(card, debuff, source)
+	if card.config.center.key == "j_MDJ_new_normal" then
+		SMODS.calculate_context({
+			idk_a_easier_way_to_do_this_so = true,
+			debuffslop = debuff,
+			targeted_card = card
+		})
+		return
+	end
+	if next(SMODS.find_card("j_MDJ_new_normal", true)) then
+		if card and not card.ability then
+			card.ability = {}
+		end
+		if card.ability.extra_slots_used and not card.ability.new_normal_affected then
+			card.ability.former_extra_slots_used = card.ability.extra_slots_used
+			card.ability.new_normal_affected = true
+		else
+			card.ability.former_extra_slots_used = 0
+		end
+		if debuff and card and card.ability and not ( card.ability.former_extra_slots_used and card.ability.former_extra_slots_used < 0 ) then
+			card.ability.extra_slots_used = -1
+		elseif not debuff and card and card.ability then
+			card.ability.extra_slots_used = card.ability.former_extra_slots_used
+			card.ability.new_normal_affected = false
+		end
+	end
+	return other_debuff_hook(card, debuff, source)
 end
 
 
@@ -774,12 +754,11 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if theres_a_mindware and not effect.from_mindware and key then
 		local new_effect = Copy3(effect)
+		effect["from_mindware"] = true
 		new_effect[key] = nil
-		new_effect.from_mindware = true
 		local is_chips = MyDreamJournal.chipmodkeys[key]
 		local is_mult = MyDreamJournal.multmodkeys[key]
 		local swapped = MyDreamJournal.chipmultopswap[key]
-		local secret = MyDreamJournal.specilscoreparammodkeys[key]
 		if not is_chips and not is_mult and not swapped then
 			goto skip
 		end
@@ -791,7 +770,10 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			new_amount = new_amount*7.5
 		end
 		new_effect[swapped] = new_amount
-		SMODS.calculate_effect(new_effect, scored_card, from_edition)
+		SMODS.calculate_effect(effect, scored_card, from_edition)
+		effect = new_effect
+		amount = new_amount
+		key = swapped
 		::skip::
 	end
 	if theres_a_brainware and ( MyDreamJournal.scoreparammodkeys[key] or MyDreamJournal.specilscoreparammodkeys[key] ) and not effect.frombrainware then

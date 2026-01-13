@@ -9,11 +9,11 @@ local rarity_probablities = {
 SMODS.Consumable {
     key = 'ware',
     set = 'Spectral',
-    pos = { x = 0, y = 0 },
-    soul_pos = { x = 1, y = 0, extra = { x = 2, y = 0} },
+    pos = { x = 0, y = 1 },
+    soul_pos = { x = 1, y = 1, extra = { x = 2, y = 1} },
     atlas = "eplaceholder",
     discovered = true,
-    soul_set = 'Tarot',
+    soul_set = 'Hardware',
     config = { extra = { unrare = MyDreamJournal.veryrare, unlegendary = MyDreamJournal.exotic, }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { localize(MyDreamJournal.veryrare), localize(MyDreamJournal.exotic) } }
@@ -103,4 +103,8 @@ SMODS.Consumable {
             return G.jokers.highlighted[1] and (G.jokers.highlighted[1].config.center.rarity == max_rarity)
         end
     end,
+    demicoloncompat = true,
+    force_use = function(self, card)
+        self:use(card)
+    end
 }

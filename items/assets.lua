@@ -11,6 +11,12 @@ SMODS.Atlas({
     py = 95
  })
   SMODS.Atlas({
+    key = "enhancements",
+    path = "enhancements.png",
+    px = 71,
+    py = 95
+ })
+  SMODS.Atlas({
     key = "installers",
     path = "installers.png",
     px = 71,
@@ -48,7 +54,7 @@ SMODS.Atlas({
  })
   SMODS.Atlas({
     key = "placeholder",
-    path = "stolenplaceholder.png",
+    path = "placeholder.png",
     px = 71,
     py = 95
  })
@@ -83,6 +89,12 @@ SMODS.Atlas({
     py = 34,
     atlas_table = 'ANIMATION_ATLAS',
     frames = 21,
+ })
+ SMODS.Atlas({
+    key = "tags",
+    path = "tags.png",
+    px = 34,
+    py = 34,
  })
  SMODS.Font {
 	key = "pokemon",
@@ -360,6 +372,10 @@ loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_suits = gradient
 loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_damage = HEX('FF6969')
- SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
+G.C.SET.Hardware = HEX('4C4C4C')
+G.C.SECONDARY_SET.Hardware = HEX('008200')
+G.ARGS.LOC_COLOURS.MDJ_hardware = G.C.SECONDARY_SET.Hardware
+SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
 SMODS.Shader({ key = 'dark', path = 'dark.fs' })
 SMODS.Shader({ key = 'amazing', path = 'amazing.fs' })
+SMODS.Shader({ key = 'blackscale', path = 'blackscale.fs' })

@@ -259,6 +259,7 @@ SMODS.Joker {
     pos = { x = 0, y = 3 },
 	discovered = true,
     rarity = 2,
+	pools = {Music = true},
 	pronouns = 'she_her',
     blueprint_compat = false,
 	perishable_compat = true,
@@ -278,6 +279,7 @@ SMODS.Joker {
     pos = { x = 0, y = 0 },
 	discovered = true,
     rarity = 2,
+	pools = {Music = true},
 	pronouns = 'he_him',
     blueprint_compat = true,
 	perishable_compat = true,
@@ -345,6 +347,7 @@ SMODS.Joker {
     pos = { x = 0, y = 0 },
 	discovered = true,
     rarity = 2,
+	pools = {Music = true},
 	pronouns = 'he_him',
     blueprint_compat = false,
 	perishable_compat = true,
@@ -566,6 +569,7 @@ SMODS.Joker {
     pos = { x = 7, y = 2 },
 	discovered = true,
     rarity = 2,
+	pools = {Music = true},
 	pronouns = 'he_him',
     blueprint_compat = false,
 	perishable_compat = true,
@@ -761,14 +765,14 @@ SMODS.Joker {
 		if context.MDJ_mod_key_and_amount then
             if MyDreamJournal.plusops[context.MDJ_key] then
                 return {
-                    MDJ_amount = context.MDJ_amount+pseudorandom('vremade_misprint', card.ability.extra.min, card.ability.extra.max)
+                    MDJ_amount = context.MDJ_amount+pseudorandom('forbidden', card.ability.extra.min, card.ability.extra.max)
                 }
             end
         end
         if context.forcetrigger then
             return {
-                mult = pseudorandom('vremade_misprint', card.ability.extra.min, card.ability.extra.max),
-                chips = pseudorandom('vremade_misprint', card.ability.extra.min, card.ability.extra.max)
+                mult = pseudorandom('forbidden', card.ability.extra.min, card.ability.extra.max),
+                chips = pseudorandom('forbidden', card.ability.extra.min, card.ability.extra.max)
             }
         end
     end,
@@ -777,6 +781,30 @@ SMODS.Joker {
 		if card.ability.secret ~= secret then
 			card.children.center:set_sprite_pos({ x = pseudorandom(pseudoseed("cynthoni"), 0, 28), y = 0})
 			card.ability.secret = secret
+		end
+	end
+}
+SMODS.Joker {
+    key = "new_normal",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	pools = {Music = true},
+	pronouns = 'he_him',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 5,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+	calculate = function (self, card, context)
+		if context.idk_a_easier_way_to_do_this_so and context.targeted_card == card and context.debuffslop then
+			return {
+				message = localize("k_not_allowed_ex")
+			}
 		end
 	end
 }

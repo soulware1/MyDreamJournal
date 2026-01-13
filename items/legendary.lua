@@ -179,3 +179,29 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "fake_glop",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'she_her',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+	immutable = true,
+    cost = 20,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {  } }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                xchips = SMODS.Scoring_Parameters["mult"].current,
+                eq_mult = 1
+            }
+        end
+    end
+}

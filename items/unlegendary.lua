@@ -102,6 +102,7 @@ SMODS.Joker {
     atlas = "eplaceholder",
 	discovered = true,
     rarity = MyDreamJournal.exotic,
+    pools = {Music = true},
 	pronouns = 'they_them',
     blueprint_compat = false,
 	perishable_compat = true,

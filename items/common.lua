@@ -285,3 +285,26 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "mcpayout",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 1,
+	pronouns = 'he_they',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 3,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { G.GAME.current_round.last_payout or 0 } }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                mult = G.GAME.current_round.last_payout
+            }
+        end
+    end
+}
