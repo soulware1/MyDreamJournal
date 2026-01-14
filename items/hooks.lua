@@ -794,7 +794,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		new_effect[key] = nil
 		local is_chips = MyDreamJournal.chipmodkeys[key]
 		local is_mult = MyDreamJournal.multmodkeys[key]
-		local swapped = MyDreamJournal.chipmultopswap[key]
+		local swapped = MyDreamJournal.chipmultopswap[og_key]
 		if not is_chips and not is_mult and not swapped then
 			goto skip
 		end
