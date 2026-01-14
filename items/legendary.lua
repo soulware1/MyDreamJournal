@@ -168,12 +168,14 @@ SMODS.Joker {
             local key = context.MDJ_key
             if MyDreamJournal.plusmulttoxmult[key] then
                 return {
-                    MDJ_key = 'percent_mult'
+                    MDJ_key = 'percent_mult',
+                    MDJ_amount = context.MDJ_amount*10
                 }
             end
             if MyDreamJournal.pluschipstoxchips[key] then
                 return {
-                    MDJ_key = 'percent_chips'
+                    MDJ_key = 'percent_chips',
+                    MDJ_amount = context.MDJ_amount*10
                 }
             end
         end

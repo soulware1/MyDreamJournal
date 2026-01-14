@@ -184,6 +184,7 @@ SMODS.Consumable {
                 for i = 1, #G.hand.highlighted do
                     local capacitor_card = G.hand.highlighted[i]
                     capacitor_card.ability.perma_repetitions = ( capacitor_card.ability.perma_repetitions or 0 )+card.ability.retriggers
+                    capacitor_card:juice_up(0.3, 0.5)
                 end
                 card:juice_up(0.3, 0.5)
                 return true
@@ -276,7 +277,7 @@ SMODS.Consumable {
     atlas = "placeholder",
     set = 'Hardware',
     pos = { x = 1, y = 0 },
-    config = { add = 0.1 },
+    config = { add = 0.5 },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.add, card.ability.add/10 } }
     end,

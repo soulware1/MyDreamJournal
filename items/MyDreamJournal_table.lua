@@ -184,6 +184,28 @@ MyDreamJournal.specilscoreparammodkeys = {
 	['fauxEmult_mod'] = 'expo', ['fauxEchip_mod'] = 'expo',
 }
 
+MyDreamJournal.otherscoremodkeys = {
+	['digit_mult'] = 'add',
+    ['digit_chips'] = 'add',
+    ['base_mult'] = 'expo',
+    ['base_chips'] = 'expo',
+    ['base_sum_mult'] = 'expo',
+    ['base_sum_chips'] = 'expo',
+    ['sum_mult'] = 'add',
+    ['sum_chips'] = 'add',
+	['sin_chips'] = 'mult',
+	['cos_chips'] = 'mult',
+	['sin_mult'] = 'mult',
+	['cos_mult'] = 'mult',
+	['set_mult'] = 'hyper',
+	['set_chips'] = 'hyper',
+	['set_visible_mult'] = 'hyper',
+	['set_visible_chips'] = 'hyper',
+	['base_mod_plus_one_mult_then_chips'] = "hyper",
+	['percent_chips'] = "mult",
+	['percent_mult'] = "mult",
+}
+
 MyDreamJournal.dollarmodkeys = {
     ['h_dollars'] = true,
     ['dollars'] = true,

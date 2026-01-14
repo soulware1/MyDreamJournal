@@ -5,6 +5,30 @@ end
 local to_number = to_number or function(x)
 	return x
 end
+-- all keys
+local all_key = {
+	base_chips = true,
+	base_mult = true,
+	base_sum_mult = true,
+	base_sum_chips = true,
+	set_mult = true,
+	set_chips = true,
+	set_score = true,
+	set_visible_mult = true,
+	set_visible_chips = true,
+	set_visible_score = true,
+	base_mod_plus_one_mult_then_chips = true,
+	digit_chips = true,
+	digit_mult = true,
+	sum_mult = true,
+	sum_chips = true,
+	sin_chips = true,
+	cos_chips = true,
+	sin_mult = true,
+	cos_mult = true,
+	percent_chips = true,
+	percent_mult = true,
+}
 function SMODS.current_mod.calculate(self, context)
 	-- setup
 	if not G.GAME.current_round.MDJ_construction_jokers_ranks and not G.GAME.current_round.MDJ_construction_jokers_temp_ranks and not G.GAME.current_round.MDJ_construction_jokers_displayed_ranks and not G.GAME.current_round.MDJ_construction_jokers_first_hand then
@@ -64,6 +88,7 @@ function SMODS.current_mod.calculate(self, context)
 	end
 	if context.MDJ_mod_key_and_amount then
 		local key = context.MDJ_key
+		local og_key = context.MDJ_og_key
 		local amount = context.MDJ_amount
 		local operation = MyDreamJournal.multmodkeys[key] or MyDreamJournal.chipmodkeys[key]
 		local op_number = MyDreamJournal.keystonumbers[operation]
@@ -85,6 +110,31 @@ function SMODS.current_mod.calculate(self, context)
 				amount = amount + op_number
 			else
 				amount[2] = amount[2] + op_number
+			end
+		end
+		if context.card then
+			local scored_card = context.card
+			local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
+			local is_dark = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_dark")
+			local is_amazing = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_amazing")
+			if is_corrupted and all_key[og_key] and MyDreamJournal.chipmultopswap[og_key] then
+				key = MyDreamJournal.chipmultopswap[og_key]
+			elseif is_corrupted and MyDreamJournal.chipmultopswap[key] then
+				key = MyDreamJournal.chipmultopswap[key]
+			end
+			if is_dark and MyDreamJournal.scoreparammodkeys[key] then
+				if MyDreamJournal.keystonumbers[MyDreamJournal.scoreparammodkeys[key]] == 4 then
+					amount[2] = amount[2]*2
+				else
+					amount = amount*2
+				end
+			end
+			if is_amazing and MyDreamJournal.scoreparammodkeys[key] then
+				if MyDreamJournal.keystonumbers[MyDreamJournal.scoreparammodkeys[key]] == 4 then
+					amount[2] = amount[2]^1.5
+				else
+					amount = amount^1.5
+				end
 			end
 		end
 		return {
@@ -285,6 +335,7 @@ local equals_key = {
 local slop_key = {
 	'MDJ_amount',
 	'MDJ_key',
+	'MDJ_og_key'
 }
 for _, v in ipairs(converted_keys) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
@@ -369,6 +420,7 @@ local sslopcalc = SMODS.update_context_flags
 SMODS.update_context_flags = function(context, flags)
 	if flags.MDJ_key then context.MDJ_key = flags.MDJ_key end
 	if flags.MDJ_amount then context.MDJ_amount = flags.MDJ_amount end
+	if flags.MDJ_og_key then context.MDJ_og_key = flags.MDJ_og_key end
 	return sslopcalc(context, flags)
 end
 local vanilla_jank_fixer = Card.calculate_joker
@@ -518,34 +570,13 @@ end
 
 local calcindiveffectref = SMODS.calculate_individual_effect
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
-	local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
-	local is_dark = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_dark")
-	local is_amazing = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_amazing")
+	local og_key = key
 	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
 	local theres_a_brainware = next(SMODS.find_card("j_MDJ_brainware"))
 	local is_demicolon = nil
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
 	if scored_card and scored_card.config and scored_card.config.center then
 		is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
-	end
-	if is_corrupted then
-		local msg
-		if string.find(key, 'chip') then
-			msg = "Mult!"
-			if MyDreamJournal.chipmodkeys[key] == "add" or key == 'digit_chips' then
-				amount = math.floor((amount/7.5)+0.5)
-			end
-		elseif string.find(key, 'mult') then
-			msg = "Chips!"
-			-- rounds
-			if MyDreamJournal.multmodkeys[key] == "add" or key == 'digit_mult' then
-				amount = math.floor((amount*7.5)+0.5)
-			end
-		end
-		if msg and not (Talisman and Talisman.config_file.disable_anims) and scored_card then
-			card_eval_status_text(scored_card, 'extra', nil, nil, nil, {message = msg, colour = string.find(key, 'chip') and G.C.CHIPS or string.find(key, 'mult') and G.C.MULT, delay = 0.2})
-		end
-		key = MyDreamJournal.chipmultopswap[key]
 	end
 	if key == 'set_mult' then
 		local mult = SMODS.Scoring_Parameters["mult"]
@@ -690,10 +721,15 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			amount = amount*7.5
 		end
 	end
-	if key and amount and key ~= 'MDJ_key' and key ~= 'MDJ_amount' then
-		local alter = SMODS.calculate_context({MDJ_mod_key_and_amount = true, MDJ_amount = amount, MDJ_key = key, demicolon_racism = is_demicolon})
+	if key and amount and key ~= 'MDJ_key' and key ~= 'MDJ_amount' and not effect.no_alter then
+		local alter = SMODS.calculate_context({MDJ_mod_key_and_amount = true, MDJ_amount = amount, MDJ_key = key, MDJ_og_key = og_key, card = scored_card, demicolon_racism = is_demicolon})
 		key = (alter and alter.MDJ_key) or key
 		amount = (alter and alter.MDJ_amount) or amount
+		-- recalcuate it
+		if all_key[key] then
+			effect.no_alter = true
+			SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
+		end
 	end
 	-- add in the equals if no entropy :sob:
 	if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
@@ -762,7 +798,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		if not is_chips and not is_mult and not swapped then
 			goto skip
 		end
-		local is_additive = ((is_chips == "add") and true) or ((is_mult == "add") and true)
+		local is_additive = ((is_chips == "add")) or ((is_mult == "add"))
 		local new_amount = amount
 		if is_additive and is_chips then
 			new_amount = new_amount/7.5
@@ -776,7 +812,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = swapped
 		::skip::
 	end
-	if theres_a_brainware and ( MyDreamJournal.scoreparammodkeys[key] or MyDreamJournal.specilscoreparammodkeys[key] ) and not effect.frombrainware then
+	if theres_a_brainware and ( MyDreamJournal.scoreparammodkeys[og_key] or MyDreamJournal.otherscoremodkeys[og_key] ) and not effect.frombrainware then
 		local operations = G.GAME.current_round.previous_operations
 		local operation_table = {
 			scored_card.unique_val,
@@ -808,7 +844,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 				SMODS.calculate_effect(effect, awesome_card, from_edition)
 			end
 		end
-		local heaven_or_hell = MyDreamJournal.scoreparammodkeys[key] or MyDreamJournal.specilscoreparammodkeys[key]
+		local heaven_or_hell = MyDreamJournal.scoreparammodkeys[og_key] or MyDreamJournal.otherscoremodkeys[og_key]
 		if heaven_or_hell == "add" then
 			operations["plus"][#operations["plus"]+1] = operation_table
 		elseif heaven_or_hell == "mult" then
@@ -821,26 +857,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			operations["eee"][#operations["eee"]+1] = operation_table
 		elseif heaven_or_hell == "hyper" then
 			operations["hyperoperator_hell_is_a_real_place"][#operations["hyperoperator_hell_is_a_real_place"]+1] = operation_table
-		end
-	end
-	if is_dark and amount and (((type(amount) == "table" and amount.arrow) or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) and key ~= "fauxEchip_mod" and key ~= "fauxEchip_mod" then
-		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
-		if not operation then
-			amount = amount*2
-		elseif MyDreamJournal.keystonumbers[operation] == 4 then
-			amount[2] = amount[2]*2
-		else
-			amount = amount*2
-		end
-	end
-	if is_amazing and amount and (((type(amount) == "table" and amount.arrow) or type(amount) == "number") or (MyDreamJournal.keystonumbers[MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]] == 4)) and key ~= "fauxEchip_mod" and key ~= "fauxEchip_mod" then
-		local operation = MyDreamJournal.chipmodkeys[key] or MyDreamJournal.multmodkeys[key]
-		if not operation then
-			amount = amount^1.5
-		elseif MyDreamJournal.keystonumbers[operation] == 4 then
-			amount[2] = amount[2]^1.5
-		else
-			amount = amount^1.5
 		end
 	end
 	if key == 'base_mod_plus_one_mult_then_chips' then
@@ -864,7 +880,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = "mult_mod"
 	end
 	-- slop
-	if key == 'MDJ_key' or key == 'MDJ_amount' then
+	if key == 'MDJ_key' or key == 'MDJ_amount' or key == 'MDJ_og_key' then
         return { [key] = amount }
     end
 	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)

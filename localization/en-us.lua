@@ -549,11 +549,8 @@ return {
             j_MDJ_cube = {
                 name = 'Blender Cube',
                 text = {
-                    "Probabilities roll with",
-                    "a rounded up {C:green}Numerator{}, and",
-                    "a rounded down {C:green}Denominator",
-                    "then simplify the probability",
-                    "{C:inactive}(ex: 2 in 4 chance -> 1 in 2 chance)"
+                    "Simplify all {C:attention}Listed{} {C:green}Probabilities",
+                    "{C:inactive}(ex: 1.5 in 2 chance -> 2 in 3 chance)"
                 }
             },
             j_MDJ_love = {
@@ -675,11 +672,34 @@ return {
             b_MDJ_sextuplezero = {
                 name = "#000000 Deck",
                 text = {
-                    "Each selected card costs 0.2",
-                    "{C:blue}Hands{} to play or 0.2",
-                    "{C:red}Discards{} to discard",
-                    "{C:attention}Unlimited-ish card selection",
-                    "{C:inactive}(Can't go into hands/discard debt)"
+                    "{C:blue}Hands{} and {C:red}discard{} costs",
+                    "are now {C:attention}per-card{} instead",
+                    "of {C:attention}per-hand{} at {C:attention}0.2{} per card",
+                }
+            },
+        },
+        Sleeve = {
+            sleeve_MDJ_cyclic = {
+                name = "Cyclic Sleeve",
+                text = { "When shuffling deck, don't." }
+            },
+            sleeve_MDJ_cyclic_alt = {
+                name = "Cyclic Sleeve",
+                text = { "Don't do the starting shuffle either." }
+            },
+            sleeve_MDJ_sextuplezero = {
+                name = "#000000 Sleeve",
+                text = {
+                    "{C:blue}Hands{} and {C:red}discard{} costs",
+                    "are now {C:attention}per-card{} instead",
+                    "of {C:attention}per-hand{} at {C:attention}0.2{} per card",
+                }
+            },
+            sleeve_MDJ_sextuplezero_alt = {
+                name = "#000000 Sleeve",
+                text = {
+                    "{C:blue}+1{} hand and {C:red}+1{} discard",
+                    "every round"
                 }
             },
         },
@@ -720,10 +740,6 @@ return {
                     "and now affects Mult instead",
                     "Mult operations {X:mult,C:white}X#1#{} if {C:mult}+Mult{}",
                     "and now affects Chips instead",
-					'Glop operations {X:glop,C:white}X40{} if {C:glop}+Glop{}',
-                    "and now affects Sfark instead",
-					'Sfark operations {X:sfark,C:white}X(1/40){} if {C:sfark}+Sfark{}',
-                    "and now affects Glop instead",
 				},
 			},
         },
@@ -862,6 +878,15 @@ return {
                 name = "{f:MDJ_arial}btw",
                 text = {
                     "{f:MDJ_arial,C:mult}+4%{f:MDJ_arial} Mult = {f:MDJ_arial,C:mult}+4%{f:MDJ_arial} of Current Mult"
+                }
+            },
+            MDJ_base_conversion = {
+                name = "Base Conversion",
+                text = {
+                    "{C:attention}Base Conversion{} is sorta like exponentiation",
+                    "here's two examples",
+                    "When Base B (9) is below 10",
+                    
                 }
             },
             undiscovered_hardware = {

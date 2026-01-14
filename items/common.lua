@@ -259,6 +259,33 @@ local function simplify(n, d)
     local c = gcd(n, d)
     return n / c, d / c
 end
+local function simplify_decimals(n, d)
+    if string.match(tostring(n), "^[%d%.]+$") == nil or string.match(tostring(d), "^[%d%.]+$") == nil then
+        n = math.floor(n)
+        d = math.floor(d)
+        return simplify(n, d)
+    end
+    if n == math.floor(n) and d == math.floor(d) then
+        return simplify(n, d)
+    end
+    local ndecimal = ""
+    local ddecimal = ""
+    if n ~= math.floor(n) then
+        ndecimal = string.match(tostring(n), "%.(%d+)")
+    end
+    if d ~= math.floor(d) then
+        ddecimal = string.match(tostring(d), "%.(%d+)")
+    end
+    if #ddecimal >= #ndecimal then
+        n = n * 10 ^ #ddecimal
+        d = d * 10 ^ #ddecimal
+    else
+        n = n * 10 ^ #ndecimal
+        d = d * 10 ^ #ndecimal
+    end
+    return simplify(n, d)
+end
+
 SMODS.Joker {
     key = "cube",
     pos = { x = 1, y = 5 },
@@ -269,7 +296,7 @@ SMODS.Joker {
     eternal_compat = true,
     perishable_compat = true,
 	demicolon_compat = false,
-    cost = 2,
+    cost = 1,
     discovered = true,
     config = { extra = { }, },
     loc_vars = function(self, info_queue, card)
@@ -277,7 +304,7 @@ SMODS.Joker {
     end,
     calculate = function (self, card, context)
         if context.mod_probability then
-            local numerator, denominator = simplify(math.ceil(context.numerator), math.floor(context.denominator))
+            local numerator, denominator = simplify_decimals(context.numerator, context.denominator)
             return {
                 numerator = numerator,
                 denominator = denominator
