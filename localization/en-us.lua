@@ -649,6 +649,15 @@ return {
                     "(Currently {X:mult,C:white}X#1#{} Mult)"
                 }
             },
+            j_MDJ_mailed = {
+                name = "Mailed Joker",
+                text = {
+                    "Envelope Cards give {X:chips,C:white}X#1#{}",
+                    "per {C:attention}Vowel{} in their name",
+                    "and {X:mult,C:white}X#1#{} per {C:attention}Consonant{}",
+                    "{C:inactive}(Numbers count as both)"
+                },
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -826,7 +835,7 @@ return {
                     "{C:MDJ_scoreparams}+#1#{} to {C:MDJ_scoreparams}Additive Score Operations",
                     "{C:MDJ_scoreparams}+#2#{} to {C:MDJ_scoreparams}Multiplicative Score Operations",
                     "{X:MDJ_scoreparams,C:white}+(#1#/10^(N+1)){} to all {C:MDJ_scoreparams}higher score operations{}",
-                    "{C:inactive,s:0.9}N being the used operation+1{}"
+                    "{C:inactive,s:0.9}N being the used operation{}"
                 },
             },
         },

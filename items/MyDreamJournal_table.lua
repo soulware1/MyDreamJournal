@@ -25,6 +25,33 @@ function MyDreamJournal.localized_names(area)
     return names
 end
 
+function MyDreamJournal.vowelandconsonants(str)
+    local vowels = 0
+    local consonants = 0
+
+    for i = 1, #str do
+        local char = str:sub(i, i)
+        if char ~= " " then
+            char = char:lower()
+
+            if char:match("%a") then
+                if char:match("[aeiou]") then
+                    vowels = vowels + 1
+                else
+                    consonants = consonants + 1
+                end
+            else
+				-- special characters (lke numbers) count as both because :3
+                vowels = vowels + 1
+                consonants = consonants + 1
+            end
+        end
+    end
+
+    return vowels, consonants
+end
+
+
 function MyDreamJournal.is_music(card)
     local center = type(card) == "string"
         and G.P_CENTERS[card]

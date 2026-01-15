@@ -808,3 +808,33 @@ SMODS.Joker {
 		end
 	end
 }
+SMODS.Joker {
+    key = "mailed",
+    atlas = 'awesomejokers',
+    pos = { x = 2, y = 6 },
+    rarity = 2,
+	discovered = true,
+    blueprint_compat = true,
+    cost = 6,
+    config = { extra = { per_x = 0.1 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.per_x, } }
+    end,
+	in_pool = function (self, args)
+        for _, playing_card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(playing_card, "m_MDJ_envelope") then
+                return true
+            end
+        end
+        return false
+	end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_MDJ_envelope")  then
+			local vowel, consonants = MyDreamJournal.vowelandconsonants(MyDreamJournal.mass_concat(MyDreamJournal.localized_names({ cards = { context.other_card } })))
+            return {
+                xchips = 1+(vowel*card.ability.extra.per_x),
+				xmult = 1+(consonants*card.ability.extra.per_x),
+            }
+        end
+    end
+}
