@@ -854,7 +854,7 @@ return {
                 name = "Musical Top-up Tag",
                 text = {
                     "Create up to {C:attention}#1#",
-                    "{C:purple}Music {C:blue}Common{} Jokers",
+                    "{C:purple}Music {C:green}Uncommon{} Jokers",
                     "{C:inactive}(Must have room)",
                 },
             },
@@ -862,7 +862,7 @@ return {
                 name = "Musical Top-up Tag",
                 text = {
                     "Create up to {C:attention}#1#",
-                    "{C:purple}Music {C:green}Uncommon{} Jokers",
+                    "{C:purple}Music {C:red}Rare{} Jokers",
                     "{C:inactive}(Must have room)",
                 },
             },
