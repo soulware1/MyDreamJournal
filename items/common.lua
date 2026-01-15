@@ -175,6 +175,7 @@ SMODS.Joker {
     key = "smfw",
     pos = { x = 8, y = 3 },
     atlas = 'awesomejokers',
+    pools = {Music = true},
     pronouns = 'it_its',
     rarity = 1,
     blueprint_compat = false,
