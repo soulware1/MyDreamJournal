@@ -3,7 +3,7 @@ SMODS.Tag {
     min_ante = 2,
     pos = { x = 0, y = 0 },
     atlas = "tags",
-    config = { spawn_jokers = 2 },
+    config = { spawn_jokers = 1 },
     loc_vars = function(self, info_queue, tag)
         return { vars = { tag.config.spawn_jokers } }
     end,
@@ -16,9 +16,8 @@ SMODS.Tag {
                     if G.jokers and #G.jokers.cards < G.jokers.config.card_limit then
                         SMODS.add_card {
                             set = "Music",
-                            rarity = "Common",
+                            rarity = 2,
                             area = G.jokers,
-                            key_append = "vremade_top"
                         }
                     end
                 end

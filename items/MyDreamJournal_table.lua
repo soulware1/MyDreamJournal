@@ -4,15 +4,6 @@ local to_big = to_big or function(n)
 	return n
 end
 
-SMODS.ObjectType({
-	key = "Music",
-	default = "j_MDJ_anarchy",
-	cards = {},
-	inject = function(self)
-		SMODS.ObjectType.inject(self)
-	end,
-})
-
 function MyDreamJournal.mass_concat(strings)
     local built = ""
 
@@ -421,3 +412,44 @@ function MyDreamJournal.card_eval_status_text_eq(card, eval_type, amt, percent, 
         playing_card_joker_effects(extra.playing_cards_created)
     end
 end
+
+SMODS.ObjectType({
+	key = "Music",
+	default = "j_MDJ_anarchy",
+	cards = {},
+	rarities = {
+		{
+			key = 'Common',
+			weight = 0.7,
+			rate = 0.7,
+		},
+		{
+			key = 'Uncommon',
+			weight = 0.25,
+			rate = 0.25,
+		},
+		{
+			key = 'Rare',
+			weight = 0.05,
+			rate = 0.05,
+		},
+		{
+			key = MyDreamJournal.epic,
+			weight = 0.01,
+			rate = 0.01,
+		},
+		{
+			key = 'Legendary',
+			weight = 0.003,
+			rate = 0.003,
+		},
+		{
+			key = MyDreamJournal.exotic,
+			weight = 0.001,
+			rate = 0.001,
+		}
+	},
+	inject = function(self)
+		SMODS.ObjectType.inject(self)
+	end,
+})

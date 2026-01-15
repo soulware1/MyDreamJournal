@@ -9,10 +9,14 @@ target = "functions/state_events.lua"
 pattern = "ease_hands_played(-1)"
 position = "at"
 payload = """
-if G.GAME.selected_back.effect.center.key ~= "b_MDJ_sextuplezero" then
+if ( G.GAME.selected_back.effect.center.key ~= "b_MDJ_sextuplezero" and G.GAME.selected_sleeve ~= "sleeve_MDJ_sextuplezero" ) then
     ease_hands_played(-1)
 else
-    ease_hands_played(-(math.max(#G.hand.highlighted*0.2, 0.2)))
+    if G.GAME.current_round.hands_left-(math.max(#G.hand.highlighted*0.2, 0.2)) < 0.2 then
+        ease_hands_played(-100)
+    else
+        ease_hands_played(-(math.max(#G.hand.highlighted*0.2, 0.2)))
+    end
 end
 """
 overwrite = true
@@ -28,10 +32,18 @@ if ( G.GAME.selected_back.effect.center.key ~= "b_MDJ_sextuplezero" and G.GAME.s
     ease_discard(-1)
 else
     -- ease_discard doesn't update fast enough
-    G.GAME.starting_params.discard_limit = (G.GAME.current_round.discards_left-math.max(#G.hand.highlighted*0.2, 0.2))/0.2
+    if (G.GAME.current_round.discards_left-math.max(#G.hand.highlighted*0.2, 0.2))/0.2 < 0.2 then
+        G.GAME.starting_params.discard_limit = 0
+    else
+        G.GAME.starting_params.discard_limit = (G.GAME.current_round.discards_left-math.max(#G.hand.highlighted*0.2, 0.2))/0.2
+    end
     G.hand.config.highlighted_limit = math.max(G.GAME.starting_params.discard_limit, G.GAME.starting_params.play_limit, 5)
     SMODS.update_hand_limit_text(nil, true)
-    ease_discard(-(math.max(#G.hand.highlighted*0.2, 0.2)))
+    if G.GAME.current_round.discards_left-(math.max(#G.hand.highlighted*0.2, 0.2)) < 0.2 then
+        ease_discard(-100)
+    else
+        ease_discard(-(math.max(#G.hand.highlighted*0.2, 0.2)))
+    end
 end
 """
 overwrite = true

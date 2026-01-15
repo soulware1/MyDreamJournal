@@ -64,7 +64,7 @@ SMODS.Joker {
     pos = { x = 9, y = 3 },
 	discovered = true,
     rarity = MyDreamJournal.epic,
-    pools = {Music = true},
+    pools = {Music = true, rarity = MyDreamJournal.epic},
 	pronouns = 'he_him',
     blueprint_compat = true,
 	perishable_compat = true,

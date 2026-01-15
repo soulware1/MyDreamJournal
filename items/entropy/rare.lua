@@ -2,7 +2,7 @@ SMODS.Joker {
     key = "burgz",
     rarity = 3,
     cost = 7,
-    pools = {Music = true},
+    pools = {Music = true, rarity = "Rare"},
     eternal_compat = true,
     perishable_compat = true,
     blueprint_compat = true,

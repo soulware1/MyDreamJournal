@@ -89,6 +89,7 @@ function SMODS.current_mod.calculate(self, context)
 	if context.MDJ_mod_key_and_amount then
 		local key = context.MDJ_key
 		local og_key = context.MDJ_og_key
+		local og_amount = context.MDJ_og_amount
 		local amount = context.MDJ_amount
 		local operation = MyDreamJournal.multmodkeys[key] or MyDreamJournal.chipmodkeys[key]
 		local op_number = MyDreamJournal.keystonumbers[operation]
@@ -117,9 +118,10 @@ function SMODS.current_mod.calculate(self, context)
 			local is_corrupted = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_corrupted")
 			local is_dark = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_dark")
 			local is_amazing = scored_card and (scored_card.edition and scored_card.edition.key == "e_MDJ_amazing")
-			if is_corrupted and all_key[og_key] and MyDreamJournal.chipmultopswap[og_key] then
+			if is_corrupted and all_key[og_key] and MyDreamJournal.chipmultopswap[og_key] and not context.from_mindware_lol then
 				key = MyDreamJournal.chipmultopswap[og_key]
-			elseif is_corrupted and MyDreamJournal.chipmultopswap[key] then
+				amount = og_amount
+			elseif is_corrupted and MyDreamJournal.chipmultopswap[key] and not context.from_mindware_lol then
 				key = MyDreamJournal.chipmultopswap[key]
 			end
 			if is_dark and MyDreamJournal.scoreparammodkeys[key] then
@@ -335,7 +337,9 @@ local equals_key = {
 local slop_key = {
 	'MDJ_amount',
 	'MDJ_key',
-	'MDJ_og_key'
+	'MDJ_og_key',
+	'MDJ_og_amount',
+	'from_mindware_lol'
 }
 for _, v in ipairs(converted_keys) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
@@ -571,6 +575,7 @@ end
 local calcindiveffectref = SMODS.calculate_individual_effect
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
 	local og_key = key
+	local og_amount = amount
 	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
 	local theres_a_brainware = next(SMODS.find_card("j_MDJ_brainware"))
 	local is_demicolon = nil
@@ -715,14 +720,41 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			return true
 		end
 	end
-	-- force the deck to be the first one considered in mult
-	if G.GAME.selected_back.effect.center.key == "b_MDJ_sextuplezero" then
-		if MyDreamJournal.plusmulttoxmult[key] then
-			amount = amount*7.5
+	if theres_a_mindware and not effect.from_mindware and key then
+		local new_effect = Copy3(effect)
+		effect["from_mindware"] = true
+		new_effect[key] = nil
+		local is_chips = MyDreamJournal.chipmodkeys[key]
+		local is_mult = MyDreamJournal.multmodkeys[key]
+		local swapped = MyDreamJournal.chipmultopswap[og_key]
+		if not is_chips and not is_mult and not swapped then
+			goto skip
 		end
+		SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
+		local is_additive = ((is_chips == "add")) or ((is_mult == "add"))
+		local new_amount = amount
+		if is_additive and is_chips then
+			new_amount = new_amount/7.5
+		elseif is_additive and is_mult then
+			new_amount = new_amount*7.5
+		end
+		if MyDreamJournal.otherscoremodkeys[og_key] then
+			if MyDreamJournal.otherscoremodkeys[og_key] == "add" and MyDreamJournal.chipmodkeys[og_key] then
+				new_amount = og_amount/7.5
+			elseif MyDreamJournal.otherscoremodkeys[og_key] == "add" and MyDreamJournal.multmodkeys[og_key] then
+				new_amount = og_amount*7.5
+			else
+				new_amount = og_amount
+			end
+		end
+		new_effect[swapped] = new_amount
+		effect = new_effect
+		amount = new_amount
+		key = swapped
+		::skip::
 	end
 	if key and amount and key ~= 'MDJ_key' and key ~= 'MDJ_amount' and not effect.no_alter then
-		local alter = SMODS.calculate_context({MDJ_mod_key_and_amount = true, MDJ_amount = amount, MDJ_key = key, MDJ_og_key = og_key, card = scored_card, demicolon_racism = is_demicolon})
+		local alter = SMODS.calculate_context({MDJ_mod_key_and_amount = true, MDJ_amount = amount, MDJ_key = key, MDJ_og_key = og_key, MDJ_og_amount = og_amount, card = scored_card, from_mindware_lol = effect.from_mindware, demicolon_racism = is_demicolon})
 		key = (alter and alter.MDJ_key) or key
 		amount = (alter and alter.MDJ_amount) or amount
 		-- recalcuate it
@@ -787,30 +819,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		if not Talisman or not Talisman.config_file.disable_anims then
 			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..formeramount, G.C.BLUE)
 		end
-	end
-	if theres_a_mindware and not effect.from_mindware and key then
-		local new_effect = Copy3(effect)
-		effect["from_mindware"] = true
-		new_effect[key] = nil
-		local is_chips = MyDreamJournal.chipmodkeys[key]
-		local is_mult = MyDreamJournal.multmodkeys[key]
-		local swapped = MyDreamJournal.chipmultopswap[og_key]
-		if not is_chips and not is_mult and not swapped then
-			goto skip
-		end
-		local is_additive = ((is_chips == "add")) or ((is_mult == "add"))
-		local new_amount = amount
-		if is_additive and is_chips then
-			new_amount = new_amount/7.5
-		elseif is_additive and is_mult then
-			new_amount = new_amount*7.5
-		end
-		new_effect[swapped] = new_amount
-		SMODS.calculate_effect(effect, scored_card, from_edition)
-		effect = new_effect
-		amount = new_amount
-		key = swapped
-		::skip::
 	end
 	if theres_a_brainware and ( MyDreamJournal.scoreparammodkeys[og_key] or MyDreamJournal.otherscoremodkeys[og_key] ) and not effect.frombrainware then
 		local operations = G.GAME.current_round.previous_operations
@@ -880,7 +888,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = "mult_mod"
 	end
 	-- slop
-	if key == 'MDJ_key' or key == 'MDJ_amount' or key == 'MDJ_og_key' then
+	if key == 'MDJ_key' or key == 'MDJ_amount' or key == 'MDJ_og_key' or key == 'MDJ_og_amount' or key == 'from_mindware_lol' then
         return { [key] = amount }
     end
 	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)
