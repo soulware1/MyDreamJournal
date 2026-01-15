@@ -177,7 +177,7 @@ if SMODS.Mods["GrabBag"] and SMODS.Mods["GrabBag"].can_load then
 			if context.selling_self then
 				G.E_MANAGER:add_event(Event({
 					func = (function()
-						SMODS.add_card({ set = 'Music', area = G.jokers, rarity = "Rare" })
+						SMODS.add_card({ set = 'Music', area = G.jokers, rarity = 3 })
 						return true
 					end)
 				}))

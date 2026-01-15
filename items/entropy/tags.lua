@@ -16,7 +16,7 @@ SMODS.Tag {
                     if G.jokers and #G.jokers.cards < G.jokers.config.card_limit then
                         SMODS.add_card {
                             set = "Music",
-                            rarity = "Rare",
+                            rarity = 3,
                             area = G.jokers,
                         }
                     end
