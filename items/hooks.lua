@@ -146,6 +146,34 @@ function SMODS.current_mod.calculate(self, context)
 	end
 end
 
+local mandoorhandhookcardoor = SMODS.change_play_limit
+function SMODS.change_play_limit(mod)
+	if ( G.GAME.selected_back.effect.center.key == "b_MDJ_sextuplezero" or G.GAME.selected_sleeve == "sleeve_MDJ_sextuplezero" ) then
+		G.GAME.real_black_deck_added_hands = G.GAME.real_black_deck_added_hands or 0
+		local realhands = G.GAME.round_resets.hands-G.GAME.real_black_deck_added_hands
+		local gainedhands = mod*(realhands*0.2)
+		G.GAME.round_resets.hands = ( realhands )+gainedhands
+		G.GAME.real_black_deck_added_hands = G.GAME.real_black_deck_added_hands+gainedhands
+		ease_hands_played(gainedhands)
+	else
+		mandoorhandhookcardoor(mod)
+	end
+end
+
+local mandoordiscardhookcardoor = SMODS.change_discard_limit
+function SMODS.change_discard_limit(mod)
+	if ( G.GAME.selected_back.effect.center.key == "b_MDJ_sextuplezero" or G.GAME.selected_sleeve == "sleeve_MDJ_sextuplezero" ) then
+		G.GAME.real_black_deck_added_discards = G.GAME.real_black_deck_added_discards or 0
+		local realdiscards = G.GAME.round_resets.discards-G.GAME.real_black_deck_added_discards
+		local gaineddiscards = mod*(realdiscards*0.2)
+		G.GAME.round_resets.discards = ( realdiscards )+gaineddiscards
+		G.GAME.real_black_deck_added_discards = G.GAME.real_black_deck_added_discards+gaineddiscards
+		ease_discard(gaineddiscards)
+	else
+		mandoordiscardhookcardoor(mod)
+	end
+end
+
 -- stolen from https://gist.github.com/tylerneylon/81333721109155b2d244
 function Copy3(obj, seen)
     -- Handle non-tables and previously-seen tables.

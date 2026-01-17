@@ -181,7 +181,7 @@ SMODS.Joker {
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
-	demicolon_compat = true,
+	demicolon_compat = false,
     cost = 4,
     discovered = true,
     config = { extra = { }, },
@@ -278,11 +278,11 @@ local function simplify_decimals(n, d)
         ddecimal = string.match(tostring(d), "%.(%d+)")
     end
     if #ddecimal >= #ndecimal then
-        n = n * 10 ^ #ddecimal
-        d = d * 10 ^ #ddecimal
+        n = math.floor(n * 10 ^ #ddecimal)
+        d = math.floor(d * 10 ^ #ddecimal)
     else
-        n = n * 10 ^ #ndecimal
-        d = d * 10 ^ #ndecimal
+        n = math.floor(n * 10 ^ #ndecimal)
+        d = math.floor(d * 10 ^ #ndecimal)
     end
     return simplify(n, d)
 end
