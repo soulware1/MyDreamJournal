@@ -658,6 +658,65 @@ return {
                     "{C:inactive}(Numbers count as both)"
                 },
             },
+            j_MDJ_phantom = {
+                name = 'Phantom Joker',
+                text = {
+                    "Set {C:mult}Mult{} and {C:chips}Chips{} to the",
+                    "{C:attention}square root{} of the",
+                    "current hand's {C:purple}score"
+                }
+            },
+            j_MDJ_kaleidoskull = {
+                name = {
+                    'Kaleidoskull',
+                    '{s:0.75}By Lemon Demon',
+                },
+                text = {
+					"{X:mult,C:white}Xlog#1#(Wins){} Mult",
+                    "(Currently {X:mult,C:white}X#2#{} Mult)",
+                }
+            },
+            j_MDJ_upsilon = {
+                name = 'Upsilon Dies Backwards',
+                text = {
+                    "All {C:MDJ_operations}Operators{} affect {C:red}Mult{} instead"
+                }
+            },
+            j_MDJ_rice_pudding = {
+                name = 'Unlimited Rice Pudding',
+                text = {
+                    '{C:attention}Copy{} the first',
+                    '{C:attention}Consumable{} used each round',
+                    '{C:inactive}(Must have room)'
+                }
+            },
+            j_MDJ_13am = {
+                name = {
+                    '13am',
+                    '{s:0.75}By Toby Fox',
+                },
+                text = {
+					{
+                        "Another {C:attention}Boss Blind{}",
+                        "will appear in each {C:attention}Ante",
+                    },
+                    {
+                        "You can skip 1",
+                        "{C:attention}Boss Blind{} per {C:attention}Ante"
+                    },
+                }
+            },
+            j_MDJ_annihilate = {
+                name = {
+                    'Annihilate',
+                    '{s:0.75}By Destroid',
+                },
+                text = {
+					"All {C:attention}Played{} cards are {C:red}destroyed{}",
+                    "All {C:attention}Discarded{} cards are {C:red}destroyed{}",
+                    "All {C:attention}Held in Hand{} cards are {C:red}destroyed{}",
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {

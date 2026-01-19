@@ -196,6 +196,18 @@ MyDreamJournal.scoreparammodkeys = {
 	['hyperasc'] = 'hyper', ['hyperasc_mod'] = 'hyper',
 }
 
+MyDreamJournal.realascmodkeys = {
+	['asc'] = "mult", ['asc_mod'] = 'mult', ['x_asc'] = 'mult',
+	['plus_asc'] = 'add', ['plusasc_mod'] = 'add',
+	['exp_asc'] = 'expo', ['exp_asc_mod'] = 'expo',
+	['hyper_asc'] = 'hyper', ['hyper_asc_mod'] = 'hyper',
+	['hyperasc'] = 'hyper', ['hyperasc_mod'] = 'hyper',
+}
+
+MyDreamJournal.multparamkeys = {
+	add = "mult", mult = "xmult", expo = "emult", tetra = "eemult", penta = "eeemult", hyper = "hypermult"
+}
+
 MyDreamJournal.entropyinstalled = (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load)
 
 MyDreamJournal.specilscoreparammodkeys = {

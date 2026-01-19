@@ -838,3 +838,29 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "phantom",
+    atlas = 'awesomejokers',
+    pos = { x = 3, y = 6 },
+	discovered = true,
+    rarity = 2,
+	pronouns = 'they_them',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 6,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+			local amount = math.sqrt(SMODS.calculate_round_score())
+            return {
+                eq_mult = amount,
+				eq_chips = amount
+            }
+        end
+    end
+}

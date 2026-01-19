@@ -240,7 +240,6 @@ SMODS.Joker {
         end
     end,
 }
-
 SMODS.Joker {
     key = "pacemaker",
     blueprint_compat = true,
@@ -271,6 +270,113 @@ SMODS.Joker {
         end
         if context.end_of_round and context.main_eval then
             card.ability.extra.base = to_big(11)
+        end
+    end,
+}
+SMODS.Joker {
+    key = "upsilon",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = MyDreamJournal.epic,
+	pronouns = 'he_him',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 10,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.add } }
+    end,
+    calculate = function (self, card, context)
+        if context.MDJ_mod_key_and_amount and MyDreamJournal.chipmodkeys[context.MDJ_key] then
+            return {
+                MDJ_key = MyDreamJournal.chipmultopswap[context.MDJ_key]
+            }
+        end
+        if context.MDJ_mod_key_and_amount and MyDreamJournal.dollarmodkeys[context.MDJ_key] then
+            return {
+                MDJ_key = "mult"
+            }
+        end
+        if context.MDJ_mod_key_and_amount and MyDreamJournal.realascmodkeys[context.MDJ_key] then
+            return {
+                MDJ_key = MyDreamJournal.multparamkeys[MyDreamJournal.realascmodkeys[context.MDJ_key]]
+            }
+        end
+        if context.MDJ_mod_key_and_amount and MyDreamJournal.scoreparammodkeys[context.MDJ_key] then
+            return {
+                MDJ_key = MyDreamJournal.multparamkeys[MyDreamJournal.scoreparammodkeys[context.MDJ_key]]
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "rice_pudding",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = MyDreamJournal.epic,
+	pronouns = 'he_him',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 12,
+    config = { extra = {active = true} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round then
+            if not card.ability.extra.active then
+                card.ability.extra.active = true
+                local eval = function() return card.ability.extra.active end
+                juice_card_until(card, eval, true)
+            end
+        end
+        if context.using_consumeable and card.ability.extra.active then
+            local copied = false
+            G.E_MANAGER:add_event(Event{func = function ()
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    local copy
+                    card.ability.extra.active = false
+                    copy = copy_card(context.consumeable)
+                    copy:add_to_deck()
+                    G.consumeables:emplace(copy)
+                    copied = true
+                end
+                return true
+            end})
+            if copied then
+                return {
+                    message = localize('k_duplicated_ex'),
+                }
+            end
+        end
+    end,
+    add = function(self, card)
+        if card.ability.extra.active then
+            local eval = function() return card.ability.extra.active end
+            juice_card_until(card, eval, true)
+        end
+    end
+}
+SMODS.Joker {
+    key = "annihilate",
+    blueprint_compat = false,
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    rarity = MyDreamJournal.epic,
+    pronouns = "they_them",
+    cost = 10,
+    discovered = true,
+    config = { extra = { } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+    calculate = function(self, card, context)
+        if context.destroy_card and ( context.cardarea == G.play or context.cardarea == G.hand or context.cardarea == G.discard ) then
+            return {remove = true}
         end
     end,
 }

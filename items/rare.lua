@@ -563,3 +563,50 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "kaleidoskull",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'he_him',
+    pools = {Music = true},
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 6,
+    immutable = true,
+    config = { extra = { log = 4, losses = G.PROFILES[G.SETTINGS.profile].career_stats.c_wins }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.log, math.log(card.ability.extra.losses, card.ability.extra.log)} }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                xmult = math.log(card.ability.extra.losses, card.ability.extra.log)
+            }
+        end
+    end
+}
+--[[
+SMODS.Joker {
+    key = "13am",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'he_him',
+    pools = {Music = true},
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = false,
+    cost = 6,
+    immutable = true,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+}
+]]
