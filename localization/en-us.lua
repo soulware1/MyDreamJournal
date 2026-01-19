@@ -717,6 +717,17 @@ return {
                     "All {C:attention}Held in Hand{} cards are {C:red}destroyed{}",
                 }
             },
+            j_MDJ_rockefeller = {
+                name = {
+                    'Rockefeller Street (Nightcore)',
+                    '{s:0.75}By Getter Jaani',
+                    '{s:0.4,C:inactive}Like the original song, not the nightcore remix'
+                },
+                text = {
+					"If scored hand has a {C:attention}A{}, {C:attention}2{}, {C:attention}7{}, and {C:attention}3",
+                    "in that order, {X:MDJ_scoreparams,C:white}^#1#{} {C:MDJ_scoreparams}Additive Score Operators"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
