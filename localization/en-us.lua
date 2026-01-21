@@ -728,14 +728,24 @@ return {
                     "in that order, {X:MDJ_scoreparams,C:white}^#1#{} {C:MDJ_scoreparams}Additive Score Operators"
                 }
             },
+            j_MDJ_fallingup = {
+                name = {
+                    'Falling Up',
+                    '{s:0.75}By Will Wood',
+                },
+                text = {
+					"Round up all {C:MDJ_operations}Multiplicative Scoring Operations"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
                 name = "Ware",
                 text = {
-                    "Select the {C:rare,E:1}rarest{} Joker",
-                    "{C:attention}destroy{} it and create a",
-                    "{C:MDJ_veryrare,E:1}Unrare{} or {C:MDJ_unlegendary,E:1}Unlegendary{} Joker",
+                    "Destroy the selected joker",
+                    "of the {C:attention}highest{} owned rarity",
+                    "{C:inactive}(#1#)",
+                    "Then create a {C:MDJ_veryrare,E:1}Unrare{} or {C:MDJ_unlegendary,E:1}Unlegendary{} Joker",
                     "{C:inactive}(Must have room)",
                     "{C:inactive,s:0.85}(Unlegendary not counted)"
                 }

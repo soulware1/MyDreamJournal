@@ -336,39 +336,3 @@ SMODS.Joker {
         end
     end
 }
-SMODS.Joker {
-    key = "rockefeller",
-    atlas = 'placeholder',
-    pos = { x = 0, y = 0 },
-	discovered = true,
-    rarity = 1,
-	pronouns = 'she_her',
-    blueprint_compat = true,
-	perishable_compat = true,
-    eternal_compat = true,
-    cost = 2,
-    config = { extra = { active = false, expo = 3 }, },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.expo } }
-    end,
-    calculate = function (self, card, context)
-        if context.before then
-            local ranks = ""
-            for i, v in ipairs(context.scoring_hand) do
-                ranks = ranks..tostring(v:get_id()).."|"
-            end
-            print(ranks)
-            if ranks:match("14|2|7|3") then
-                card.ability.extra.active = true
-            end
-        end
-        if context.MDJ_mod_key_and_amount and card.ability.extra.active and MyDreamJournal.plusops[context.MDJ_key] then
-            return {
-                MDJ_amount = context.MDJ_amount^card.ability.extra.expo
-            }
-        end
-        if context.after then
-            card.ability.extra.active = false
-        end
-    end
-}
