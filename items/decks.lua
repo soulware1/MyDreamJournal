@@ -1,6 +1,6 @@
 local oldshuffle = CardArea.shuffle
 function CardArea:shuffle(seed)
-	if  ( G.GAME.selected_back.effect.center.key == "b_MDJ_cyclic" or G.GAME.selected_sleeve == "sleeve_MDJ_cyclic" ) and self == G.deck then
+	if ( ( G.GAME.selected_back.effect.center.key == "b_MDJ_cyclic" or G.GAME.selected_sleeve == "sleeve_MDJ_cyclic" ) or ( Entropy and not Entropy.IsDeckOrSleeve("b_MDJ_sextuplezero") ) ) and self == G.deck then
 		return self
 	end
 	return oldshuffle(self, seed)
@@ -27,6 +27,7 @@ SMODS.Back {
     key = "cyclic",
     pos = { x = 0, y = 0 },
     atlas = "decks",
+    pools = { RedeemableBacks = true },
     config = {},
     loc_vars = function(self, info_queue, back)
         return { vars = {} }
@@ -48,6 +49,7 @@ SMODS.Back {
     key = "sextuplezero",
     pos = { x = 1, y = 0 },
     atlas = "decks",
+    pools = { RedeemableBacks = true },
     config = { hands = 0, discards = 0 },
     loc_vars = function(self, info_queue, back)
         return { vars = {} }
@@ -108,8 +110,6 @@ if SMODS.Mods["CardSleeves"] and SMODS.Mods["CardSleeves"].can_load then
             local key, vars
             if self.get_current_deck_key() == "b_MDJ_sextuplezero" then
                 key = self.key .. "_alt"
-                self.config = { hands = 1, discards = 1 }
-                vars = { self.config.discards, self.config.hands }
             end
             return { key = key, vars = vars }
         end,
@@ -120,6 +120,10 @@ if SMODS.Mods["CardSleeves"] and SMODS.Mods["CardSleeves"].can_load then
             func = function()
                 SetSelectionLimit(G.GAME.starting_params.hands/0.2)
                 SetSelectionLimit(G.GAME.starting_params.discards/0.2, true)
+                if self.get_current_deck_key() == "b_MDJ_sextuplezero" then
+                    G.GAME.starting_params.discards = G.GAME.starting_params.discards + 1
+                    G.GAME.starting_params.hands = G.GAME.starting_params.hands + 1
+                end
                 return true -- if you do not add this, the event will re-run every single frame until it does return true
             end
             })

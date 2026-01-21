@@ -917,8 +917,9 @@ SMODS.Joker {
     end,
     calculate = function (self, card, context)
         if context.MDJ_mod_key_and_amount and MyDreamJournal.xops[context.MDJ_key] then
+			context.MDJ_amount = math.ceil(context.MDJ_amount)
             return {
-                MDJ_amount = math.ceil(context.MDJ_amount)
+                MDJ_amount = context.MDJ_amount
             }
         end
     end
