@@ -1,6 +1,6 @@
 local oldshuffle = CardArea.shuffle
 function CardArea:shuffle(seed)
-	if ( ( G.GAME.selected_back.effect.center.key == "b_MDJ_cyclic" or G.GAME.selected_sleeve == "sleeve_MDJ_cyclic" ) or ( Entropy and not Entropy.DeckOrSleeve("b_MDJ_sextuplezero") ) ) and self == G.deck then
+	if ( ( G.GAME.selected_back.effect.center.key == "b_MDJ_cyclic" or G.GAME.selected_sleeve == "sleeve_MDJ_cyclic" ) or ( Entropy and Entropy.DeckOrSleeve("b_MDJ_cyclic") ) ) and self == G.deck then
 		return self
 	end
 	return oldshuffle(self, seed)
