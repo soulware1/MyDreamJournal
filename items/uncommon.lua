@@ -885,7 +885,6 @@ SMODS.Joker {
             for i, v in ipairs(context.scoring_hand) do
                 ranks = ranks..tostring(v:get_id()).."|"
             end
-            print(ranks)
             if ranks:match("14|2|7|3") then
                 card.ability.extra.active = true
             end

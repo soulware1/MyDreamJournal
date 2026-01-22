@@ -336,3 +336,59 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "IOU",
+    atlas = 'awesomejokers',
+    pos = { x = 4, y = 6 },
+    pixel_size = { w = 28, h = 16 },
+	discovered = true,
+    rarity = 1,
+	pronouns = 'he_they',
+    blueprint_compat = false,
+	perishable_compat = false,
+    eternal_compat = false,
+    cost = 3,
+    config = { extra = { rarity = 1 }, },
+    loc_vars = function(self, info_queue, card)
+        local rarity = ""
+        if type(card.ability.extra.rarity) == "number" then
+            local rarities = {
+                "Common",
+                "Uncommon",
+                "Rare",
+                "Legendary"
+            }
+            rarity = rarities[card.ability.extra.rarity]
+        else
+            rarity = card.ability.extra.rarity
+        end
+        return { vars = { localize("k_"..rarity:lower()), localize("k_"..MyDreamJournal.exotic:lower()), colours = { G.C[rarity] or G.C.RARITY[rarity] or G.C.FILTER } } }
+    end,
+    calculate = function (self, card, context)
+        if context.end_of_round and context.main_eval and G.GAME.blind.boss then
+            if type(card.ability.extra.rarity) == "number" and card.ability.extra.rarity ~= 4 then
+                card.ability.extra.rarity = card.ability.extra.rarity+1
+                if card.ability.extra.rarity == 4 then
+                    card.ability.extra.rarity = MyDreamJournal.epic
+                end
+            elseif card.ability.extra.rarity == MyDreamJournal.epic then
+                card.ability.extra.rarity = 4
+            end
+        end
+        if context.selling_self then
+			G.E_MANAGER:add_event(Event({
+				func = (function()
+                    local rarities = {
+                        "Common",
+                        "Uncommon",
+                        "Rare",
+                        "Legendary"
+                    }
+					SMODS.add_card({ set = 'Joker', rarity = rarities[card.ability.extra.rarity] or card.ability.extra.rarity })
+					return true
+				end)
+			}))
+			return nil, true -- This is for Joker retrigger purposes
+        end
+    end
+}

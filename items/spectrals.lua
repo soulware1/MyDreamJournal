@@ -14,9 +14,29 @@ SMODS.Consumable {
     atlas = "eplaceholder",
     discovered = true,
     soul_set = 'Hardware',
-    config = { extra = { unrare = MyDreamJournal.veryrare, unlegendary = MyDreamJournal.exotic, }, },
+    config = { extra = { unrare = MyDreamJournal.epic, unlegendary = MyDreamJournal.exotic, }, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { localize(MyDreamJournal.veryrare), localize(MyDreamJournal.exotic) } }
+        local highest_rarity = "common"
+        if G.jokers then
+            for i = 1, #G.jokers.cards do
+                local joker = G.jokers.cards[i]
+                if joker.config.center.rarity == MyDreamJournal.veryrare then
+                    highest_rarity = MyDreamJournal.veryrare
+                elseif type(joker.config.center.rarity) == "number" and joker.config.center.rarity > highest_rarity then
+                    highest_rarity = joker.config.center.rarity
+                end
+            end
+            if type(highest_rarity) == "number" then
+                local rarities = {
+                    "Common",
+                    "Uncommon",
+                    "Rare",
+                    "Legendary"
+                }
+                highest_rarity = rarities[highest_rarity]
+            end
+        end
+        return { vars = { localize("k_"..MyDreamJournal.epic:lower()), localize("k_"..MyDreamJournal.exotic:lower()), localize("k_"..highest_rarity:lower()), colours = { G.C[MyDreamJournal.epic] or G.C.RARITY[MyDreamJournal.epic] or G.C.FILTER, G.C[MyDreamJournal.exotic] or G.C.RARITY[MyDreamJournal.exotic] or G.C.FILTER } } }
     end,
     use = function(self, card, area, copier)
         if G.jokers.highlighted[1] then
@@ -26,7 +46,6 @@ SMODS.Consumable {
             if not probablities then
                 probablities = {1, 2}
             end
-            print(probablities)
             if SMODS.pseudorandom_probability(card, pseudoseed("soupware..."), probablities[1], probablities[2], nil, true) then
                 G.E_MANAGER:add_event(Event({
                     trigger = 'after',

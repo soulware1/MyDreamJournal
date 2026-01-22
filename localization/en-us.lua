@@ -737,6 +737,16 @@ return {
 					"Round up all {C:MDJ_operations}Multiplicative Scoring Operations"
                 }
             },
+            j_MDJ_IOU = {
+                name = 'IOU',
+                text = {
+                    'Sell this card to create a',
+                    "{V:1}#1#{} Joker",
+                    "{C:inactive}(Rarity upgrades upon",
+                    "{C:inactive}beating a boss blind)",
+                    "{C:inactive}(Won't create a #2# or higher)"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -744,8 +754,8 @@ return {
                 text = {
                     "Destroy the selected joker",
                     "of the {C:attention}highest{} owned rarity",
-                    "{C:inactive}(#1#)",
-                    "Then create a {C:MDJ_veryrare,E:1}Unrare{} or {C:MDJ_unlegendary,E:1}Unlegendary{} Joker",
+                    "Then create a {V:1,E:1}#1#{} or {V:2,E:1}#2#{} Joker",
+                    "{C:inactive}(Highest Owned Rarity: #3#)",
                     "{C:inactive}(Must have room)",
                     "{C:inactive,s:0.85}(Unlegendary not counted)"
                 }
