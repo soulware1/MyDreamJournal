@@ -1,6 +1,6 @@
 local oldshuffle = CardArea.shuffle
 function CardArea:shuffle(seed)
-	if ( ( G.GAME.selected_back.effect.center.key == "b_MDJ_cyclic" or G.GAME.selected_sleeve == "sleeve_MDJ_cyclic" ) or ( Entropy and not Entropy.IsDeckOrSleeve("b_MDJ_sextuplezero") ) ) and self == G.deck then
+	if ( ( G.GAME.selected_back.effect.center.key == "b_MDJ_cyclic" or G.GAME.selected_sleeve == "sleeve_MDJ_cyclic" ) or ( Entropy and not Entropy.DeckOrSleeve("b_MDJ_sextuplezero") ) ) and self == G.deck then
 		return self
 	end
 	return oldshuffle(self, seed)
@@ -12,6 +12,7 @@ local function SetSelectionLimit(n, discards)
     end
     if not n then
         warn("n isn't a number, what on earth are you doing? N:" .. n)
+        return
     end
     if not discards then
         G.GAME.starting_params.play_limit = n

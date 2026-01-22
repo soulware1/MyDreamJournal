@@ -9,7 +9,7 @@ target = "functions/state_events.lua"
 pattern = "ease_hands_played(-1)"
 position = "at"
 payload = """
-if ( G.GAME.selected_back.effect.center.key ~= "b_MDJ_sextuplezero" and G.GAME.selected_sleeve ~= "sleeve_MDJ_sextuplezero" ) or ( Entropy and not Entropy.IsDeckOrSleeve("b_MDJ_sextuplezero") ) then
+if ( G.GAME.selected_back.effect.center.key ~= "b_MDJ_sextuplezero" and G.GAME.selected_sleeve ~= "sleeve_MDJ_sextuplezero" ) or ( Entropy and not Entropy.DeckOrSleeve("b_MDJ_sextuplezero") ) then
     ease_hands_played(-1)
 else
     -- holy indecipherable
@@ -29,7 +29,7 @@ target = "functions/state_events.lua"
 pattern = "ease_discard(-1)"
 position = "at"
 payload = """
-if ( G.GAME.selected_back.effect.center.key ~= "b_MDJ_sextuplezero" and G.GAME.selected_sleeve ~= "sleeve_MDJ_sextuplezero" ) or ( Entropy and not Entropy.IsDeckOrSleeve("b_MDJ_sextuplezero") ) then
+if ( G.GAME.selected_back.effect.center.key ~= "b_MDJ_sextuplezero" and G.GAME.selected_sleeve ~= "sleeve_MDJ_sextuplezero" ) or ( Entropy and not Entropy.DeckOrSleeve("b_MDJ_sextuplezero") ) then
     ease_discard(-1)
 else
     -- ease_discard doesn't update fast enough
