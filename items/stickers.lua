@@ -1,6 +1,7 @@
 SMODS.Sticker {
     key = "attention",
     badge_colour = HEX('FBDB41'),
+    atlas = "stickers",
     pos = { x = 0, y = 0 },
     should_apply = function(self, card, center, area, bypass_roll)
         return false

@@ -403,7 +403,7 @@ SMODS.Joker {
 	perishable_compat = true,
     eternal_compat = true,
     cost = 1,
-    config = { extra = { xchips = 0.5, xmult = 2 }, },
+    config = { extra = { xchips = 0.25, xmult = 4 }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.xchips, card.ability.extra.xmult } }
     end,
