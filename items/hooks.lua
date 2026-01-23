@@ -786,7 +786,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = (alter and alter.MDJ_key) or key
 		amount = (alter and alter.MDJ_amount) or amount
 		-- recalcuate it
-		if all_key[key] then
+		if all_key[key] and key ~= og_key then
 			effect.no_alter = true
 			SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
 		end

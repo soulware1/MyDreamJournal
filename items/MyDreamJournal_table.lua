@@ -303,6 +303,15 @@ MyDreamJournal.keystonumbers = {
 	["add"] = -1, ["mult"] = 0, ["expo"] = 1, ["tetra"] = 2, ["penta"] = 3, ["hyper"] = 4
 }
 
+function MyDreamJournal.ApplySticker(card, key)
+    if not card.ability then card.ability = {} end
+    if card.ability then
+        if not SMODS.Stickers[key] then return end
+        card.ability[key] = true
+        if SMODS.Stickers[key].apply then SMODS.Stickers[key].apply(SMODS.Stickers[key], card) end
+    end
+end
+
 math.randomseed(os.time())
 MyDreamJournal.secretnumberthatsgeneratedatstartupandneveragain = math.random(0, 2)
 

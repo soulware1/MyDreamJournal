@@ -392,3 +392,33 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "useless",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 1,
+	pronouns = 'he_him',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 1,
+    config = { extra = { xchips = 0.5, xmult = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xchips, card.ability.extra.xmult } }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                xchips = card.ability.extra.xchips,
+                xmult = card.ability.extra.xmult,
+            }
+        end
+        if context.end_of_round and context.main_eval then
+            card.ability.extra.xchips, card.ability.extra.xmult = card.ability.extra.xmult, card.ability.extra.xchips
+            return {
+                message = localize("k_swapped_ex")
+            }
+        end
+    end
+}

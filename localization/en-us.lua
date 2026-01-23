@@ -747,6 +747,13 @@ return {
                     "{C:inactive}(Won't create a #2# or higher)"
                 }
             },
+            j_MDJ_useless = {
+                name = 'Useless Joker',
+                text = {
+                    '{X:chips,C:white}X#1#{} Chips, {X:mult,C:white}X#2#{} Mult',
+                    "{C:attention}Swaps{} values at the end of round",
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -928,6 +935,13 @@ return {
                     "{C:inactive,s:0.9}N being the used operation{}"
                 },
             },
+			c_MDJ_hardware_lightbulb = {
+				name = "Lightbulb",
+				text = {
+					"Apply an {C:dark_edition}Attention{} sticker to",
+					"{C:attention}#1#{} selected Joker"
+				}
+			},
         },
         Enhanced = {
             m_MDJ_envelope = {
@@ -967,6 +981,13 @@ return {
             },
         },
         Other = {
+            MDJ_attention = {
+                name = "Attention",
+                text = {
+                    "Most random choices",
+                    "will choose this Joker.",
+                },
+            },
             MDJ_heximal_slop = {
                 name = "{f:MDJ_arial}btw",
                 text = {

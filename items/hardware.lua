@@ -292,3 +292,31 @@ SMODS.Consumable {
         self:use(card)
     end
 }
+SMODS.Consumable {
+    key = "hardware_lightbulb",
+    atlas = "placeholder",
+    set = 'Hardware',
+    config = { selection = 1 },
+    pos = { x = 1, y = 0 },
+    use = function(self, card, area, copier)
+        for i, v in pairs(G.jokers.highlighted) do
+            MyDreamJournal.ApplySticker(v, "MDJ_attention")
+            v:juice_up()
+        end
+    end,
+    can_use = function(self, card)
+        return #G.jokers.highlighted <= card.ability.selection
+	end,
+    loc_vars = function(self, q, card)
+        q[#q+1] = {set = "Other", key = "MDJ_attention"}
+        return {
+            vars = {
+                card.ability.selection
+            }
+        }
+    end,
+    demicoloncompat = true,
+    force_use = function(self, card)
+        self:use(card)
+    end
+}
