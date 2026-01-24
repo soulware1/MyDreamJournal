@@ -394,8 +394,8 @@ SMODS.Joker {
 }
 SMODS.Joker {
     key = "useless",
-    atlas = 'placeholder',
-    pos = { x = 0, y = 0 },
+    atlas = 'awesomejokers',
+    pos = { x = 5, y = 6 },
 	discovered = true,
     rarity = 1,
 	pronouns = 'he_him',
@@ -420,5 +420,8 @@ SMODS.Joker {
                 message = localize("k_swapped_ex")
             }
         end
-    end
+    end,
+    set_badges = function (self, card, badges)
+		badges[#badges+1] = create_badge('Art Credit: Szymii_', G.C.BLACK, G.C.GREEN, 0.8 )
+	end
 }
