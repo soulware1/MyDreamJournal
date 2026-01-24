@@ -923,3 +923,26 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "monitoring",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 6,
+    config = { extra = { rep = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.repetitions } }
+    end,
+    calculate = function(self, card, context)
+        if context.repetition and context.other_card:get_id() == 12 then
+            return {
+                repetitions = card.ability.extra.repetitions
+            }
+        end
+    end,
+}

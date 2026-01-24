@@ -754,6 +754,16 @@ return {
                     "{C:attention}Swaps{} values at the end of round",
                 }
             },
+            j_MDJ_monitoring = {
+                name = {
+                    'Monitoring',
+                    '{s:0.75}By DECO*27',
+                },
+                text = {
+                    "Retrigger all",
+                    "{C:attention}Queens{} twice",
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
