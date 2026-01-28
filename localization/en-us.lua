@@ -734,7 +734,7 @@ return {
                     '{s:0.75}By Will Wood',
                 },
                 text = {
-					"Round up all {C:MDJ_operations}Multiplicative Scoring Operations"
+					"Round up all {X:MDJ_operations,C:white}XScoreOp"
                 }
             },
             j_MDJ_IOU = {

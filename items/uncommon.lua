@@ -912,6 +912,7 @@ SMODS.Joker {
     cost = 5,
     config = { extra = { }, },
     loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = { set = "Other", key = "MDJ_scoreops", config = {} }
         return { vars = { } }
     end,
     calculate = function (self, card, context)
