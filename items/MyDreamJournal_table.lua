@@ -188,6 +188,7 @@ MyDreamJournal.scoreparammodkeys = {
 	['hyperchips'] = 'hyper', ['hyper_chips'] = 'hyper', ['hyperchip_mod'] = 'hyper',
 	['glop'] = 'add', ['xglop'] = 'mult', ['eglop'] = 'expo',
     ['sfark'] = 'add', ['xsfark'] = 'mult', ['esfark'] = 'expo',
+	['score'] = 'add', ['xscore'] = 'mult',
 	-- ascension power is treated as one operator higher
 	['asc'] = "expo", ['asc_mod'] = 'expo', ['x_asc'] = 'expo',
 	['plus_asc'] = 'mult', ['plusasc_mod'] = 'mult',

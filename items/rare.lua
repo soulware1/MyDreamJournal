@@ -230,7 +230,7 @@ SMODS.Joker {
     calculate = function (self, card, context)
         if context.joker_main or context.forcetrigger then
             return {
-                base_chips = 9,
+                base_chips = 8,
             }
         end
     end
@@ -608,3 +608,26 @@ SMODS.Joker {
     end,
 }
 ]]
+SMODS.Joker {
+    key = "devil_nobody",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'she_her',
+    pools = {Music = true},
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = false,
+    cost = 7,
+    config = { extra = { hdollars = 1 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.hdollars } }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play then
+            context.other_card.ability.perma_p_dollars = (context.other_card.ability.perma_p_dollars or 0)+card.ability.extra.hdollars
+        end
+    end
+}

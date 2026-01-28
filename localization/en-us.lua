@@ -222,7 +222,7 @@ return {
             j_MDJ_base = {
                 name = "33058899",
                 text = {
-                    "Convert {C:chips}Chips{} to {C:attention,E:1}Base 9",
+                    "Convert {C:chips}Chips{} to {C:attention,E:1}Base 8",
                 }
             },
             j_MDJ_fractal = {
@@ -476,8 +476,8 @@ return {
                     "{C:inactive}(Ex: + -> x -> ^)",
                 }
             },
-            j_MDJ_fervourware = {
-                name = "Fervourware",
+            j_MDJ_fake_sfark = {
+                name = "Synthetic Sfark",
                 text = {
                     "{X:chips,C:white}XMult{} to {C:chips}+Chips",
                 }
@@ -764,6 +764,59 @@ return {
                     "{C:attention}Queens{} twice",
                 }
             },
+            j_MDJ_fervourware = {
+                name = "Fervourware",
+                text = {
+                    "{C:attention}+ScoreOps{} are set to the Nth",
+                    "{C:attention}Fibonacci number",
+                    "{C:inactive}(N being the amount being added)"
+                }
+            },
+            j_MDJ_devil_nobody = {
+                name = {
+                    'Devil Nobody',
+                    '{s:0.75}By Stomach Book',
+                },
+                text = {
+                    "All {C:attention}Played Cards{}",
+                    "gain held in hand {C:money}$#1#{}"
+                }
+            },
+            j_MDJ_marketland = {
+                name = {
+                    'Marketland',
+                    '{s:0.75}By Lemon Demon',
+                },
+                text = {
+                    'Only {C:common}Common{} Jokers can appear',
+                }
+            },
+            j_MDJ_ribs = {
+                name = {
+                    'Ribs',
+                    '{s:0.75}By Neil Cicierega',
+                },
+                text = {
+                    '{C:common}Common{} Jokers give {C:mult}+#1#{} Mult',
+                    '{C:uncommon}Uncommon{} Jokers give {C:mult}+#2#{} Mult',
+                    '{C:rare}Rare{} Jokers give {C:mult}+#3#{} Mult',
+                    '{V:1}#4#{} Jokers give {C:mult}+#5#{} Mult',
+                    '{C:legendary}Legendary{} Jokers give {C:mult}+#6#{} Mult',
+                    '{V:2}#7#{} Jokers give {C:mult}+#8#{} Mult',
+                }
+            },
+            j_MDJ_execution = {
+                name = {
+                    'world.execute(me);',
+                    '{s:0.75}By Mili',
+                },
+                text = {
+                    '{C:chips}+(Ante*#1#){} Chips for every',
+                    '{C:attention}kilobyte{} of memory',
+                    'that {C:attention}Balatro{} uses',
+                    ''
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -877,7 +930,7 @@ return {
             bl_MDJ_final_star = {
                 name = "Golden Star",
                 text = {
-                    "^0.5 Scoring Operations",
+                    "^0.5 Score Operations",
                 },
             },
         },
@@ -952,6 +1005,15 @@ return {
 					"{C:attention}#1#{} selected Joker"
 				}
 			},
+            c_MDJ_hardware_led = {
+                name = "LED",
+                text = {
+                    "Converts up to",
+                    "{C:attention}#1#{} selected cards",
+                    "to the {C:attention}rightmost",
+                    "card's {C:attention}Base Suit{}"
+                },
+            },
         },
         Enhanced = {
             m_MDJ_envelope = {
@@ -996,6 +1058,15 @@ return {
                 text = {
                     "Most random choices",
                     "will choose this Joker.",
+                },
+            },
+            MDJ_scoreops = {
+                name = "Score Operators",
+                text = {
+                    "ScoreOps = All of the below",
+                    "+ScoreOp = {C:mult}+Mult{}, {C:chips}+Chips{}, {C:purple}+Score{} etc",
+                    "XScoreOp = {X:mult,C:white}XMult{}, {X:chips,C:white}XChips{}, {X:purple,C:white}XScore{}, {C:gold}+Ascension Power*{} etc",
+                    "Higher ScoreOps = {C:attention}Exponentiation{} and beyond"
                 },
             },
             MDJ_heximal_slop = {
@@ -1055,6 +1126,9 @@ return {
         },
     },
     misc = {
+        challenge_names = {
+            c_MDJ_common = "Common Sludge",
+        },
         dictionary = {
             MDJ_corrupted = "Corrupted",
             MDJ_dark = "Dark",
@@ -1068,6 +1142,9 @@ return {
             b_hardware_cards = "Hardware Cards",
             k_hardware = "Hardware",
             k_MDJ_hardware_pack = "Hardware",
+            k_MDJ_left_parenthisis = "(",
+            k_MDJ_right_parenthisis = ")",
+            k_MDJ_currently = "Currently"
         },
         labels = {
             MDJ_corrupted = "Corrupted",
@@ -1077,6 +1154,9 @@ return {
             MDJ_veryrare = "Unrare",
             MDJ_verylegendary = "Unlegendary",
             hardware = "Hardware",
+            MDJ_left_parenthisis = "(",
+            MDJ_right_parenthisis = ")",
+            MDJ_currently = "Currently"
         }
     }
 }

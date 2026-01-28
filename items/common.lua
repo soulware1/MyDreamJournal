@@ -425,3 +425,63 @@ SMODS.Joker {
 		badges[#badges+1] = create_badge('Art Credit: Szymii_', G.C.BLACK, G.C.GREEN, 0.8 )
 	end
 }
+SMODS.Joker {
+    key = "marketland",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    pools = {Music = true},
+	discovered = true,
+    rarity = 1,
+	pronouns = 'he_him',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 2,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+}
+
+MyDreamJournal.vanilla_rarities = {
+    "common",
+    "uncommon",
+    "rare",
+    "legendary"
+}
+MyDreamJournal.ribstable = {
+    ["common"] = 1,
+    ["uncommon"] = 2,
+    ["rare"] = 3,
+    ["nic_teto"] = 3,
+    ["legendary"] = 5,
+    ["entr_reverse_legendary"] = 5,
+    ["entr_entropic"] = 6
+}
+MyDreamJournal.ribstable[MyDreamJournal.epic:lower()] = 4
+MyDreamJournal.ribstable[MyDreamJournal.exotic:lower()] = 6
+
+SMODS.Joker {
+    key = "ribs",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    pools = {Music = true},
+	discovered = true,
+    rarity = 1,
+	pronouns = 'he_him',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 4,
+    config = { extra = { base = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.base, card.ability.extra.base^2, card.ability.extra.base^3, localize("k_"..MyDreamJournal.epic:lower()), card.ability.extra.base^4, card.ability.extra.base^5, localize("k_"..MyDreamJournal.exotic:lower()), card.ability.extra.base^6, colours = { G.C[MyDreamJournal.epic] or G.C.RARITY[MyDreamJournal.epic] or G.C.FILTER, G.C[MyDreamJournal.exotic] or G.C.RARITY[MyDreamJournal.exotic] or G.C.FILTER } } }
+    end,
+    calculate = function(self, card, context)
+        if context.other_joker and (MyDreamJournal.ribstable[MyDreamJournal.vanilla_rarities[context.other_joker.config.center.rarity] or (type(context.other_joker.config.center.rarity) == "string" and context.other_joker.config.center.rarity:lower())]) then
+            return {
+                mult = card.ability.extra.base^MyDreamJournal.ribstable[MyDreamJournal.vanilla_rarities[context.other_joker.config.center.rarity] or (type(context.other_joker.config.center.rarity) == "string" and context.other_joker.config.center.rarity:lower())]
+            }
+        end
+    end,
+}

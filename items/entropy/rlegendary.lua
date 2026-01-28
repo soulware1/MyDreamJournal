@@ -17,6 +17,9 @@ SMODS.Joker {
         return { vars = {  } }
     end,
 }
+function fibbedfibonacci(n)
+    return math.floor((1.618034^math.floor(n+0.5)/math.sqrt(5))+0.5)
+end
 SMODS.Joker {
     key = "fervourware",
     atlas = 'placeholder',
@@ -32,13 +35,14 @@ SMODS.Joker {
     cost = 20,
     config = { extra = { }, },
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { set = "Other", key = "MDJ_scoreops", config = {} }
         return { vars = {  } }
     end,
     calculate = function (self, card, context)
         if context.MDJ_mod_key_and_amount then
-            if MyDreamJournal.pluschipstoxchips[context.MDJ_key] then
+            if MyDreamJournal.plusops[context.MDJ_key] then
                 return {
-                    MDJ_amount = context.MDJ_amount*SMODS.Scoring_Parameters["mult"].current,
+                    MDJ_amount = fibbedfibonacci(math.ceil(context.MDJ_amount))
                 }
             end
         end
@@ -102,6 +106,33 @@ SMODS.Joker {
             return {
                 base_mod_plus_one_mult_then_chips = card.ability.extra.mod,
             }
+        end
+    end
+}
+SMODS.Joker {
+    key = "fake_sfark",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = "entr_reverse_legendary",
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    immutable = true,
+    cost = 20,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {  } }
+    end,
+    calculate = function (self, card, context)
+        if context.MDJ_mod_key_and_amount then
+            if MyDreamJournal.pluschipstoxchips[context.MDJ_key] then
+                return {
+                    MDJ_amount = context.MDJ_amount*SMODS.Scoring_Parameters["mult"].current,
+                }
+            end
         end
     end
 }

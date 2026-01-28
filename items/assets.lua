@@ -158,6 +158,8 @@ SMODS.Atlas({
 	squish = 1,
 	DESCSCALE = 1.25
 }
+G.ARGS = G.ARGS or {}
+G.ARGS.LOC_COLOURS = G.ARGS.LOC_COLOURS or {}
 local gradient = SMODS.Gradient {
    key = "rainbow1",
    colours = {
@@ -175,7 +177,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow1 = gradient
 local gradient = SMODS.Gradient {
    key = "rainbow2",
@@ -194,7 +195,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow2 = gradient
 local gradient = SMODS.Gradient {
    key = "rainbow3",
@@ -213,7 +213,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow3 = gradient
 local gradient = SMODS.Gradient {
    key = "rainbow4",
@@ -232,7 +231,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow4 = gradient
 local gradient = SMODS.Gradient {
    key = "rainbow5",
@@ -251,7 +249,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow5 = gradient
 local gradient = SMODS.Gradient {
    key = "rainbow6",
@@ -270,7 +267,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow6 = gradient
 local gradient = SMODS.Gradient {
    key = "rainbow7",
@@ -289,7 +285,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow7 = gradient
 local gradient = SMODS.Gradient {
    key = "rainbow8",
@@ -308,7 +303,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow8 = gradient
 local gradient = SMODS.Gradient {
    key = "rainbow9",
@@ -327,7 +321,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow9 = gradient
 local gradient = SMODS.Gradient {
    key = "rainbow10",
@@ -346,7 +339,6 @@ local gradient = SMODS.Gradient {
    cycle = 10,
    interpolation = "linear"
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_rainbow10 = gradient
 local gradient = SMODS.Gradient {
    key = "operations",
@@ -357,7 +349,6 @@ local gradient = SMODS.Gradient {
    },
    cycle = 3,
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_operations = gradient
 local gradient = SMODS.Gradient {
    key = "scoreparams",
@@ -367,7 +358,6 @@ local gradient = SMODS.Gradient {
    },
    cycle = 4,
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_scoreparams = gradient
 G.ARGS.LOC_COLOURS.MDJ_operations = gradient
 local gradient = SMODS.Gradient {
@@ -380,13 +370,15 @@ local gradient = SMODS.Gradient {
    },
    cycle = 4,
 }
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_suits = gradient
-loc_colour()
 G.ARGS.LOC_COLOURS.MDJ_damage = HEX('FF6969')
+G.ARGS.LOC_COLOURS.entr_eqmult = HEX("cb7f7f")
+G.ARGS.LOC_COLOURS.glop = HEX('11ff11')
+G.ARGS.LOC_COLOURS.sfark = HEX("ff00ff")
 G.C.SET.Hardware = HEX('4C4C4C')
 G.C.SECONDARY_SET.Hardware = HEX('008200')
 G.ARGS.LOC_COLOURS.MDJ_hardware = G.C.SECONDARY_SET.Hardware
+loc_colour()
 SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
 SMODS.Shader({ key = 'dark', path = 'dark.fs' })
 SMODS.Shader({ key = 'amazing', path = 'amazing.fs' })

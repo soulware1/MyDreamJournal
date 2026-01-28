@@ -1,0 +1,15 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = """local rarity = _rarity or SMODS.poll_rarity("Joker", 'rarity'..G.GAME.round_resets.ante..(_append or ''))"""
+position = "at"
+payload = """
+    local rarity = (next(SMODS.find_card("j_MDJ_marketland")) and 1) or ( _rarity or SMODS.poll_rarity("Joker", 'rarity'..G.GAME.round_resets.ante..(_append or '')) )
+"""
+overwrite = true
+match_indent = true

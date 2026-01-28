@@ -7,7 +7,7 @@
 --- BADGE_COLOUR: 00FF00
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0905a]
 SMODS.current_mod.optional_features = {
-    retrigger_joker = true
+    retrigger_joker = true,
 }
 SMODS.load_file("items/assets.lua")()
 SMODS.load_file("items/MyDreamJournal_table.lua")()
@@ -27,6 +27,8 @@ SMODS.load_file("items/stickers.lua")()
 SMODS.load_file("items/hardware.lua")()
 SMODS.load_file("items/booster.lua")()
 SMODS.load_file("items/tags.lua")()
+SMODS.load_file("items/booster.lua")()
+SMODS.load_file("items/challenges.lua")()
 SMODS.load_file("items/entropy/entropyloader.lua")()
 SMODS.load_file("items/crossmod.lua")()
 SMODS.load_file("items/hooks.lua")()

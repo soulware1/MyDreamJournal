@@ -207,3 +207,34 @@ SMODS.Joker {
         end
     end
 }
+SMODS.Joker {
+    key = "execution",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 20,
+    config = { extra = { per = 0.01 }},
+    loc_vars = function(self, info_queue, card)
+        local loc_mult = ' ' .. localize('k_chips') .. localize("k_MDJ_right_parenthisis")
+        main_start = {
+            { n = G.UIT.T, config = { text = localize("k_MDJ_left_parenthisis")..localize("k_MDJ_currently")..' ', colour = G.C.UI.TEXT_DARK, scale = 0.32 } },
+            { n = G.UIT.T, config = { text = '+', colour = G.C.BLUE, scale = 0.32 } },
+            { n = G.UIT.O, config = { object = DynaText({ string = {number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per), number_format(collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per)}, colours = { G.C.BLUE }, pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.5, scale = 0.32, min_cycle_time = 0 }) } },
+            { n = G.UIT.T, config = { text = ' ' .. localize('k_chips')..localize("k_MDJ_right_parenthisis"), colour = G.C.UI.TEXT_DARK, scale = 0.32 } },
+        }
+        return { vars = { card.ability.extra.per }, main_end = main_start }
+    end,
+	calculate = function(self, card, context)
+		if context.joker_main or context.forcetrigger then
+            return {
+                chips = collectgarbage("count")*(G.GAME.round_resets.ante or 1)*card.ability.extra.per
+            }
+        end
+    end,
+}
