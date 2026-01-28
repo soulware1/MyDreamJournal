@@ -393,3 +393,35 @@ SMODS.Consumable {
         return G.hand and #G.hand.highlighted > 0 and #G.hand.highlighted <= card.ability.max_highlighted
     end
 }
+
+SMODS.Consumable {
+    key = 'hardware_printer',
+    atlas = "placeholder",
+    set = 'Hardware',
+    pos = { x = 1, y = 0 },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                if G.consumeables.config.card_limit > #G.consumeables.cards then
+                    play_sound('timpani')
+                    SMODS.add_card({ key = pseudorandom_element(G.P_CENTER_POOLS.Consumeables, pseudoseed("hardware_printer"))["key"] })
+                    card:juice_up(0.3, 0.5)
+                end
+                return true
+            end
+        }))
+        delay(0.6)
+    end,
+    can_use = function(self, card)
+        return G.consumeables.config.card_limit > #G.consumeables.cards
+    end,
+    demicoloncompat = true,
+    force_use = function(self, card)
+        self:use(card)
+    end
+}

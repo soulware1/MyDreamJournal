@@ -1014,6 +1014,13 @@ return {
                     "card's {C:attention}Base Suit{}"
                 },
             },
+			c_MDJ_hardware_printer = {
+				name = "Printer",
+				text = {
+					"Creates a random {C:attention}Consumable",
+                    "{C:inactive}(Must have room)"
+				}
+			},
         },
         Enhanced = {
             m_MDJ_envelope = {
