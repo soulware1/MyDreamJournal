@@ -872,6 +872,22 @@ return {
                 }
             },
         },
+        Voucher = {
+            v_MDJ_dialup = {
+                name = "Dial-up",
+                text = {
+                    "{X:mult,C:white}X#1#{} the first",
+                    "{C:mult}+Mult{} per-hand"
+                }
+            },
+            v_MDJ_3g = {
+                name = "3G Network",
+                text = {
+                    "{X:mult,C:white}X#1#{} the first",
+                    "{X:mult,C:white}XMult{} per-hand"
+                }
+            },
+        },
         Edition = {
             e_MDJ_dark = {
                 name = "Dark",
