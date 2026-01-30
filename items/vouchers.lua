@@ -26,6 +26,7 @@ SMODS.Voucher {
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.amount } }
     end,
+    requires = { "v_MDJ_dialup" },
     calculate = function (self, card, context)
         if context.after then
             card.ability.immutable.firsttrigger = true
