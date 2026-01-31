@@ -331,7 +331,13 @@ SMODS.Consumable {
         return { vars = { card.ability.max_highlighted } }
     end,
     use = function(self, card, area, copier)
-        local suit_conv = ( G.hand and G.hand.highlighted[#G.hand.highlighted] and G.hand.highlighted[1].base and G.hand.highlighted[1].base.suit )
+        local rightmost = G.hand.highlighted[1]
+        for i = 1, #G.hand.highlighted do
+            if G.hand.highlighted[i].T.x > rightmost.T.x then
+                rightmost = G.hand.highlighted[i]
+            end
+        end
+        local suit_conv = rightmost.base.suit
         assert(suit_conv, "wtf where's the rightmost card's suit")
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
