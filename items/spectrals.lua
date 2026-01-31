@@ -16,7 +16,7 @@ SMODS.Consumable {
     soul_set = 'Hardware',
     config = { extra = { unrare = MyDreamJournal.epic, unlegendary = MyDreamJournal.exotic, }, },
     loc_vars = function(self, info_queue, card)
-        local highest_rarity = "common"
+        local highest_rarity = 1
         if G.jokers then
             for i = 1, #G.jokers.cards do
                 local joker = G.jokers.cards[i]
@@ -33,6 +33,7 @@ SMODS.Consumable {
                     "Rare",
                     "Legendary"
                 }
+                ---@diagnostic disable-next-line: cast-local-type
                 highest_rarity = rarities[highest_rarity]
             end
         end

@@ -443,24 +443,6 @@ SMODS.Joker {
     end,
 }
 
-MyDreamJournal.vanilla_rarities = {
-    "common",
-    "uncommon",
-    "rare",
-    "legendary"
-}
-MyDreamJournal.ribstable = {
-    ["common"] = 1,
-    ["uncommon"] = 2,
-    ["rare"] = 3,
-    ["nic_teto"] = 3,
-    ["legendary"] = 5,
-    ["entr_reverse_legendary"] = 5,
-    ["entr_entropic"] = 6
-}
-MyDreamJournal.ribstable[MyDreamJournal.epic:lower()] = 4
-MyDreamJournal.ribstable[MyDreamJournal.exotic:lower()] = 6
-
 SMODS.Joker {
     key = "ribs",
     atlas = 'placeholder',
@@ -484,4 +466,52 @@ SMODS.Joker {
             }
         end
     end,
+}
+SMODS.Joker {
+    key = "kidpix",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    pools = {Music = true},
+	discovered = true,
+    rarity = 1,
+	pronouns = 'she_her',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 2,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { set = "Other", key = "MDJ_inversionscoreop", config = {} }
+        info_queue[#info_queue+1] = { set = "Other", key = "MDJ_scoreops", config = {} }
+        return { vars = {} }
+    end,
+    calculate = function (self, card, context)
+        if context.MDJ_mod_key_and_amount and MyDreamJournal.scoreparammodkeys[context.MDJ_key] then
+            local type = MyDreamJournal.realascmodkeys[context.MDJ_key] or MyDreamJournal.scoreparammodkeys[context.MDJ_key]
+            if type == "hyper" then
+                context.MDJ_amount = context.MDJ_amount[2]
+            end
+            context.MDJ_amount = math.abs(context.MDJ_amount)
+            if type == "add" then
+                return {
+                    MDJ_amount = context.MDJ_amount
+                }
+            end
+            if type == "mult" and context.MDJ_amount < 1 then
+                return {
+                    MDJ_amount = 1/context.MDJ_amount
+                }
+            end
+            if type ~= "expo" and context.MDJ_amount < 1 then
+                type = "expo"
+                context.MDJ_key = MyDreamJournal.downgrade[context.MDJ_key]
+            end
+            if type == "expo" and context.MDJ_amount < 1 then
+                return {
+                    MDJ_key = context.MDJ_key,
+                    MDJ_amount = math.log(2)/math.log(2^context.MDJ_amount)
+                }
+            end
+        end
+    end
 }

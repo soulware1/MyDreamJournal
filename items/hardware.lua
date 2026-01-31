@@ -279,6 +279,7 @@ SMODS.Consumable {
     pos = { x = 1, y = 0 },
     config = { add = 0.5 },
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { set = "Other", key = "MDJ_scoreops", config = {} }
         return { vars = { card.ability.add, card.ability.add/10 } }
     end,
     use = function(self, card, area, copier)

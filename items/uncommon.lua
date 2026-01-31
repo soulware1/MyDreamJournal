@@ -947,3 +947,103 @@ SMODS.Joker {
         end
     end,
 }
+
+SMODS.Joker {
+    key = "faygo",
+    blueprint_compat = true,
+    eternal_compat = false,
+    cost = 5,
+    atlas = 'placeholder',
+	pools = {Food = true},
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+    config = { extra = { odds = 6, add = 15 } },
+    loc_vars = function(self, info_queue, card)
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'faygo')
+        return { vars = { card.ability.extra.add, card.ability.extra.add/10, numerator, denominator } }
+    end,
+    calculate = function(self, card, context)
+		
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+            if SMODS.pseudorandom_probability(card, 'faygo', 1, card.ability.extra.odds) then
+                SMODS.destroy_cards(card, nil, nil, true)
+                return {
+                    message = localize('k_drank_ex')
+                }
+            end
+        end
+		if context.forcetrigger then
+			return {
+				mult = card.ability.extra.add,
+				xmult = 1+(card.ability.extra.add/10),
+				emult = 1+(card.ability.extra.add/100),
+				eemult = 1+(card.ability.extra.add/1000),
+				eeemult = 1+(card.ability.extra.add/10000),
+			}
+		end
+		if context.MDJ_mod_key_and_amount then
+			local is_corrupted = card and (card.edition and card.edition.key == "e_MDJ_corrupted")
+			local is_dark = card and (card.edition and card.edition.key == "e_MDJ_dark")
+			local key = context.MDJ_key
+			local amount = context.MDJ_amount
+			if not is_corrupted and not context.demicolon_racism then
+				local operation = MyDreamJournal.multmodkeys[key]
+				local op_number = MyDreamJournal.keystonumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					local is_hyper = false
+					if op_number == 4 then
+						op_number = amount[1]
+						is_hyper = true
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (card.ability.extra.add / 10) / (10 ^ op_number)
+					elseif op_number == -1 then
+						op_number = card.ability.extra.add
+					elseif op_number == 0 then
+						op_number = card.ability.extra.add / 10
+					end
+					if is_dark then
+						op_number = op_number * 2
+					end
+					if not is_hyper then
+						amount = amount + op_number
+					else
+						amount[2] = amount[2] + op_number
+					end
+				end
+			else
+				local operation = MyDreamJournal.chipmodkeys[key]
+				local op_number = MyDreamJournal.keystonumbers[operation]
+				if operation and op_number then
+					-- handle generalized higher order hyperoperations
+					local is_hyper = false
+					if op_number == 4 then
+						op_number = amount[1]
+						is_hyper = true
+					end
+					if op_number ~= -1 and op_number ~= 0 then
+						op_number = (card.ability.extra.add / 10) / (10 ^ op_number)
+					elseif op_number == -1 then
+						op_number = card.ability.extra.add
+					elseif op_number == 0 then
+						op_number = card.ability.extra.add / 10
+					end
+					if is_dark then
+						op_number = op_number * 2
+					end
+					if not is_hyper then
+						amount = amount + op_number
+					else
+						amount[2] = amount[2] + op_number
+					end
+				end
+			end
+			return {
+				MDJ_amount = amount,
+				MDJ_key = key
+			}
+		end
+    end,
+}

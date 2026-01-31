@@ -817,6 +817,31 @@ return {
                     ''
                 }
             },
+            j_MDJ_faygo = {
+                name = 'Faygo',
+                text = {
+                   {
+                    "{X:mult,C:white}+#1#{} to all {C:mult}+Mult{}",
+                    "{X:mult,C:white}+#2#{} to all {X:mult,C:white}XMult{}",
+                    "{X:mult,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Mult",
+                    "{C:inactive,s:0.9}N being 10^ the used operation{}"
+                   },
+                   {
+                    "{C:green}#3# in #4#{} chance this is drank at",
+                    "the end of round"
+                   }
+                }
+            },
+            j_MDJ_kidpix = {
+                name = {
+                    'KID PIX',
+                    '{s:0.75}By milkypossum',
+                },
+                text = {
+                    '{C:red}Inverts{} all {C:attention}detrimental',
+                    "{C:MDJ_scoreparams}ScoreOps"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -1008,9 +1033,9 @@ return {
             c_MDJ_hardware_electron_emitter = {
                 name = "Electron Emitter",
                 text = {
-                    "{C:MDJ_scoreparams}+#1#{} to {C:MDJ_scoreparams}Additive Score Operations",
-                    "{C:MDJ_scoreparams}+#2#{} to {C:MDJ_scoreparams}Multiplicative Score Operations",
-                    "{X:MDJ_scoreparams,C:white}+(#1#/10^(N+1)){} to all {C:MDJ_scoreparams}higher score operations{}",
+                    "{C:MDJ_scoreparams}+#1#{} to {C:MDJ_scoreparams}+ScoreOps",
+                    "{C:MDJ_scoreparams}+#2#{} to {X:MDJ_scoreparams,C:white}XScoreOps",
+                    "{X:MDJ_scoreparams,C:white}+(#1#/10^(N+1)){} to all {C:MDJ_scoreparams}Higher ScoreOps{}",
                     "{C:inactive,s:0.9}N being the used operation{}"
                 },
             },
@@ -1109,8 +1134,19 @@ return {
                 text = {
                     "{C:attention}Base Conversion{} is sorta like exponentiation",
                     "here's two examples",
-                    "When Base B (9) is below 10",
-                    
+                    "When Base B (9) is below 10"
+                }
+            },
+            MDJ_inversionscoreop = {
+                name = "Inverting Score Operators",
+                text = {
+                    "First, if {C:red}negative{}",
+                    "set it to its {C:attention}absolute value",
+                    "Then if above {C:attention}^{}, set to {C:attention}^{}",
+                    "",
+                    "If {X:MDJ_scoreparams,C:white}XScoreOp{} then set it to {C:attention}1/n",
+                    "Else if {X:MDJ_scoreparams,C:white}^ScoreOp{} then set it to {C:attention}log(2)/log(2^n)",
+                    "{C:inactive,s:0.85}Ascension Power is considered to be one ScoreOp lower"
                 }
             },
             undiscovered_hardware = {

@@ -166,6 +166,17 @@ MyDreamJournal.multmodkeys = {
 	-- Other mods can add their custom operations to this table.
 }
 
+MyDreamJournal.downgrade = {
+	['ee_mult'] = 'e_mult', ['eemult'] = 'emult', ['EEmult_mod'] = 'Emult_mod',
+	['eee_mult'] = 'e_mult', ['eeemult'] = 'emult', ['EEEmult_mod'] = 'Emult_mod',
+	['hypermult'] = 'e_mult', ['hyper_mult'] = 'emult', ['hypermult_mod'] = 'Emult_mod',
+	['ee_chips'] = 'e_chips', ['eechips'] = 'echips', ['EEchip_mod'] = 'Echip_mod',
+	['eee_chips'] = 'e_chips', ['eeechips'] = 'echips', ['EEEchip_mod'] = 'Echip_mod',
+	['hyperchips'] = 'e_chips', ['hyper_chips'] = 'echips', ['hyperchip_mod'] = 'Echip_mod',
+	['hyper_asc'] = 'exp_asc', ['hyper_asc_mod'] = 'exp_asc_mod',
+	['hyperasc'] = 'exp_asc', ['hyperasc_mod'] = 'exp_asc_mod',
+}
+
 MyDreamJournal.normalized_random = function(mu, sigma, seed)
     local u1 = pseudorandom(seed)
     local u2 = pseudorandom(seed)
@@ -360,6 +371,24 @@ else
         --approx 0x more common than a cryptid exotic joker :ujel:
     }
 end
+
+MyDreamJournal.vanilla_rarities = {
+    "common",
+    "uncommon",
+    "rare",
+    "legendary"
+}
+MyDreamJournal.ribstable = {
+    ["common"] = 1,
+    ["uncommon"] = 2,
+    ["rare"] = 3,
+    ["nic_teto"] = 3,
+    ["legendary"] = 5,
+    ["entr_reverse_legendary"] = 5,
+    ["entr_entropic"] = 6
+}
+MyDreamJournal.ribstable[MyDreamJournal.epic:lower()] = 4
+MyDreamJournal.ribstable[MyDreamJournal.exotic:lower()] = 6
 
 -- stole from toga
 MyDreamJournal.handlimitapi = function()
