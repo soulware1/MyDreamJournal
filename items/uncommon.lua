@@ -952,6 +952,7 @@ SMODS.Joker {
     key = "faygo",
     blueprint_compat = true,
     eternal_compat = false,
+	demicolon_compat = true,
     cost = 5,
     atlas = 'placeholder',
 	pools = {Food = true},
