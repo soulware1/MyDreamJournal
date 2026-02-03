@@ -493,7 +493,7 @@ end
 
 SMODS.ObjectType({
 	key = "Music",
-	default = "j_MDJ_anarchy",
+	default = "j_MDJ_ribs",
 	cards = {},
 	rarities = {
 		{
