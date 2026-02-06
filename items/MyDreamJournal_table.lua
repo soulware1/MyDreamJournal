@@ -69,6 +69,23 @@ function MyDreamJournal.is_music(card)
     return false
 end
 
+function MyDreamJournal.is_food(card)
+    local center = type(card) == "string"
+        and G.P_CENTERS[card]
+        or (card.config and card.config.center)
+
+    if not center then
+        return false
+    end
+
+    -- If the center has the Food pool in its definition
+    if center.pools and center.pools.Food then
+        return true
+    end
+
+    return false
+end
+
 MyDreamJournal.rank_shorthands = {
 		"_",
 		"2",

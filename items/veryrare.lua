@@ -94,6 +94,7 @@ SMODS.Joker {
         end
     end,
 }
+--[[
 SMODS.Joker {
     key = "powerstone",
     atlas = 'placeholder',
@@ -167,6 +168,7 @@ SMODS.Joker {
         end
     end
 }
+]]--
 SMODS.Joker {
     key = "complex",
     atlas = 'placeholder',

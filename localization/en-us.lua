@@ -842,6 +842,39 @@ return {
                     "{C:MDJ_scoreparams}ScoreOps"
                 }
             },
+            j_MDJ_copycat = {
+                name = 'Copycat',
+                text = {
+                   {
+                    "When something {C:attention}scales{}",
+                    "this Joker gains",
+                    "that amount as {C:chips}+Chips{}",
+                    "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
+                   },
+                   {
+                    "If the amount was {C:attention}<1{}",
+                    "and {C:attention}>0{} this Joker gains",
+                    "that amount as {X:chips,C:white}XChips{}",
+                    "{C:inactive}(Currently {X:chips,C:white}X#2#{C:inactive} Chips)"
+                   }
+                }
+            },
+            j_MDJ_copykitten = {
+                name = 'Copykitten',
+                text = {
+                   {
+                    "When something {C:attention}scales{}",
+                    "this Joker gains {C:mult}+#1#{} Mult",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+                   },
+                   {
+                    "If the scaled amount was",
+                    "{C:attention}<1{} and {C:attention}>0{} this Joker",
+                    "gains {X:mult,C:white}X#3#{} {C:mult}Mult",
+                    "{C:inactive}(Currently {X:mult,C:white}X#4#{C:inactive} Mult)"
+                   }
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {

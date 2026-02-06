@@ -1048,3 +1048,87 @@ SMODS.Joker {
 		end
     end,
 }
+SMODS.Joker {
+    key = "copykitten",
+    atlas = 'awesomejokers',
+    pos = { x = 2, y = 4 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'any_all',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 5,
+    config = { extra = { xmult = 1, mult = 0, mult_gain = 2, xmult_gain = 0.1 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.mult_gain, card.ability.extra.mult, card.ability.extra.xmult_gain, card.ability.extra.xmult, } }
+    end,
+	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
+        if args["prediction_scaling"]
+        or other_card.config.center.key == "j_MDJ_copycat"
+        or other_card.config.center.key == "j_MDJ_copykitten"
+        or args["operation"] == "-"
+        or scalar_value < 0 then
+            return
+        end
+        if args["operation"] == "X" then
+            if scalar_value < 1 then
+                return
+            end
+        end
+        SMODS.scale_card(
+             card,
+             {
+                ref_table = card.ability.extra, -- the table that has the value you are changing in
+                ref_value = "mult", -- the key to the value in the ref_table
+                scalar_value = "mult_gain", -- the key to the value to scale by, in the ref_table by default
+                scaling_message = {
+                    message = localize({ type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult_gain } }),
+                    colour = G.C.BLUE
+                }
+            }
+        )
+        if scalar_value < 1 and scalar_value > 0 then
+			SMODS.scale_card(
+				card,
+				{
+					ref_table = card.ability.extra, -- the table that has the value you are changing in
+					ref_value = "xmult", -- the key to the value in the ref_table
+					scalar_value = "xmult_gain", -- the key to the value to scale by, in the ref_table by default
+					no_message = true,
+				}
+			)
+        end
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                mult = card.ability.extra.mult,
+                xmult = card.ability.extra.xmult
+            }
+        end
+		if context.forcetrigger then
+			SMODS.scale_card(
+				card,
+				{
+					ref_table = card.ability.extra, -- the table that has the value you are changing in
+					ref_value = "mult", -- the key to the value in the ref_table
+					scalar_value = "mult_gain", -- the key to the value to scale by, in the ref_table by default
+					scaling_message = {
+						message = localize({ type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult_gain } }),
+						colour = G.C.BLUE
+					}
+				}
+			)
+			SMODS.scale_card(
+				card,
+				{
+					ref_table = card.ability.extra, -- the table that has the value you are changing in
+					ref_value = "xmult", -- the key to the value in the ref_table
+					scalar_value = "xmult_gain", -- the key to the value to scale by, in the ref_table by default
+					no_message = true,
+				}
+			)
+		end
+    end
+}

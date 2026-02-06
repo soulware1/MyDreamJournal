@@ -1,3 +1,4 @@
+---@diagnostic disable: need-check-nil
 local to_big = to_big or function(n)
 	return n
 end
@@ -628,6 +629,74 @@ SMODS.Joker {
     calculate = function (self, card, context)
         if context.individual and context.cardarea == G.play then
             context.other_card.ability.perma_p_dollars = (context.other_card.ability.perma_p_dollars or 0)+card.ability.extra.hdollars
+        end
+    end
+}
+SMODS.Joker {
+    key = "copycat",
+    atlas = 'awesomejokers',
+    pos = { x = 2, y = 1 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'any_all',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 5,
+    config = { extra = { xchips = 1, chips = 0 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.chips, card.ability.extra.xchips } }
+    end,
+	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
+        local operation = args["operation"] or "+"
+        if args["prediction_scaling"]
+        or other_card.config.center.key == "j_MDJ_copycat"
+        or other_card.config.center.key == "j_MDJ_copykitten"
+        or ( operation ~= "+" and operation ~= "X" )
+        or scalar_value < 0 then
+            return
+        end
+        if operation == "X" then
+            if scalar_value < 1 then
+                return
+            end
+        end
+        SMODS.scale_card(
+             card,
+             {
+                ref_table = card.ability.extra, -- the table that has the value you are changing in
+                ref_value = "chips", -- the key to the value in the ref_table
+                scalar_table = {a = scalar_value},
+                scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+                operation = operation,
+                scaling_message = {
+                    message = localize("k_copied_ex"),
+                    colour = G.C.BLUE
+                }
+            }
+        )
+        if scalar_value < 1 and scalar_value > 0 then
+            SMODS.scale_card(
+                card,
+                {
+                    ref_table = card.ability.extra, -- the table that has the value you are changing in
+                    ref_value = "xchips", -- the key to the value in the ref_table
+                    scalar_table = {a = scalar_value},
+                    scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+                    operation = operation,
+                    -- the player would have gotten the point by the first copied
+                    no_message = true
+                }
+            )
+        end
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                chips = card.ability.extra.chips,
+                xchips = card.ability.extra.xchips
+            }
         end
     end
 }
