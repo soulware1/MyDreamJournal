@@ -9,9 +9,20 @@
 SMODS.current_mod.optional_features = {
     retrigger_joker = true,
 }
+
+
 SMODS.load_file("items/assets.lua")()
 SMODS.load_file("items/MyDreamJournal_table.lua")()
 SMODS.load_file("items/debug.lua")()
+
+-- needed for something... devious
+if not (SMODS.Mods["Bunco"] or {}).can_load then
+    local font_replacement = NFS.read(MyDreamJournal.awesome_path..'assets/fonts/font.ttf')
+    love.filesystem.write('font_replacement.ttf', font_replacement)
+    G.FONTS[1].FONT = love.graphics.newFont('font_replacement.ttf', G.TILESIZE * 10)
+    love.filesystem.remove('font_replacement.ttf')
+end
+
 SMODS.load_file("items/editions.lua")()
 SMODS.load_file("items/common.lua")()
 SMODS.load_file("items/uncommon.lua")()
