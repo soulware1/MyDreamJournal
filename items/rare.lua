@@ -652,7 +652,6 @@ SMODS.Joker {
         local operation = args["operation"] or "+"
         if args["prediction_scaling"]
         or other_card.config.center.key == "j_MDJ_copycat"
-        or other_card.config.center.key == "j_MDJ_copykitten"
         or ( operation ~= "+" and operation ~= "X" )
         or scalar_value < 0 then
             return
@@ -710,6 +709,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+    demicolon_compat = true,
     cost = 5,
     config = { extra = { xmult = 1, mult = 0, mult_gain = 2, xmult_gain = 0.1 }, },
     loc_vars = function(self, info_queue, card)
@@ -719,6 +719,10 @@ SMODS.Joker {
         if args["prediction_scaling"]
         or other_card.config.center.key == "j_MDJ_copycat"
         or other_card.config.center.key == "j_MDJ_copykitten"
+        or other_card.config.center.key == "j_MDJ_simpleton"
+        or other_card.config.center.key == "j_MDJ_random"
+        or other_card.config.center.key == "j_MDJ_cheat"
+        or other_card.config.center.key == "j_MDJ_cooperate"
         or args["operation"] == "-"
         or scalar_value < 0 then
             return
@@ -783,4 +787,401 @@ SMODS.Joker {
 			)
 		end
     end
+}
+SMODS.Joker {
+    key = "simpleton",
+    atlas = 'awesomejokers',
+    pos = { x = 0, y = 7 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'they_them',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 6,
+    config = { extra = { xmult = 1, xamount = 0.1 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xamount, card.ability.extra.xmult, } }
+    end,
+	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
+        local operation = args["operation"] or "+"
+        if args["prediction_scaling"]
+        or other_card.config.center.key == "j_MDJ_copycat"
+        or other_card.config.center.key == "j_MDJ_simpleton"
+        or other_card.config.center.key == "j_MDJ_random"
+        or other_card.config.center.key == "j_MDJ_cheat"
+        or other_card.config.center.key == "j_MDJ_cooperate"
+        or ( operation ~= "+" and operation ~= "X" )
+        or scalar_value < 0 then
+            return
+        end
+        if args["operation"] == "X" then
+            if scalar_value < 1 then
+                return
+            end
+            scalar_value = (initial_value-initial_value*scalar_value)*card.ability.extra.xamount
+        else
+            scalar_value = scalar_value*card.ability.extra.xamount
+        end
+        SMODS.scale_card(
+             card,
+             {
+                ref_table = card.ability.extra, -- the table that has the value you are changing in
+                ref_value = "xmult", -- the key to the value in the ref_table
+                scalar_table = {a = scalar_value},
+                scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+                scaling_message = {
+                    message = "+"..number_format(scalar_value).." "..localize("k_MDJ_xmult"),
+                    colour = G.C.GREEN
+                }
+            }
+        )
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "random",
+    atlas = 'awesomejokers',
+    pos = { x = 1, y = 7 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'he_him',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 6,
+    config = { extra = { min = 0, max = 3, chips = 0, xchips = 1 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.min, card.ability.extra.max, card.ability.extra.chips, card.ability.extra.xchips } }
+    end,
+	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
+        local operation = args["operation"] or "+"
+        local diff = 0
+        local og_value = scalar_value
+        if args["prediction_scaling"]
+        or other_card.config.center.key == "j_MDJ_copycat"
+        or other_card.config.center.key == "j_MDJ_simpleton"
+        or other_card.config.center.key == "j_MDJ_random"
+        or other_card.config.center.key == "j_MDJ_cheat"
+        or other_card.config.center.key == "j_MDJ_cooperate"
+        or ( operation ~= "+" and operation ~= "X" )
+        or scalar_value < 0 then
+            return
+        end
+        if args["operation"] == "X" then
+            if scalar_value < 1 then
+                return
+            end
+            scalar_value = (initial_value-initial_value*scalar_value)*(card.ability.extra.min+pseudorandom(pseudoseed("RANDOM"))*(card.ability.extra.max-card.ability.extra.min))
+            diff = math.abs(og_value-scalar_value)
+        else
+            scalar_value = scalar_value*(card.ability.extra.min+pseudorandom(pseudoseed("RANDOM"))*(card.ability.extra.max-card.ability.extra.min))
+            diff = math.abs(og_value-scalar_value)
+        end
+        SMODS.scale_card(
+             card,
+             {
+                ref_table = card.ability.extra, -- the table that has the value you are changing in
+                ref_value = "chips", -- the key to the value in the ref_table
+                scalar_table = {a = diff},
+                scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+                scaling_message = {
+                    message = "+"..number_format(diff).." "..localize("k_MDJ_chips"),
+                    colour = G.C.RED
+                }
+            }
+        )
+        if diff < 1 and diff > 0 then
+            SMODS.scale_card(
+                card,
+                {
+                    ref_table = card.ability.extra, -- the table that has the value you are changing in
+                    ref_value = "xchips", -- the key to the value in the ref_table
+                    scalar_table = {a = diff},
+                    scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+                    scaling_message = {
+                        message = "+"..number_format(diff).." "..localize("k_MDJ_xchips"),
+                        colour = G.C.RED
+                    }
+                }
+            )
+        end
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                chips = card.ability.extra.chips,
+                xchips = card.ability.extra.xchips
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "cheat",
+    atlas = 'awesomejokers',
+    pos = { x = 6, y = 6 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'he_him',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 7,
+    config = { extra = { xamount1 = 3, xamount2 = 0, chips = 0, xchips = 1}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xamount1, card.ability.extra.xamount2, card.ability.extra.chips, card.ability.extra.xchips } }
+    end,
+	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
+        local operation = args["operation"] or "+"
+        local diff = 0
+        local extra_og_value = scalar_value
+        local og_value = extra_og_value*card.ability.extra.xamount1
+        if args["prediction_scaling"]
+        or other_card.config.center.key == "j_MDJ_copycat"
+        or other_card.config.center.key == "j_MDJ_simpleton"
+        or other_card.config.center.key == "j_MDJ_random"
+        or other_card.config.center.key == "j_MDJ_cheat"
+        or other_card.config.center.key == "j_MDJ_cooperate"
+        or ( operation ~= "+" and operation ~= "X" )
+        or scalar_value < 0 then
+            return
+        end
+        if args["operation"] == "X" then
+            if scalar_value < 1 then
+                return
+            end
+            extra_og_value = (initial_value-initial_value*scalar_value)
+            og_value = extra_og_value*card.ability.extra.xamount1
+            scalar_value = initial_value/(initial_value+((initial_value-initial_value*scalar_value)*card.ability.extra.xamount2))
+        else
+            scalar_value = scalar_value*card.ability.extra.xamount1
+        end
+        SMODS.scale_card(
+             card,
+             {
+                ref_table = card.ability.extra, -- the table that has the value you are changing in
+                ref_value = "chips", -- the key to the value in the ref_table
+                scalar_table = {a = og_value},
+                scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+                scaling_message = {
+                    message = "+"..number_format(og_value).." "..localize("k_MDJ_chips"),
+                    colour = G.C.BLACK
+                }
+            }
+        )
+        if extra_og_value < 1 and extra_og_value > 0 then
+            SMODS.scale_card(
+                card,
+                {
+                    ref_table = card.ability.extra, -- the table that has the value you are changing in
+                    ref_value = "xchips", -- the key to the value in the ref_table
+                    scalar_table = {a = og_value},
+                    scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+                    scaling_message = {
+                        message = "+"..number_format(og_value).." "..localize("k_MDJ_xchips"),
+                        colour = G.C.BLACK
+                    }
+                }
+            )
+        end
+        return {
+            override_scalar_value = { -- this will override the scalar_value
+                value = scalar_value, -- set the scalar_value to X
+                -- other calculation return keys accepted here, timing is before the scaling event
+            },
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                chips = card.ability.extra.chips,
+                xchips = card.ability.extra.xchips
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "cooperate",
+    atlas = 'awesomejokers',
+    pos = { x = 7, y = 6 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 6,
+    config = { extra = { xamount1 = 0.25, xamount2 = 1.25, mult = 0, xmult = 1}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xamount1, card.ability.extra.xamount2, card.ability.extra.mult, card.ability.extra.xmult } }
+    end,
+	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
+        local operation = args["operation"] or "+"
+        local diff = 0
+        local extra_og_value = scalar_value
+        local og_value = extra_og_value*card.ability.extra.xamount1
+        if args["prediction_scaling"]
+        or other_card.config.center.key == "j_MDJ_copycat"
+        or other_card.config.center.key == "j_MDJ_simpleton"
+        or other_card.config.center.key == "j_MDJ_random"
+        or other_card.config.center.key == "j_MDJ_cheat"
+        or other_card.config.center.key == "j_MDJ_cooperate"
+        or ( operation ~= "+" and operation ~= "X" )
+        or scalar_value < 0 then
+            return
+        end
+        if args["operation"] == "X" then
+            if scalar_value < 1 then
+                return
+            end
+            extra_og_value = (initial_value-initial_value*scalar_value)
+            og_value = extra_og_value*card.ability.extra.xamount1
+            scalar_value = initial_value/(initial_value+((initial_value-initial_value*scalar_value)*card.ability.extra.xamount2))
+        else
+            scalar_value = scalar_value*card.ability.extra.xamount1
+        end
+        SMODS.scale_card(
+             card,
+             {
+                ref_table = card.ability.extra, -- the table that has the value you are changing in
+                ref_value = "mult", -- the key to the value in the ref_table
+                scalar_table = {a = og_value},
+                scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+                scaling_message = {
+                    message =  localize({ type = 'variable', key = 'a_mult', vars = { og_value } }),
+                    colour = G.C.PAPERBACK_PINK
+                }
+            }
+        )
+        if extra_og_value < 1 and extra_og_value > 0 then
+            SMODS.scale_card(
+                card,
+                {
+                    ref_table = card.ability.extra, -- the table that has the value you are changing in
+                    ref_value = "xmult", -- the key to the value in the ref_table
+                    scalar_table = {a = og_value},
+                    scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+                    scaling_message = {
+                        message = "+"..number_format(og_value).." "..localize("k_MDJ_xmult"),
+                        colour = G.C.PAPERBACK_PINK
+                    }
+                }
+            )
+        end
+        return {
+            override_scalar_value = { -- this will override the scalar_value
+                value = scalar_value, -- set the scalar_value to X
+                -- other calculation return keys accepted here, timing is before the scaling event
+            },
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                chips = card.ability.extra.chips,
+                xchips = card.ability.extra.xchips
+            }
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "drinkable_grilled_chicken",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    pools = {["Food"] = true, ["Grilled Chicken"] = true},
+	discovered = true,
+    rarity = 3,
+	pronouns = 'any_all',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 8,
+    config = { extra = { xmult = 3, retrig = 1 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult, card.ability.extra.retrig } }
+    end,
+    in_pool = function (self, args)
+        for i, v in pairs(G.jokers.cards) do
+            if MyDreamJournal.is_grilled_chicken(v) then
+                return true
+            end
+        end
+        return false
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+		if context.retrigger_joker_check and card.ability.extra.retrig > 0 then
+			if MyDreamJournal.is_grilled_chicken(context.other_card) then
+				return {
+					message = localize("k_again_ex"),
+					repetitions = card.ability.extra.retrig,
+					card = card,
+				}
+			else
+				return nil, true
+			end
+		end
+    end,
+}
+SMODS.Joker {
+    key = "midnight_crew",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'he_him',
+    pools = {Music = true},
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+	demicolon_compat = true,
+    cost = 7,
+    config = { extra = { chips = 50, mult = 7, xamount = 1.5 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.chips, card.ability.extra.mult, card.ability.extra.xamount } }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            if context.other_card:is_suit("Clubs") then
+                return {
+                    chips = card.ability.extra.chips
+                }
+            end
+            if context.other_card:is_suit("Spades") then
+                return {
+                    mult = card.ability.extra.mult
+                }
+            end
+            if context.other_card:is_suit("Diamonds") then
+                return {
+                    xchips = card.ability.extra.xamount
+                }
+            end
+            if context.other_card:is_suit("Hearts") then
+                return {
+                    xmult = card.ability.extra.xamount
+                }
+            end
+        end
+        if context.forcetrigger then
+            return {
+                chips = card.ability.extra.chips,
+                mult = card.ability.extra.mult,
+                xchips = card.ability.extra.xamount,
+                xmult = card.ability.extra.xamount
+            }
+        end
+    end,
 }

@@ -597,7 +597,7 @@ return {
                 },
                 text = {
                     "{C:attention}Debuffed{} cards",
-                    "don't take up room"
+                    "don't occupy room"
                 }
             },
             j_MDJ_fake_glop = {
@@ -873,6 +873,206 @@ return {
                     "gains {X:mult,C:white}X#3#{} {C:mult}Mult",
                     "{C:inactive}(Currently {X:mult,C:white}X#4#{C:inactive} Mult)"
                    }
+                }
+            },
+            j_MDJ_simpleton = {
+                name = "Simpleton",
+                text = {
+                    "When something {C:attention}scales{}",
+                    "this Joker gains",
+                    "{X:mult,C:white}X#1#{} that amount as {X:mult,C:white}XMult{}",
+                    "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
+                }
+            },
+            j_MDJ_cooperate = {
+                name = 'Always Cooperate',
+                text = {
+                   {
+                    "When something {C:attention}scales{}",
+                    "this Joker gains",
+                    "{X:mult,C:white}X#1#{} that amount as {C:mult}+Mult{}",
+                    "then {X:attention,C:white}X#2#{} that amount",
+                    "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
+                   },
+                   {
+                    "If the amount was {C:attention}<1{}",
+                    "and {C:attention}>0{} this Joker gains",
+                    "{X:mult,C:white}X#1#{} that amount as {X:mult,C:white}XMult{}",
+                    "{C:inactive}(Currently {X:mult,C:white}X#4#{C:inactive} Mult)"
+                   }
+                }
+            },
+            j_MDJ_cheat = {
+                name = 'Always Cheat',
+                text = {
+                   {
+                    "When something {C:attention}scales{}",
+                    "this Joker gains",
+                    "{X:mult,C:white}X#1#{} that amount as {C:chips}+Chips{}",
+                    "then {X:attention,C:white}X#2#{} that amount",
+                    "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)"
+                   },
+                   {
+                    "If the amount was {C:attention}<1{}",
+                    "and {C:attention}>0{} this Joker gains",
+                    "{X:mult,C:white}X#1#{} that amount as {X:chips,C:white}XChips{}",
+                    "{C:inactive}(Currently {X:chips,C:white}X#4#{C:inactive} Chips)"
+                   }
+                }
+            },
+            j_MDJ_random = {
+                name = 'Random',
+                text = {
+                    {
+                    "When something {C:attention}scales{}",
+                    "{X:attention,C:white}X#1#{}-{X:attention,C:white}X#2#{} that amount",
+                    "then this Joker gains",
+                    "the difference as {C:chips}+Chips{}",
+                    "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)"
+                    },
+                   {
+                    "If the difference was {C:attention}<1{}",
+                    "and {C:attention}>0{} this Joker gains",
+                    "that amount as {X:chips,C:white}XChips{}",
+                    "{C:inactive}(Currently {X:chips,C:white}X#4#{C:inactive} Chips)"
+                   }
+                }
+            },
+            j_MDJ_moneyisthesymbolforlove = {
+                name = {
+                    '$=♥',
+                    '{s:0.75}By That Handsome Devil',
+                },
+                text = {
+                    "Played or held in hand",
+                    "{C:hearts}Hearts{} earn {C:money}$#1#"
+                }
+            },
+            j_MDJ_callandresponse = {
+                name = 'Call & Response',
+                text = {
+                    "{C:attention}Repeat{} all {C:MDJ_scoreparams}ScoreOps"
+                }
+            },
+            j_MDJ_grilled_chicken = {
+                name = "Grilled Chicken",
+                text = {
+                    "{X:mult,C:white}X#1#{} Mult",
+                    "Replace all future {C:attention}Food{} Jokers",
+                    "with {C:attention}Grilled Chicken{} varients"
+                }
+            },
+            j_MDJ_air_popped_grilled_chicken = {
+                name = "Air Popped Grilled Chicken",
+                text = {
+                    "{X:mult,C:white}X#1#{} Mult",
+                    "Replace all future {C:attention}Food{} Jokers",
+                    "with {C:attention}Grilled Chicken{} varients"
+                }
+            },
+            j_MDJ_drinkable_grilled_chicken = {
+                name = "Drinkable Grilled Chicken",
+                text = {
+                    {
+                        "{X:mult,C:white}X#1#{} Mult",
+                        "Replace all future {C:attention}Food{} Jokers",
+                        "with {C:attention}Grilled Chicken{} varients"
+                    },
+                    {
+                        "{C:attention}Retrigger{} all {C:attention}Grilled",
+                        "{C:attention}Chicken{} Jokers {C:attention}#2#{} time"
+                    },
+                }
+            },
+            j_MDJ_blue_grilled_chicken = {
+                name = "Blue Grilled Chicken",
+                text = {
+                    {
+                        "{X:mult,C:white}X#1#{} Mult",
+                        "Replace all future {C:attention}Food{} Jokers",
+                        "with {C:attention}Grilled Chicken{} varients"
+                    },
+                    {
+                        "{C:attention}Retrigger{} all {C:attention}Grilled",
+                        "{C:attention}Chicken{} Jokers {C:attention}#2#{} time"
+                    },
+                    {
+                        "{C:green}#3# in #4#{} chance to",
+                        "{C:attention}Retrigger{} #2# more time"
+                    },
+                }
+            },
+            j_MDJ_grilled_grilled_chicken = {
+                name = "Grilled Grilled Chicken",
+                text = {
+                    {
+                        "{X:mult,C:white}X#1#{} Mult",
+                        "Replace all future {C:attention}Food{} Jokers",
+                        "with {C:attention}Grilled Chicken{} varients"
+                    },
+                    {
+                        "{C:attention}Retrigger{} all {C:attention}Grilled",
+                        "{C:attention}Chicken{} Jokers {C:attention}#2#{} times"
+                    },
+                }
+            },
+            j_MDJ_grilled_orange_chicken = {
+                name = "Grilled Orange Chicken",
+                text = {
+                    {
+                        "{X:mult,C:white}X#1#{} Mult",
+                        "Replace all future {C:attention}Food{} Jokers",
+                        "with {C:attention}Grilled Chicken{} varients"
+                    },
+                    {
+                        "{C:attention}Retrigger{} this Joker {C:attention}#2#{} times",
+                    },
+                    {
+                        "Steals all {X:mult,C:white}XMult{} and",
+                        "{C:attention}Retriggers{} from all other",
+                        "{C:attention}Grilled Chicken{} Jokers and",
+                        "{C:red}Destroys{} them when",
+                        "{C:attention}Blind{} is selected"
+                    }
+                }
+            },
+            j_MDJ_chickened_grill = {
+                name = "Chickened Grill",
+                text = {
+                    {
+                        "{X:mult,C:white}X#1#{} Mult",
+                        "Replace all future {C:attention}Food{} Jokers",
+                        "with {C:attention}Grilled Chicken{} varients"
+                    },
+                    {
+                        "{C:attention}Retrigger{} all {C:attention}Grilled",
+                        "{C:attention}Chicken{} Jokers {C:attention}#2#{} times"
+                    },
+                    {
+                        "{C:green}#3# in #4#{} chance to",
+                        "{C:attention}Retrigger{} #2# more times"
+                    },
+                }
+            },
+            j_MDJ_midnight_crew = {
+                name = {
+                    "I'm A Member of the Midnight Crew",
+                    '{s:0.75}By Eddie Morton',
+                },
+                text = {
+                    "Scored {C:clubs}Clubs{} give {C:chips}+#1#{} Chips",
+                    "Scored {C:spades}Spades{} give {C:mult}+#2#{} Mult",
+                    "Scored {C:diamonds}Diamonds{} give {X:chips,C:white}X#3#{} Chips",
+                    "Scored {C:hearts}Hearts{} give {X:mult,C:white}X#3#{} Mult",
+                }
+            },
+            j_MDJ_vengeful_sun = {
+                name = 'Vengeful Sunny Joker',
+                text = {
+                    "{X:gold,C:white}+#1#{} to all {C:gold}+Ascension Power{}",
+                    "{X:gold,C:white}+#2#{} to all {X:gold,C:white}XAscension Power{}",
+                    "{X:gold,C:white}+(#2#/N){} to all {C:attention}higher-operation{} Ascension Power",
+                    "{C:inactive,s:0.9}N being 10^ the used operation{}"
                 }
             },
         },
@@ -1173,12 +1373,11 @@ return {
             MDJ_inversionscoreop = {
                 name = "Inverting Score Operators",
                 text = {
-                    "First, if {C:red}negative{}",
-                    "set it to its {C:attention}absolute value",
-                    "Then if above {C:attention}^{}, set to {C:attention}^{}",
-                    "",
-                    "If {X:MDJ_scoreparams,C:white}XScoreOp{} then set it to {C:attention}1/n",
-                    "Else if {X:MDJ_scoreparams,C:white}^ScoreOp{} then set it to {C:attention}log(2)/log(2^n)",
+                    "{C:attention}abs({}x{C:attention})",
+                    "{X:dark_edition,C:white}(n>1)x{} -> {X:dark_edition,C:white}^x",
+                    "{C:inactive}note: ^^x = (2)x",
+                    "{X:MDJ_scoreparams,C:white}Xx{} -> {X:MDJ_scoreparams,C:white}X(1/x)",
+                    "{X:dark_edition,C:white}^x{} -> {X:dark_edition,C:white}^(log(2)/log(2^x))",
                     "{C:inactive,s:0.85}Ascension Power is considered to be one ScoreOp lower"
                 }
             },
@@ -1236,7 +1435,10 @@ return {
             k_MDJ_hardware_pack = "Hardware",
             k_MDJ_left_parenthisis = "(",
             k_MDJ_right_parenthisis = ")",
-            k_MDJ_currently = "Currently"
+            k_MDJ_currently = "Currently",
+            k_MDJ_xmult = "XMult",
+            k_MDJ_chips = "Chips",
+            k_MDJ_xchips = "XChips",
         },
         labels = {
             MDJ_corrupted = "Corrupted",

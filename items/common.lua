@@ -515,3 +515,36 @@ SMODS.Joker {
         end
     end
 }
+
+SMODS.Joker {
+    key = "air_popped_grilled_chicken",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    pools = {["Food"] = true, ["Grilled Chicken"] = true},
+	discovered = true,
+    rarity = 1,
+	pronouns = 'any_all',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 4,
+    config = { extra = { xmult = 1.5 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult } }
+    end,
+    in_pool = function (self, args)
+        for i, v in pairs(G.jokers.cards) do
+            if MyDreamJournal.is_grilled_chicken(v) then
+                return true
+            end
+        end
+        return false
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+    end,
+}

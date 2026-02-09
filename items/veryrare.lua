@@ -382,3 +382,66 @@ SMODS.Joker {
         end
     end,
 }
+SMODS.Joker {
+    key = "callandresponse",
+    blueprint_compat = false,
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    rarity = MyDreamJournal.epic,
+    pronouns = "they_them",
+    cost = 10,
+    discovered = true,
+    config = { extra = { } },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { set = "Other", key = "MDJ_scoreops", config = {} }
+        return { vars = { } }
+    end,
+}
+SMODS.Joker {
+    key = "blue_grilled_chicken",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    pools = {["Food"] = true, ["Grilled Chicken"] = true},
+	discovered = true,
+    rarity = MyDreamJournal.epic,
+	pronouns = 'any_all',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 10,
+    config = { extra = { xmult = 4.5, retrig = 1, odds = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'Grilled Chicken')
+        return { vars = { card.ability.extra.xmult, card.ability.extra.retrig, numerator, denominator } }
+    end,
+    in_pool = function (self, args)
+        for i, v in pairs(G.jokers.cards) do
+            if MyDreamJournal.is_grilled_chicken(v) then
+                return true
+            end
+        end
+        return false
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+		if context.retrigger_joker_check and card.ability.extra.retrig > 0 then
+			if MyDreamJournal.is_grilled_chicken(context.other_card) then
+                local extra = 0
+                if SMODS.pseudorandom_probability(card, 'Grilled Chicken', 1, card.ability.extra.odds) then
+                    extra = extra+card.ability.extra.retrig
+                end
+				return {
+					message = localize("k_again_ex"),
+					repetitions = card.ability.extra.retrig+extra,
+					card = card,
+				}
+			else
+				return nil, true
+			end
+		end
+    end,
+}

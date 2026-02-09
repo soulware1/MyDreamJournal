@@ -36,6 +36,9 @@ SMODS.Consumable {
                 ---@diagnostic disable-next-line: cast-local-type
                 highest_rarity = rarities[highest_rarity]
             end
+        else
+            ---@diagnostic disable-next-line: cast-local-type
+            highest_rarity = "Common"
         end
         return { vars = { localize("k_"..MyDreamJournal.epic:lower()), localize("k_"..MyDreamJournal.exotic:lower()), localize("k_"..highest_rarity:lower()), colours = { G.C[MyDreamJournal.epic] or G.C.RARITY[MyDreamJournal.epic] or G.C.FILTER, G.C[MyDreamJournal.exotic] or G.C.RARITY[MyDreamJournal.exotic] or G.C.FILTER } } }
     end,

@@ -243,3 +243,46 @@ SMODS.Joker {
         end
     end,
 }
+SMODS.Joker {
+    key = "grilled_grilled_chicken",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    pools = {["Food"] = true, ["Grilled Chicken"] = true},
+	discovered = true,
+    rarity = 4,
+	pronouns = 'any_all',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 20,
+    config = { extra = { xmult = 6.5, retrig = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult, card.ability.extra.retrig } }
+    end,
+    in_pool = function (self, args)
+        for i, v in pairs(G.jokers.cards) do
+            if MyDreamJournal.is_grilled_chicken(v) then
+                return true
+            end
+        end
+        return false
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+		if context.retrigger_joker_check and card.ability.extra.retrig > 0 then
+			if MyDreamJournal.is_grilled_chicken(context.other_card) then
+				return {
+					message = localize("k_again_ex"),
+					repetitions = card.ability.extra.retrig,
+					card = card,
+				}
+			else
+				return nil, true
+			end
+		end
+    end,
+}

@@ -924,6 +924,7 @@ SMODS.Joker {
         end
     end
 }
+
 SMODS.Joker {
     key = "monitoring",
     atlas = 'placeholder',
@@ -1044,6 +1045,90 @@ SMODS.Joker {
 			return {
 				MDJ_amount = amount,
 				MDJ_key = key
+			}
+		end
+    end,
+}
+
+SMODS.Joker {
+    key = "moneyisthesymbolforlove",
+    discovered = true,
+    blueprint_compat = true,
+    rarity = 2,
+    cost = 7,
+    atlas = "placeholder",
+	pronouns = "they_them",
+	pools = {Music = true},
+    config = { extra = { dollars = 1 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.dollars } }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.other_card:is_suit("Hearts") then
+            G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
+            return {
+                dollars = card.ability.extra.dollars,
+                func = function() -- This is for timing purposes, it runs after the dollar manipulation
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            G.GAME.dollar_buffer = 0
+                            return true
+                        end
+                    }))
+                end
+            }
+        end
+        if context.individual and context.cardarea == "unscored" and context.other_card:is_suit("Hearts") then
+            G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
+            return {
+                dollars = card.ability.extra.dollars,
+                func = function() -- This is for timing purposes, it runs after the dollar manipulation
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            G.GAME.dollar_buffer = 0
+                            return true
+                        end
+                    }))
+                end
+            }
+        end
+        if context.individual and context.cardarea == G.hand and context.other_card:is_suit("Hearts") then
+            G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
+            return {
+                dollars = card.ability.extra.dollars,
+                func = function() -- This is for timing purposes, it runs after the dollar manipulation
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            G.GAME.dollar_buffer = 0
+                            return true
+                        end
+                    }))
+                end
+            }
+        end
+    end,
+}
+
+SMODS.Joker {
+    key = "grilled_chicken",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	pools = {["Food"] = true, ["Grilled Chicken"] = true},
+	discovered = true,
+    rarity = 2,
+	pronouns = 'any_all',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 6,
+    config = { extra = { xmult = 2 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+			return {
+				xmult = card.ability.extra.xmult
 			}
 		end
     end,

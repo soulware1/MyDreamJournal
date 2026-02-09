@@ -73,6 +73,10 @@ if SMODS.Mods["potassium_re"] and SMODS.Mods["potassium_re"].can_load then
 						amount[2] = amount[2] + op_number
 					end
 				end
+				return {
+					MDJ_amount = amount,
+					MDJ_key = key
+				}
 			end
 		end
 	}

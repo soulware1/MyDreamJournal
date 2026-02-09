@@ -51,6 +51,21 @@ function MyDreamJournal.vowelandconsonants(str)
     return vowels, consonants
 end
 
+function MyDreamJournal.is_grilled_chicken(card)
+    local center = type(card) == "string"
+        and G.P_CENTERS[card]
+        or (card.config and card.config.center)
+
+    if not center then
+        return false
+    end
+
+    if center.pools and center.pools["Grilled Chicken"] then
+        return true
+    end
+
+    return false
+end
 
 function MyDreamJournal.is_music(card)
     local center = type(card) == "string"
@@ -67,6 +82,21 @@ function MyDreamJournal.is_music(card)
     end
 
     return false
+end
+
+function MyDreamJournal.is_food(card)
+    local food = {
+        j_gros_michel=true,
+		j_egg=true,
+		j_ice_cream=true,
+		j_cavendish=true,
+		j_turtle_bean=true,
+		j_diet_cola=true,
+		j_popcorn=true,
+		j_ramen=true,
+		j_selzer=true,
+    }
+    if food[card.config.center.key] or ( food.pools and food.pools.Food ) then return true end
 end
 
 function MyDreamJournal.is_food(card)
@@ -404,6 +434,14 @@ MyDreamJournal.ribstable = {
     ["entr_reverse_legendary"] = 5,
     ["entr_entropic"] = 6
 }
+MyDreamJournal.grilled_chicken = {
+	[1] = "j_MDJ_air_popped_grilled_chicken",
+	[2] = "j_MDJ_grilled_chicken",
+	[3] = "j_MDJ_drinkable_grilled_chicken",
+	[4] = "j_MDJ_blue_grilled_chicken",
+	[5] = "j_MDJ_grilled_grilled_chicken",
+	[6] = "j_MDJ_chickened_grill",
+}
 MyDreamJournal.ribstable[MyDreamJournal.epic:lower()] = 4
 MyDreamJournal.ribstable[MyDreamJournal.exotic:lower()] = 6
 
@@ -508,8 +546,50 @@ function MyDreamJournal.card_eval_status_text_eq(card, eval_type, amt, percent, 
     end
 end
 
+
 SMODS.ObjectType({
 	key = "Music",
+	default = "j_MDJ_ribs",
+	cards = {},
+	rarities = {
+		{
+			key = 'Common',
+			weight = 0.7,
+			rate = 0.7,
+		},
+		{
+			key = 'Uncommon',
+			weight = 0.25,
+			rate = 0.25,
+		},
+		{
+			key = 'Rare',
+			weight = 0.05,
+			rate = 0.05,
+		},
+		{
+			key = MyDreamJournal.epic,
+			weight = 0.01,
+			rate = 0.01,
+		},
+		{
+			key = 'Legendary',
+			weight = 0.003,
+			rate = 0.003,
+		},
+		{
+			key = MyDreamJournal.exotic,
+			weight = 0.001,
+			rate = 0.001,
+		}
+	},
+	inject = function(self)
+		SMODS.ObjectType.inject(self)
+	end,
+})
+
+SMODS.ObjectType({
+	key = "Grilled Chicken",
 	default = "j_MDJ_ribs",
 	cards = {},
 	rarities = {
