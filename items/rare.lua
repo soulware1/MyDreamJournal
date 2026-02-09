@@ -1154,26 +1154,36 @@ SMODS.Joker {
     end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
+            local chips = 0
+            local mult = 0
+            local xchips = 0
+            local xmult = 0
             if context.other_card:is_suit("Clubs") then
-                return {
-                    chips = card.ability.extra.chips
-                }
+                chips = chips+card.ability.extra.chips
             end
             if context.other_card:is_suit("Spades") then
-                return {
-                    mult = card.ability.extra.mult
-                }
+                mult = mult+card.ability.extra.mult
             end
             if context.other_card:is_suit("Diamonds") then
-                return {
-                    xchips = card.ability.extra.xamount
-                }
+                xchips = 1
+                xchips = xchips*card.ability.extra.xamount
             end
             if context.other_card:is_suit("Hearts") then
-                return {
-                    xmult = card.ability.extra.xamount
-                }
+                xmult = 1
+                xmult = xmult*card.ability.extra.xamount
             end
+            if xchips == 0 then
+                xchips = nil
+            end
+            if xmult == 0 then
+                xmult = nil
+            end
+            return {
+                chips = chips,
+                mult = mult,
+                xchips = xchips,
+                xmult = xmult
+            }
         end
         if context.forcetrigger then
             return {
