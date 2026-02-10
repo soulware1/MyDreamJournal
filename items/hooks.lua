@@ -622,7 +622,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local og_amount = amount
 	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
 	local theres_a_brainware = next(SMODS.find_card("j_MDJ_brainware"))
-	local theres_a_call = next(SMODS.find_card("j_MDJ_callandresponse"))
+	local calls = SMODS.find_card("j_MDJ_callandresponse")
 	local is_demicolon = nil
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
 	if scored_card and scored_card.config and scored_card.config.center then
@@ -798,9 +798,11 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		key = swapped
 		::skip::
 	end
-	if theres_a_call and not effect.response and key and MyDreamJournal.scoreparammodkeys[key] then
+	if next(calls) and not effect.response and key and MyDreamJournal.scoreparammodkeys[key] then
 		effect.response = true
-		SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
+		for _, v in ipairs(calls) do
+			SMODS.calculate_individual_effect(effect, v, key, amount, from_edition)
+		end
 	end
 	if key and amount and key ~= 'MDJ_key' and key ~= 'MDJ_amount' and not effect.no_alter then
 		local alter = SMODS.calculate_context({MDJ_mod_key_and_amount = true, MDJ_amount = amount, MDJ_key = key, MDJ_og_key = og_key, MDJ_og_amount = og_amount, card = scored_card, from_mindware_lol = effect.from_mindware, demicolon_racism = is_demicolon})
