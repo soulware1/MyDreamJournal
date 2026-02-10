@@ -99,23 +99,6 @@ function MyDreamJournal.is_food(card)
     if food[card.config.center.key] or ( food.pools and food.pools.Food ) then return true end
 end
 
-function MyDreamJournal.is_food(card)
-    local center = type(card) == "string"
-        and G.P_CENTERS[card]
-        or (card.config and card.config.center)
-
-    if not center then
-        return false
-    end
-
-    -- If the center has the Food pool in its definition
-    if center.pools and center.pools.Food then
-        return true
-    end
-
-    return false
-end
-
 MyDreamJournal.rank_shorthands = {
 		"_",
 		"2",
@@ -426,15 +409,24 @@ MyDreamJournal.vanilla_rarities = {
     "legendary"
 }
 MyDreamJournal.ribstable = {
+	["cry_cursed"] = -1,
+	["unik_detrimental"] = 0,
     ["common"] = 1,
     ["uncommon"] = 2,
+	["poke_safari"] = 2.5,
     ["rare"] = 3,
     ["nic_teto"] = 3,
+	["gb_BossJokers"] = 3.5,
+	["poke_mega"] = 4,
     ["legendary"] = 5,
     ["entr_reverse_legendary"] = 5,
-    ["entr_entropic"] = 6
+	["finity_showdown"] = 5.25,
+	["unik_ancient"] = 5.5,
+    ["entr_entropic"] = 7
 }
-MyDreamJournal.grilled_chicken = {
+MyDreamJournal.grilled_chicken = MyDreamJournal.grilled_chicken or {}
+
+local temp = {
 	[1] = "j_MDJ_air_popped_grilled_chicken",
 	[2] = "j_MDJ_grilled_chicken",
 	[3] = "j_MDJ_drinkable_grilled_chicken",
@@ -442,6 +434,12 @@ MyDreamJournal.grilled_chicken = {
 	[5] = "j_MDJ_grilled_grilled_chicken",
 	[6] = "j_MDJ_chickened_grill",
 }
+for i = 1, 6 do
+	MyDreamJournal.grilled_chicken[i] = MyDreamJournal.grilled_chicken[i] or {}
+	MyDreamJournal.grilled_chicken[i][#MyDreamJournal.grilled_chicken[i]+1] = temp[i]
+end
+temp = nil
+
 MyDreamJournal.ribstable[MyDreamJournal.epic:lower()] = 4
 MyDreamJournal.ribstable[MyDreamJournal.exotic:lower()] = 6
 
@@ -590,7 +588,7 @@ SMODS.ObjectType({
 
 SMODS.ObjectType({
 	key = "Grilled Chicken",
-	default = "j_MDJ_ribs",
+	default = "j_MDJ_air_popped_grilled_chicken",
 	cards = {},
 	rarities = {
 		{

@@ -148,6 +148,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+    demicolon_compat = true,
     cost = 20,
     config = { extra = { xmult = 6.5, retrig = 2 }, },
     loc_vars = function(self, info_queue, card)
@@ -162,11 +163,6 @@ SMODS.Joker {
         return false
     end,
     calculate = function(self, card, context)
-        if context.joker_main or context.forcetrigger then
-			return {
-				xmult = card.ability.extra.xmult
-			}
-		end
 		if context.retrigger_joker_check and card.ability.extra.retrig > 0 then
 			if context.other_card == card then
 				return {
@@ -178,7 +174,7 @@ SMODS.Joker {
 				return nil, true
 			end
 		end
-        if context.setting_blind then
+        if context.setting_blind or context.forcetrigger then
             for i, v in pairs(G.jokers.cards) do
                 if MyDreamJournal.is_grilled_chicken(v) and v ~= card then
                     if v.ability.extra.xmult then
@@ -215,5 +211,10 @@ SMODS.Joker {
                 end
             end
         end
+        if context.joker_main or context.forcetrigger then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
     end,
 }

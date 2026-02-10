@@ -798,6 +798,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+    demicolon_compat = true,
     cost = 6,
     config = { extra = { xmult = 1, xamount = 0.1 }, },
     loc_vars = function(self, info_queue, card)
@@ -856,6 +857,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+    demicolon_compat = true,
     cost = 6,
     config = { extra = { min = 0, max = 3, chips = 0, xchips = 1 }, },
     loc_vars = function(self, info_queue, card)
@@ -933,6 +935,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+    demicolon_compat = true,
     cost = 7,
     config = { extra = { xamount1 = 3, xamount2 = 0, chips = 0, xchips = 1}, },
     loc_vars = function(self, info_queue, card)
@@ -1017,6 +1020,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+    demicolon_compat = true,
     cost = 6,
     config = { extra = { xamount1 = 0.25, xamount2 = 1.25, mult = 0, xmult = 1}, },
     loc_vars = function(self, info_queue, card)
@@ -1103,6 +1107,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+    demicolon_compat = true,
     cost = 8,
     config = { extra = { xmult = 3, retrig = 1 }, },
     loc_vars = function(self, info_queue, card)
@@ -1154,15 +1159,15 @@ SMODS.Joker {
     end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
-            local chips = 0
-            local mult = 0
-            local xchips = 0
-            local xmult = 0
+            local chips = nil
+            local mult = nil
+            local xchips = nil
+            local xmult = nil
             if context.other_card:is_suit("Clubs") then
-                chips = chips+card.ability.extra.chips
+                chips = (chips or 0)+card.ability.extra.chips
             end
             if context.other_card:is_suit("Spades") then
-                mult = mult+card.ability.extra.mult
+                mult = (mult or 0)+card.ability.extra.mult
             end
             if context.other_card:is_suit("Diamonds") then
                 xchips = 1
@@ -1171,12 +1176,6 @@ SMODS.Joker {
             if context.other_card:is_suit("Hearts") then
                 xmult = 1
                 xmult = xmult*card.ability.extra.xamount
-            end
-            if xchips == 0 then
-                xchips = nil
-            end
-            if xmult == 0 then
-                xmult = nil
             end
             return {
                 chips = chips,

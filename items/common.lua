@@ -527,6 +527,7 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
+    demicolon_compat = true,
     cost = 4,
     config = { extra = { xmult = 1.5 }, },
     loc_vars = function(self, info_queue, card)

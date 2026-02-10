@@ -6,6 +6,7 @@ SMODS.Joker {
     eternal_compat = true,
     perishable_compat = true,
     blueprint_compat = true,
+    demicolon_compat = true,
     pronouns = "he_him",
     pos = {x = 0, y = 0},
     atlas = "placeholder",
@@ -20,7 +21,7 @@ SMODS.Joker {
     demicoloncompat = true,
     calculate = function(self, card, context)
         if context.setting_blind or context.forcetrigger then
-            if G.GAME.joker_buffer + #G.jokers.cards < G.jokers.config.card_limit then
+            if ( G.GAME.joker_buffer + #G.jokers.cards < G.jokers.config.card_limit ) or context.forcetrigger then
                 G.E_MANAGER:add_event(Event{
                     func = function()
                         local ncard = SMODS.add_card{
@@ -78,11 +79,12 @@ SMODS.Joker {
                     op_number = amount[1]
                     is_hyper = true
                 end
-                -- mult has the same amount to add as add
                 if op_number ~= -1 and op_number ~= 0 then
-                    op_number = card.ability.extra.add / (10 ^ op_number)
-                else
+                    op_number = (card.ability.extra.add/10) / (10 ^ op_number)
+                elseif op_number == -1 then
                     op_number = card.ability.extra.add
+                else
+                    op_number = card.ability.extra.add/10
                 end
                 if is_dark then
                     op_number = op_number * 2

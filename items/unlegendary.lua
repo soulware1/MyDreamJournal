@@ -30,7 +30,7 @@ SMODS.Joker {
 	perishable_compat = true,
     eternal_compat = true,
 	demicolon_compat = true,
-    cost = 100,
+    cost = 50,
     config = { extra = { add = 2, mult = 1.5 }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.add, card.ability.extra.mult } }
@@ -107,8 +107,7 @@ SMODS.Joker {
     blueprint_compat = false,
 	perishable_compat = true,
     eternal_compat = true,
-	demicolon_compat = true,
-    cost = 100,
+    cost = 50,
     config = { extra = { }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { } }
@@ -239,7 +238,7 @@ SMODS.Joker {
     eternal_compat = true,
 	demicolon_compat = true,
     immutable = true,
-    cost = 100,
+    cost = 50,
     config = { extra = { set = 9 }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.set } }
@@ -266,7 +265,7 @@ SMODS.Joker {
 	perishable_compat = true,
     eternal_compat = true,
 	demicolon_compat = true,
-    cost = 100,
+    cost = 50,
     config = { extra = { per = 0.1 }, },
     loc_vars = function(self, info_queue, card)
         if G.GAME and G.GAME.current_round and G.GAME.current_round.played_poker_hands then
@@ -330,7 +329,8 @@ SMODS.Joker {
     blueprint_compat = true,
 	perishable_compat = true,
     eternal_compat = true,
-    cost = 10,
+    demicolon_compat = true,
+    cost = 50,
     config = { extra = { xmult = 9, retrig = 3, odds = 2 }, },
     loc_vars = function(self, info_queue, card)
         local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'Chickened Grill')

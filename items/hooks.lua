@@ -497,7 +497,7 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
 		elseif card.config.center.rarity == "entr_reverse_legendary" then
 			card:set_ability("j_MDJ_grilled_orange_chicken")
 		else
-			card:set_ability(MyDreamJournal.grilled_chicken[MyDreamJournal.ribstable[MyDreamJournal.vanilla_rarities[card.config.center.rarity] or card.config.center.rarity]] or "j_MDJ_air_popped_grilled_chicken")
+			card:set_ability(pseudorandom_element(MyDreamJournal.grilled_chicken[MyDreamJournal.ribstable[MyDreamJournal.vanilla_rarities[card.config.center.rarity] or card.config.center.rarity]] or {"j_MDJ_air_popped_grilled_chicken"}, pseudoseed("GRILLED")))
 		end
 	end
 	if next(SMODS.find_card("j_MDJ_tme")) then

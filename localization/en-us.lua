@@ -1295,6 +1295,23 @@ return {
                     "{C:inactive}(Must have room)"
 				}
 			},
+            c_MDJ_hardware_laser_diode = {
+                name = "Laser Diode",
+                text = {
+                    "Enhances up to",
+                    "{C:attention}#1#{} selected cards",
+                    "to the {C:attention}rightmost",
+                    "card's {C:attention}Enhancement{}"
+                },
+            },
+            c_MDJ_hardware_photodiode = {
+                name = "Photodiode",
+                text = {
+                    "Add the {C:attention}rightmost",
+                    "card's {C:attention}Seal{} up to",
+                    "{C:attention}#1#{} selected cards",
+                },
+            },
         },
         Enhanced = {
             m_MDJ_envelope = {
