@@ -1453,9 +1453,9 @@ return {
             k_MDJ_left_parenthisis = "(",
             k_MDJ_right_parenthisis = ")",
             k_MDJ_currently = "Currently",
-            k_MDJ_xmult = "XMult",
-            k_MDJ_chips = "Chips",
-            k_MDJ_xchips = "XChips",
+            k_MDJ_scaling_xmult = "+#1# XMult",
+            k_MDJ_scaling_chips = "+#1# Chips",
+            k_MDJ_scaling_xchips = "+#1# XChips",
         },
         labels = {
             MDJ_corrupted = "Corrupted",

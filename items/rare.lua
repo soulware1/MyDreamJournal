@@ -782,7 +782,10 @@ SMODS.Joker {
 					ref_table = card.ability.extra, -- the table that has the value you are changing in
 					ref_value = "xmult", -- the key to the value in the ref_table
 					scalar_value = "xmult_gain", -- the key to the value to scale by, in the ref_table by default
-					no_message = true,
+					scaling_message = {
+						message = localize({ type = 'variable', key = 'k_MDJ_scaling_xmult', vars = { card.ability.extra.xmult_gain } }),
+						colour = G.C.BLUE
+					}
 				}
 			)
 		end
@@ -832,7 +835,7 @@ SMODS.Joker {
                 scalar_table = {a = scalar_value},
                 scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
                 scaling_message = {
-                    message = "+"..number_format(scalar_value).." "..localize("k_MDJ_xmult"),
+                    message = localize({ type = 'variable', key = 'k_MDJ_scaling_xmult', vars = { scalar_value } }),
                     colour = G.C.GREEN
                 }
             }
@@ -895,7 +898,7 @@ SMODS.Joker {
                 scalar_table = {a = diff},
                 scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
                 scaling_message = {
-                    message = "+"..number_format(diff).." "..localize("k_MDJ_chips"),
+                    message = localize({ type = 'variable', key = 'k_MDJ_scaling_chips', vars = { diff } }),
                     colour = G.C.RED
                 }
             }
@@ -909,7 +912,7 @@ SMODS.Joker {
                     scalar_table = {a = diff},
                     scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
                     scaling_message = {
-                        message = "+"..number_format(diff).." "..localize("k_MDJ_xchips"),
+                        message = localize({ type = 'variable', key = 'k_MDJ_scaling_xchips', vars = { diff } }),
                         colour = G.C.RED
                     }
                 }
@@ -974,7 +977,7 @@ SMODS.Joker {
                 scalar_table = {a = og_value},
                 scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
                 scaling_message = {
-                    message = "+"..number_format(og_value).." "..localize("k_MDJ_chips"),
+                    message = localize({ type = 'variable', key = 'k_MDJ_scaling_chips', vars = { og_value } }),
                     colour = G.C.BLACK
                 }
             }
@@ -988,7 +991,7 @@ SMODS.Joker {
                     scalar_table = {a = og_value},
                     scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
                     scaling_message = {
-                        message = "+"..number_format(og_value).." "..localize("k_MDJ_xchips"),
+                        message = localize({ type = 'variable', key = 'k_MDJ_scaling_xchips', vars = { og_value } }),
                         colour = G.C.BLACK
                     }
                 }
@@ -1073,7 +1076,7 @@ SMODS.Joker {
                     scalar_table = {a = og_value},
                     scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
                     scaling_message = {
-                        message = "+"..number_format(og_value).." "..localize("k_MDJ_xmult"),
+                        message = localize({ type = 'variable', key = 'k_MDJ_scaling_xmult', vars = { og_value } }),
                         colour = G.C.PAPERBACK_PINK
                     }
                 }
