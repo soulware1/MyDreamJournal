@@ -59,6 +59,7 @@ local equals_key = {
 	'set_visible_score',
 	'base_mod_plus_one_mult_then_chips'
 }
+MyDreamJournal.equals_key = equals_key
 -- slop
 local slop_key = {
 	'MDJ_amount',
@@ -84,23 +85,23 @@ function SMODS.current_mod.calculate(self, context)
 			hyperoperator_hell_is_a_real_place = {}
 		}
 		G.GAME.current_round.last_payout = to_big(0)
-		G.GAME.MDJ_electron_beam = to_big(0)
-		G.GAME.MDJ_pluschips = {}
-		G.GAME.MDJ_pluschips_mean = 0
-		G.GAME.MDJ_pluschips_mode = 0
-		G.GAME.MDJ_pluschips_median = 0
-		G.GAME.MDJ_plusmult = {}
-		G.GAME.MDJ_plusmult_mean = 0
-		G.GAME.MDJ_plusmult_mode = 0
-		G.GAME.MDJ_plusmult_median = 0
-		G.GAME.MDJ_xchips = {}
-		G.GAME.MDJ_xchips_mean = 0
-		G.GAME.MDJ_xchips_mode = 0
-		G.GAME.MDJ_xchips_median = 0
-		G.GAME.MDJ_xmult = {}
-		G.GAME.MDJ_xmult_mean = 0
-		G.GAME.MDJ_xmult_mode = 0
-		G.GAME.MDJ_xmult_median = 0
+		G.GAME.current_round.MDJ_electron_beam = to_big(0)
+		G.GAME.current_round.MDJ_pluschips = {}
+		G.GAME.current_round.MDJ_pluschips_mean = 0
+		G.GAME.current_round.MDJ_pluschips_mode = 0
+		G.GAME.current_round.MDJ_pluschips_median = 0
+		G.GAME.current_round.MDJ_plusmult = {}
+		G.GAME.current_round.MDJ_plusmult_mean = 0
+		G.GAME.current_round.MDJ_plusmult_mode = 0
+		G.GAME.current_round.MDJ_plusmult_median = 0
+		G.GAME.current_round.MDJ_xchips = {}
+		G.GAME.current_round.MDJ_xchips_mean = 0
+		G.GAME.current_round.MDJ_xchips_mode = 0
+		G.GAME.current_round.MDJ_xchips_median = 0
+		G.GAME.current_round.MDJ_xmult = {}
+		G.GAME.current_round.MDJ_xmult_mean = 0
+		G.GAME.current_round.MDJ_xmult_mode = 0
+		G.GAME.current_round.MDJ_xmult_median = 0
 	end
 	local ranks = G.GAME.current_round.MDJ_construction_jokers_ranks
 	local ranks2 = G.GAME.current_round.MDJ_construction_jokers_temp_ranks
@@ -146,13 +147,13 @@ function SMODS.current_mod.calculate(self, context)
 		local og_amount = context.MDJ_og_amount
 		local amount = context.MDJ_amount
 		if MyDreamJournal.pluschipstoxchips[key] and not equals_key[og_key] then
-			G.GAME.MDJ_pluschips[#G.GAME.MDJ_pluschips+1] = amount
+			G.GAME.current_round.MDJ_pluschips[#G.GAME.current_round.MDJ_pluschips+1] = amount
 		elseif MyDreamJournal.plusmulttoxmult[key] and not equals_key[og_key] then
-			G.GAME.MDJ_plusmult[#G.GAME.MDJ_plusmult+1] = amount
+			G.GAME.current_round.MDJ_plusmult[#G.GAME.current_round.MDJ_plusmult+1] = amount
 		elseif MyDreamJournal.xmulttoemult[key] and not equals_key[og_key] then
-			G.GAME.MDJ_xmult[#G.GAME.MDJ_xmult+1] = amount
+			G.GAME.current_round.MDJ_xmult[#G.GAME.current_round.MDJ_xmult+1] = amount
 		elseif MyDreamJournal.xchipstoechips[key] and not equals_key[og_key] then
-			G.GAME.MDJ_xchips[#G.GAME.MDJ_xchips+1] = amount
+			G.GAME.current_round.MDJ_xchips[#G.GAME.current_round.MDJ_xchips+1] = amount
 		end
 		local operation = MyDreamJournal.multmodkeys[key] or MyDreamJournal.chipmodkeys[key]
 		local op_number = MyDreamJournal.keystonumbers[operation]
@@ -164,11 +165,11 @@ function SMODS.current_mod.calculate(self, context)
 				is_hyper = true
 			end
 			if op_number ~= -1 and op_number ~= 0 then
-				op_number = G.GAME.MDJ_electron_beam/(10^(op_number+1))
+				op_number = G.GAME.current_round.MDJ_electron_beam/(10^(op_number+1))
 			elseif op_number == -1 then
-				op_number = G.GAME.MDJ_electron_beam
+				op_number = G.GAME.current_round.MDJ_electron_beam
 			elseif op_number == 0 then
-				op_number = G.GAME.MDJ_electron_beam/10
+				op_number = G.GAME.current_round.MDJ_electron_beam/10
 			end
 			if not is_hyper then
 				amount = amount + op_number

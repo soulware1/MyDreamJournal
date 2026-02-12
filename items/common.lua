@@ -589,15 +589,15 @@ SMODS.Joker {
     cost = 4,
     config = { extra = {}, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { G.GAME.MDJ_pluschips_mean or 0, G.GAME.MDJ_plusmult_mean or 0 } }
+        return { vars = { G.GAME.current_round.MDJ_pluschips_mean or 0, G.GAME.current_round.MDJ_plusmult_mean or 0 } }
     end,
     calculate = function (self, card, context)
         if context.joker_main or context.forcetrigger then
-            G.GAME.MDJ_pluschips_mean = mean(G.GAME.MDJ_pluschips)
-            G.GAME.MDJ_plusmult_mean = mean(G.GAME.MDJ_plusmult)
+            G.GAME.current_round.MDJ_pluschips_mean = mean(G.GAME.current_round.MDJ_pluschips)
+            G.GAME.current_round.MDJ_plusmult_mean = mean(G.GAME.current_round.MDJ_plusmult)
             return {
-                chips = G.GAME.MDJ_pluschips_mean,
-                mult = G.GAME.MDJ_plusmult_mean
+                chips = G.GAME.current_round.MDJ_pluschips_mean,
+                mult = G.GAME.current_round.MDJ_plusmult_mean
             }
         end
     end
@@ -616,15 +616,15 @@ SMODS.Joker {
     cost = 4,
     config = { extra = {}, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { G.GAME.MDJ_pluschips_mode or 0, G.GAME.MDJ_plusmult_mode or 0 } }
+        return { vars = { G.GAME.current_round.MDJ_pluschips_mode or 0, G.GAME.current_round.MDJ_plusmult_mode or 0 } }
     end,
     calculate = function (self, card, context)
         if context.joker_main or context.forcetrigger then
-            G.GAME.MDJ_pluschips_mode = mode(G.GAME.MDJ_pluschips)
-            G.GAME.MDJ_plusmult_mode = mode(G.GAME.MDJ_plusmult)
+            G.GAME.current_round.MDJ_pluschips_mode = mode(G.GAME.current_round.MDJ_pluschips)
+            G.GAME.current_round.MDJ_plusmult_mode = mode(G.GAME.current_round.MDJ_plusmult)
             return {
-                chips = G.GAME.MDJ_pluschips_mode,
-                mult = G.GAME.MDJ_plusmult_mode
+                chips = G.GAME.current_round.MDJ_pluschips_mode,
+                mult = G.GAME.current_round.MDJ_plusmult_mode
             }
         end
     end
@@ -644,7 +644,7 @@ local function median(set)
     if isEven then
         local m1 = set[#set / 2]
         local m2 = set[(#set / 2) + 1]
-        median = (m1+m2)
+        median = (m1+m2)/2
     elseif not isEven then
         local SepN = (#set - 1) / 2
         median = set[#set - SepN]
@@ -665,15 +665,15 @@ SMODS.Joker {
     cost = 5,
     config = { extra = {}, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { G.GAME.MDJ_pluschips_median or 0, G.GAME.MDJ_plusmult_median or 0 } }
+        return { vars = { G.GAME.current_round.MDJ_pluschips_median or 0, G.GAME.current_round.MDJ_plusmult_median or 0 } }
     end,
     calculate = function (self, card, context)
         if context.joker_main or context.forcetrigger then
-            G.GAME.MDJ_pluschips_median = median(G.GAME.MDJ_pluschips)
-            G.GAME.MDJ_plusmult_median = median(G.GAME.MDJ_plusmult)
+            G.GAME.current_round.MDJ_pluschips_median = median(G.GAME.current_round.MDJ_pluschips)
+            G.GAME.current_round.MDJ_plusmult_median = median(G.GAME.current_round.MDJ_plusmult)
             return {
-                chips = G.GAME.MDJ_pluschips_median,
-                mult = G.GAME.MDJ_plusmult_median
+                chips = G.GAME.current_round.MDJ_pluschips_median,
+                mult = G.GAME.current_round.MDJ_plusmult_median
             }
         end
     end

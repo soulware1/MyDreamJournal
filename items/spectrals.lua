@@ -13,6 +13,7 @@ SMODS.Consumable {
     soul_pos = { x = 1, y = 1, extra = { x = 2, y = 1} },
     atlas = "eplaceholder",
     discovered = true,
+    hidden = true,
     soul_set = 'Hardware',
     config = { extra = { unrare = MyDreamJournal.epic, unlegendary = MyDreamJournal.exotic, }, },
     loc_vars = function(self, info_queue, card)

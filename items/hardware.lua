@@ -283,7 +283,7 @@ SMODS.Consumable {
         return { vars = { card.ability.add, card.ability.add/10 } }
     end,
     use = function(self, card, area, copier)
-        G.GAME.MDJ_electron_beam = G.GAME.MDJ_electron_beam+card.ability.add
+        G.GAME.current_round.MDJ_electron_beam = G.GAME.current_round.MDJ_electron_beam+card.ability.add
     end,
     can_use = function(self, card)
         return true
