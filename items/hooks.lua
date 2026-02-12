@@ -59,6 +59,7 @@ local equals_key = {
 	'set_visible_score',
 	'base_mod_plus_one_mult_then_chips'
 }
+MyDreamJournal.equals_key = equals_key
 -- slop
 local slop_key = {
 	'MDJ_amount',
