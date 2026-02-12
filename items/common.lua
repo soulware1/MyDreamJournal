@@ -657,7 +657,7 @@ SMODS.Joker {
     atlas = 'placeholder',
     pos = { x = 0, y = 0 },
 	discovered = true,
-    rarity = 2,
+    rarity = 1,
 	pronouns = 'it_its',
     blueprint_compat = true,
 	perishable_compat = true,
