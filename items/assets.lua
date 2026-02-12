@@ -381,7 +381,12 @@ G.ARGS.LOC_COLOURS.MDJ_hardware = G.C.SECONDARY_SET.Hardware
 if not (SMODS.Mods["paperback"] or {}).can_load then
    G.C.PAPERBACK_PINK = HEX('FF79AD')
 end
--- loc_colour()
+G.C.MULT = G.C.MULT
+G.C.CHIPS = G.C.CHIPS
+G.ARGS.LOC_COLOURS.mult = G.C.MULT
+G.ARGS.LOC_COLOURS.chips = G.C.CHIPS
+G.ARGS.LOC_COLOURS.white = HEX("FFFFFF")
+loc_colour(G.ARGS.LOC_COLOURS)
 SMODS.Shader({ key = 'corrupted', path = 'corrupted.fs' })
 SMODS.Shader({ key = 'dark', path = 'dark.fs' })
 SMODS.Shader({ key = 'amazing', path = 'amazing.fs' })
