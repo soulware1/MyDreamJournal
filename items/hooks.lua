@@ -29,6 +29,44 @@ local all_key = {
 	percent_chips = true,
 	percent_mult = true,
 }
+-- keys that are "converted" to another key, for example digit_chips converting to chips
+local converted_keys = {
+	'digit_chips',
+	'digit_mult',
+	'sum_mult',
+	'sum_chips',
+	'sin_chips',
+	'cos_chips',
+	'sin_mult',
+	'cos_mult',
+	'percent_chips',
+	'percent_mult',
+	'secretEchips_mod',
+	'fauxEmult_mod',
+	'fauxEchip_mod'
+}
+-- keys that makes a scoring param equal to something, usually based off of the scoring param itself
+local equals_key = {
+	'base_chips',
+	'base_mult',
+	'base_sum_mult',
+	'base_sum_chips',
+	'set_mult',
+	'set_chips',
+	'set_score',
+	'set_visible_mult',
+	'set_visible_chips',
+	'set_visible_score',
+	'base_mod_plus_one_mult_then_chips'
+}
+-- slop
+local slop_key = {
+	'MDJ_amount',
+	'MDJ_key',
+	'MDJ_og_key',
+	'MDJ_og_amount',
+	'from_mindware_lol'
+}
 function SMODS.current_mod.calculate(self, context)
 	-- setup
 	if not G.GAME.current_round.MDJ_construction_jokers_ranks and not G.GAME.current_round.MDJ_construction_jokers_temp_ranks and not G.GAME.current_round.MDJ_construction_jokers_displayed_ranks and not G.GAME.current_round.MDJ_construction_jokers_first_hand then
@@ -47,6 +85,22 @@ function SMODS.current_mod.calculate(self, context)
 		}
 		G.GAME.current_round.last_payout = to_big(0)
 		G.GAME.MDJ_electron_beam = to_big(0)
+		G.GAME.MDJ_pluschips = {}
+		G.GAME.MDJ_pluschips_mean = 0
+		G.GAME.MDJ_pluschips_mode = 0
+		G.GAME.MDJ_pluschips_median = 0
+		G.GAME.MDJ_plusmult = {}
+		G.GAME.MDJ_plusmult_mean = 0
+		G.GAME.MDJ_plusmult_mode = 0
+		G.GAME.MDJ_plusmult_median = 0
+		G.GAME.MDJ_xchips = {}
+		G.GAME.MDJ_xchips_mean = 0
+		G.GAME.MDJ_xchips_mode = 0
+		G.GAME.MDJ_xchips_median = 0
+		G.GAME.MDJ_xmult = {}
+		G.GAME.MDJ_xmult_mean = 0
+		G.GAME.MDJ_xmult_mode = 0
+		G.GAME.MDJ_xmult_median = 0
 	end
 	local ranks = G.GAME.current_round.MDJ_construction_jokers_ranks
 	local ranks2 = G.GAME.current_round.MDJ_construction_jokers_temp_ranks
@@ -91,6 +145,15 @@ function SMODS.current_mod.calculate(self, context)
 		local og_key = context.MDJ_og_key
 		local og_amount = context.MDJ_og_amount
 		local amount = context.MDJ_amount
+		if MyDreamJournal.pluschipstoxchips[key] and not equals_key[og_key] then
+			G.GAME.MDJ_pluschips[#G.GAME.MDJ_pluschips+1] = amount
+		elseif MyDreamJournal.plusmulttoxmult[key] and not equals_key[og_key] then
+			G.GAME.MDJ_plusmult[#G.GAME.MDJ_plusmult+1] = amount
+		elseif MyDreamJournal.xmulttoemult[key] and not equals_key[og_key] then
+			G.GAME.MDJ_xmult[#G.GAME.MDJ_xmult+1] = amount
+		elseif MyDreamJournal.xchipstoechips[key] and not equals_key[og_key] then
+			G.GAME.MDJ_xchips[#G.GAME.MDJ_xchips+1] = amount
+		end
 		local operation = MyDreamJournal.multmodkeys[key] or MyDreamJournal.chipmodkeys[key]
 		local op_number = MyDreamJournal.keystonumbers[operation]
 		if operation and op_number then
@@ -331,44 +394,6 @@ if not (SMODS.Mods["Astronomica"] and SMODS.Mods["Astronomica"].can_load) then
 		table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 	end
 end
--- keys that are "converted" to another key, for example digit_chips converting to chips
-local converted_keys = {
-	'digit_chips',
-	'digit_mult',
-	'sum_mult',
-	'sum_chips',
-	'sin_chips',
-	'cos_chips',
-	'sin_mult',
-	'cos_mult',
-	'percent_chips',
-	'percent_mult',
-	'secretEchips_mod',
-	'fauxEmult_mod',
-	'fauxEchip_mod'
-}
--- keys that makes a scoring param equal to something, usually based off of the scoring param itself
-local equals_key = {
-	'base_chips',
-	'base_mult',
-	'base_sum_mult',
-	'base_sum_chips',
-	'set_mult',
-	'set_chips',
-	'set_score',
-	'set_visible_mult',
-	'set_visible_chips',
-	'set_visible_score',
-	'base_mod_plus_one_mult_then_chips'
-}
--- slop
-local slop_key = {
-	'MDJ_amount',
-	'MDJ_key',
-	'MDJ_og_key',
-	'MDJ_og_amount',
-	'from_mindware_lol'
-}
 for _, v in ipairs(converted_keys) do
 	table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys or {}, v)
 end
@@ -623,6 +648,12 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
 	local theres_a_brainware = next(SMODS.find_card("j_MDJ_brainware"))
 	local calls = SMODS.find_card("j_MDJ_callandresponse")
+	if next(calls) and not effect.response and key and MyDreamJournal.scoreparammodkeys[key] then
+		effect.response = true
+		for _, v in ipairs(calls) do
+			SMODS.calculate_individual_effect(effect, v, key, amount, from_edition)
+		end
+	end
 	local is_demicolon = nil
 	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
 	if scored_card and scored_card.config and scored_card.config.center then
@@ -797,12 +828,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		amount = new_amount
 		key = swapped
 		::skip::
-	end
-	if next(calls) and not effect.response and key and MyDreamJournal.scoreparammodkeys[key] then
-		effect.response = true
-		for _, v in ipairs(calls) do
-			SMODS.calculate_individual_effect(effect, v, key, amount, from_edition)
-		end
 	end
 	if key and amount and key ~= 'MDJ_key' and key ~= 'MDJ_amount' and not effect.no_alter then
 		local alter = SMODS.calculate_context({MDJ_mod_key_and_amount = true, MDJ_amount = amount, MDJ_key = key, MDJ_og_key = og_key, MDJ_og_amount = og_amount, card = scored_card, from_mindware_lol = effect.from_mindware, demicolon_racism = is_demicolon})

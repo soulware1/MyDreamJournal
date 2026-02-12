@@ -549,3 +549,132 @@ SMODS.Joker {
 		end
     end,
 }
+
+local function mean(tab)
+    local mean = 0
+    local tabamount = 0
+    for _, v in pairs(tab) do
+        mean = mean+v
+        tabamount = tabamount+1
+    end
+    return mean/tabamount
+end
+
+local function mode(set) 
+	local counts = {}
+	for _,v in pairs(set) do
+		counts[v] = counts[v] and counts[v] + 1 or 1
+	end
+	local mode = {}
+	local modeCount = 0
+	for k,v in pairs(counts) do
+		if v > modeCount then
+			modeCount = v
+			mode = k
+		end
+	end
+	return mode
+end
+
+SMODS.Joker {
+    key = "mean",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 1,
+	pronouns = 'it_its',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 4,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { G.GAME.MDJ_pluschips_mean or 0, G.GAME.MDJ_plusmult_mean or 0 } }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            G.GAME.MDJ_pluschips_mean = mean(G.GAME.MDJ_pluschips)
+            G.GAME.MDJ_plusmult_mean = mean(G.GAME.MDJ_plusmult)
+            return {
+                chips = G.GAME.MDJ_pluschips_mean,
+                mult = G.GAME.MDJ_plusmult_mean
+            }
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "mode",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 1,
+	pronouns = 'it_its',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 4,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { G.GAME.MDJ_pluschips_mode or 0, G.GAME.MDJ_plusmult_mode or 0 } }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            G.GAME.MDJ_pluschips_mode = mode(G.GAME.MDJ_pluschips)
+            G.GAME.MDJ_plusmult_mode = mode(G.GAME.MDJ_plusmult)
+            return {
+                chips = G.GAME.MDJ_pluschips_mode,
+                mult = G.GAME.MDJ_plusmult_mode
+            }
+        end
+    end
+}
+
+local function median(set)
+    table.sort(set, function(a, b)
+        return a < b
+    end) 
+    local isEven
+	local median
+    if #set % 2 == 0 then
+        isEven = true
+    else
+        isEven = false
+    end
+    if isEven then
+        local m1 = set[#set / 2]
+        local m2 = set[(#set / 2) + 1]
+        median = (m1+m2)
+    elseif not isEven then
+        local SepN = (#set - 1) / 2
+        median = set[#set - SepN]
+    end
+	return median
+end
+
+SMODS.Joker {
+    key = "median",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	pronouns = 'it_its',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 5,
+    config = { extra = {}, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { G.GAME.MDJ_pluschips_median or 0, G.GAME.MDJ_plusmult_median or 0 } }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            G.GAME.MDJ_pluschips_median = median(G.GAME.MDJ_pluschips)
+            G.GAME.MDJ_plusmult_median = median(G.GAME.MDJ_plusmult)
+            return {
+                chips = G.GAME.MDJ_pluschips_median,
+                mult = G.GAME.MDJ_plusmult_median
+            }
+        end
+    end
+}

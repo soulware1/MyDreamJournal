@@ -219,7 +219,7 @@ SMODS.Joker {
     eternal_compat = true,
     demicolon_compat = true,
     cost = 20,
-    config = { extra = { per = 0.01 }},
+    config = { extra = { per = 0.0025 }},
     loc_vars = function(self, info_queue, card)
         local loc_mult = ' ' .. localize('k_chips') .. localize("k_MDJ_right_parenthisis")
         main_start = {
@@ -233,7 +233,7 @@ SMODS.Joker {
                 end, }), ref_value = "doesnt matter"}}, colours = { G.C.BLUE }, scale = 0.32,}) } },
                 { n = G.UIT.T, config = { text = ' ' .. localize('k_chips')..localize("k_MDJ_right_parenthisis"), colour = G.C.UI.TEXT_DARK, scale = 0.32 } },
             }
-        return { vars = { card.ability.extra.per }, main_end = main_start }
+        return { vars = { tostring(card.ability.extra.per) }, main_end = main_start }
     end,
 	calculate = function(self, card, context)
 		if context.joker_main or context.forcetrigger then

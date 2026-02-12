@@ -1173,11 +1173,11 @@ SMODS.Joker {
                 mult = (mult or 0)+card.ability.extra.mult
             end
             if context.other_card:is_suit("Diamonds") then
-                xchips = 1
+                xchips = xchips or 1
                 xchips = xchips*card.ability.extra.xamount
             end
             if context.other_card:is_suit("Hearts") then
-                xmult = 1
+                xmult = xmult or 1
                 xmult = xmult*card.ability.extra.xamount
             end
             return {
@@ -1197,3 +1197,70 @@ SMODS.Joker {
         end
     end,
 }
+
+SMODS.Joker {
+    key = "achilles",
+    discovered = true,
+    blueprint_compat = true,
+    rarity = 3,
+    cost = 5,
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+    pronouns = "they_them",
+    config = { extra = { reduce = 20, triggered = false } },
+    loc_vars = function(self, info_queue, card)
+        local idol_card = G.GAME.current_round.achilles_card or { rank = 'Ace', suit = 'Spades' }
+        return { vars = { card.ability.extra.reduce, localize(idol_card.rank, 'ranks'), localize(idol_card.suit, 'suits_plural'), colours = { G.C.SUITS[idol_card.suit] } } }
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.cardarea == G.play and context.other_card:get_id() == G.GAME.current_round.achilles_card.id and context.other_card:is_suit(G.GAME.current_round.achilles_card.suit) and not card.ability.extra.triggered then
+            card.ability.extra.triggered = true
+            local final_chips = (G.GAME.blind.chips / 100) * (100 - card.ability.extra.reduce)
+            local chip_mod -- iterate over ~120 ticks
+            if type(G.GAME.blind.chips) ~= 'table' then
+                chip_mod = math.ceil((G.GAME.blind.chips - final_chips) / 120)
+            else
+                chip_mod = ((G.GAME.blind.chips - final_chips) / 120):ceil()
+            end
+            local step = 0
+            G.E_MANAGER:add_event(Event({trigger = 'after', blocking = true, func = function()
+                G.GAME.blind:disable()
+                G.GAME.blind.chips = G.GAME.blind.chips - G.SETTINGS.GAMESPEED * chip_mod
+                if G.GAME.blind.chips > final_chips then
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    if step % 5 == 0 then
+                        play_sound('chips1', math.max(1.0 - (step * 0.005), 0.001))
+                    end
+                    step = step + 1
+                else
+                    G.GAME.blind.chips = final_chips
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    return true
+                end
+            end}))
+        end
+        if context.after then
+            card.ability.extra.triggered = false
+        end
+    end,
+}
+
+local function reset_achilles()
+    G.GAME.current_round.achilles_card = { rank = 'Ace', suit = 'Spades' }
+    local valid_idol_cards = {}
+    for _, playing_card in ipairs(G.playing_cards) do
+        if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
+            valid_idol_cards[#valid_idol_cards + 1] = playing_card
+        end
+    end
+    local idol_card = pseudorandom_element(valid_idol_cards, 'achilles_card' .. G.GAME.round_resets.ante)
+    if idol_card then
+        G.GAME.current_round.achilles_card.rank = idol_card.base.value
+        G.GAME.current_round.achilles_card.suit = idol_card.base.suit
+        G.GAME.current_round.achilles_card.id = idol_card.base.id
+    end
+end
+
+function SMODS.current_mod.reset_game_globals(run_start)
+    reset_achilles()
+end

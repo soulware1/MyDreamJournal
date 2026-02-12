@@ -3,7 +3,7 @@
 	"name": "My Dream Journal",
 	"display_name": "My Dream Journal",
 	"author": ["soulware"],
-	"description": "Idk :P also thanks to snonc41 for the construction joker idea",
+	"description": "Idk :P also thanks to snonc41 for the construction joker idea \n as seen on twitch.tv",
 	"prefix": "MDJ",
 	"main_file": "MyDreamJournal.lua",
 	"priority": 2147483648,

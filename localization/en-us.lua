@@ -1075,6 +1075,70 @@ return {
                     "{C:inactive,s:0.9}N being 10^ the used operation{}"
                 }
             },
+            j_MDJ_achilles = {
+                name = {
+                    "Achilles",
+                    '{s:0.75}By gnirob',
+                },
+                text = {
+                    "If played hand contains",
+                    "a {C:attention}#2#{} of {V:1}#3#{} disables the",
+                    "current {C:attention}Boss blind{} and",
+                    "reduces {C:attention}Blind Requirement{} by {X:attention,C:white}#1#%{}",
+                    "{s:0.8}Card changes every round",
+                },
+            },
+            j_MDJ_mean = {
+                name = 'Mean',
+                text = {
+                    {
+                        "Adds {C:chips}Chips{} based off",
+                        "of the mean of",
+                        "all {C:chips}+Chips{} triggers",
+                        "(Currently {C:chips}+#1#{} Chips)"
+                    },
+                    {
+                        "Adds {C:mult}Mult{} based off",
+                        "of the mean of",
+                        "all {C:mult}+Mult{} triggers",
+                        "(Currently {C:mult}+#2#{} Mult)"
+                    },
+                }
+            },
+            j_MDJ_mode = {
+                name = 'Mode',
+                text = {
+                    {
+                        "Adds {C:chips}Chips{} based off",
+                        "of the mode of",
+                        "all {C:chips}+Chips{} triggers",
+                        "(Currently {C:chips}+#1#{} Chips)"
+                    },
+                    {
+                        "Adds {C:mult}Mult{} based off",
+                        "of the mode of",
+                        "all {C:mult}+Mult{} triggers",
+                        "(Currently {C:mult}+#2#{} Mult)"
+                    },
+                }
+            },
+            j_MDJ_median = {
+                name = 'Median',
+                text = {
+                    {
+                        "Adds {C:chips}Chips{} based off",
+                        "of the median of",
+                        "all {C:chips}+Chips{} triggers",
+                        "(Currently {C:chips}+#1#{} Chips)"
+                    },
+                    {
+                        "Adds {C:mult}Mult{} based off",
+                        "of the median of",
+                        "all {C:mult}+Mult{} triggers",
+                        "(Currently {C:mult}+#2#{} Mult)"
+                    },
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
