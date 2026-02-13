@@ -1517,6 +1517,8 @@ return {
             k_MDJ_left_parenthisis = "(",
             k_MDJ_right_parenthisis = ")",
             k_MDJ_currently = "Currently",
+        },
+        v_dictionary = {
             k_MDJ_scaling_xmult = "+#1# XMult",
             k_MDJ_scaling_chips = "+#1# Chips",
             k_MDJ_scaling_xchips = "+#1# XChips",
