@@ -1139,6 +1139,73 @@ return {
                     },
                 }
             },
+            j_MDJ_printed = {
+                name = 'Printed Joker',
+                text = {
+                   {
+                    "When {C:chips}+Chips{} is triggered",
+                    "this Joker gains {C:chips}+#3#{} Chips",
+                    "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
+                   },
+                   {
+                    "When {C:mult}+Mult{} is triggered",
+                    "this Joker gains {C:mult}+#4#{} Mult",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+                   },
+                }
+            },
+            j_MDJ_illuminati = {
+                name = 'The Illuminati',
+                text = {
+                   {
+                    "When {C:chips}+Chips{} is triggered",
+                    "and it contained {C:attention}3{} as a digit",
+                    "this Joker gains {C:chips}+#3#{} Chips",
+                    "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
+                   },
+                   {
+                    "When {C:mult}+Mult{} is triggered",
+                    "and it contained {C:attention}3{} as a digit",
+                    "this Joker gains {C:mult}+#3#{} Mult",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+                   },
+                }
+            },
+            j_MDJ_stuck_in_a_loop = {
+                name = {
+                    "Stuck Inside a Loop",
+                    '{s:0.75}By pteracotta',
+                },
+                text = {
+                    "On {C:attention}first hand{} of round",
+                    "{C:red}spend{} all hands and {C:attention}retrigger",
+                    "{C:attention}all{} cards based on how many were {C:attention}spent"
+                }
+            },
+            j_MDJ_petervsdeadpool = {
+                name = {
+                    "Deadpool vs Peter Griffin",
+                    '{s:0.75}By Fightmarker',
+                },
+                text = {
+                   {
+                    "This Joker gains a random",
+                    "{C:attention}bonus{} when triggered"
+                   },
+                   {
+                    "(Currently {C:mult}+#1#{} Mult)",
+                    "(Currently {C:chips}+#2#{} Chips)",
+                    "(Currently {X:mult,C:white}X#3#{} Mult)",
+                    "(Currently {X:chips,C:white}X#4#{} Chips)",
+                    "(Currently {X:mult,C:white}+#5#{} +Mult)",
+                    "(Currently {X:chips,C:white}+#6#{} +Chips)",
+                    "(Currently {X:mult,C:white}+#7#{} XMult)",
+                    "(Currently {X:chips,C:white}+#8#{} XChips)",
+                    "(Currently converts Mult to {C:mult}Base #9#{})",
+                    "(Currently converts Chips to {C:chips}Base #10#{})",
+                   },
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -1377,6 +1444,23 @@ return {
                 },
             },
         },
+        Software = {
+			c_MDJ_software_pixel = {
+				name = "Pixel",
+				text = {
+					"Apply an {C:dark_edition}Ouroboros{} sticker to",
+					"{C:attention}#1#{} selected Joker"
+				}
+			},
+            c_MDJ_software_os = {
+                name = "Operating System",
+                text = {
+                    "Creates a card from",
+                    "the {C:attention}last used{}",
+                    "consumable's set"
+                }
+            },
+        },
         Enhanced = {
             m_MDJ_envelope = {
                 name = "Envelope Card",
@@ -1394,7 +1478,6 @@ return {
                     "Idk :P also thanks to snonc41 for the construction joker idea",
                 }
             },
-
         },
         Tag = {
             tag_MDJ_music_top_up = {
@@ -1422,6 +1505,22 @@ return {
                     "will choose this Joker.",
                 },
             },
+            MDJ_hyde = {
+                name = "Marked",
+                text = {
+                    "This card can't",
+                    "be targetted by",
+                    "{C:attention}The Mr. Hyde Jive"
+                },
+            },
+            MDJ_ouroboros = {
+                name = "Ouroboros",
+                text = {
+                    "Recreate then destroy",
+                    "this Joker at the end",
+                    "of the round"
+                },
+            },
             MDJ_scoreops = {
                 name = "Score Operators",
                 text = {
@@ -1429,6 +1528,13 @@ return {
                     "+ScoreOp = {C:mult}+Mult{}, {C:chips}+Chips{}, {C:purple}+Score{} etc",
                     "XScoreOp = {X:mult,C:white}XMult{}, {X:chips,C:white}XChips{}, {X:purple,C:white}XScore{}, {C:gold}+Ascension Power*{} etc",
                     "Higher ScoreOps = {C:attention}Exponentiation{} and beyond"
+                },
+            },
+            MDJ_inverting = {
+                name = "Inverted Ranks Example",
+                text = {
+                    "Ace -> 2",
+                    "King -> 3"
                 },
             },
             MDJ_heximal_slop = {
@@ -1517,11 +1623,22 @@ return {
             k_MDJ_left_parenthisis = "(",
             k_MDJ_right_parenthisis = ")",
             k_MDJ_currently = "Currently",
+            b_software_cards = "Software Cards",
+            k_software = "Software",
+            k_MDJ_software_pack = "Software",
+            k_MDJ_ouroboros = "Ouroboros",
+            k_MDJ_attention = "Attention"
         },
         v_dictionary = {
             k_MDJ_scaling_xmult = "+#1# XMult",
             k_MDJ_scaling_chips = "+#1# Chips",
+            k_MDJ_scaling_pchips = "+#1# +Chips",
+            k_MDJ_scaling_pmult = "+#1# +Mult",
+            k_MDJ_scaling_basemult = "+#1# Base Mult",
+            k_MDJ_scaling_basechips = "+#1# Base Mult",
             k_MDJ_scaling_xchips = "+#1# XChips",
+            k_MDJ_scaling_pxchips = "+#1# to all XChips",
+            k_MDJ_scaling_pxmult = "+#1# to all XMult",
         },
         labels = {
             MDJ_corrupted = "Corrupted",
@@ -1531,6 +1648,7 @@ return {
             MDJ_veryrare = "Unrare",
             MDJ_verylegendary = "Unlegendary",
             hardware = "Hardware",
+            software = "Software",
             MDJ_left_parenthisis = "(",
             MDJ_right_parenthisis = ")",
             MDJ_currently = "Currently"

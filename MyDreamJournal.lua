@@ -8,6 +8,7 @@
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0905a]
 SMODS.current_mod.optional_features = {
     retrigger_joker = true,
+    post_trigger = true,
 }
 
 

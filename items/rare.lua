@@ -374,7 +374,7 @@ SMODS.Joker {
         return { vars = {} }
     end,
 	calculate = function(self, card, context)
-		if context.retrigger_joker_check and context.other_card ~= self then
+		if context.retrigger_joker_check and context.other_card ~= card then
             local other_joker = nil
             for i = 1, #G.jokers.cards do
                 if G.jokers.cards[i] == card then other_joker = G.jokers.cards[i + 1] end

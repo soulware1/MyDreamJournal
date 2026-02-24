@@ -939,12 +939,12 @@ SMODS.Joker {
     cost = 6,
     config = { extra = { rep = 2 }, },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.repetitions } }
+        return { vars = { card.ability.extra.rep } }
     end,
     calculate = function(self, card, context)
         if context.repetition and context.other_card:get_id() == 12 then
             return {
-                repetitions = card.ability.extra.repetitions
+                repetitions = card.ability.extra.rep
             }
         end
     end,
@@ -1136,3 +1136,230 @@ SMODS.Joker {
     end,
 }
 
+SMODS.Joker {
+    key = "printed",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	pronouns = 'they_them',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 5,
+    config = { extra = { chips = 0, mult = 0, chipgain = 1.2, multgain = 0.5 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.chips, card.ability.extra.mult, card.ability.extra.chipgain, card.ability.extra.multgain } }
+    end,
+    calculate = function(self, card, context)
+        if ( context.MDJ_mod_key_and_amount or context.forcetrigger ) and not context.blueprint_card then
+			local key = context.MDJ_key
+			if not key or MyDreamJournal.pluschipstoxchips[key] then
+				SMODS.scale_card(
+					card,
+					{
+						ref_table = card.ability.extra, -- the table that has the value you are changing in
+						ref_value = "chips", -- the key to the value in the ref_table
+						scalar_value = "chipgain", -- the key to the value to scale by, in the ref_table by default
+						scaling_message = {
+							message = localize({ type = 'variable', key = 'k_MDJ_scaling_chips', vars = { card.ability.extra.gain } }),
+							colour = G.C.CHIPS
+						}
+					}
+				)
+			end
+			if not key or MyDreamJournal.plusmulttoxmult[key] then
+				SMODS.scale_card(
+					card,
+					{
+						ref_table = card.ability.extra, -- the table that has the value you are changing in
+						ref_value = "mult", -- the key to the value in the ref_table
+						scalar_value = "multgain", -- the key to the value to scale by, in the ref_table by default
+						scaling_message = {
+							message = localize({ type = 'variable', key = 'a_mult', vars = { card.ability.extra.gain } }),
+							colour = G.C.CHIPS
+						}
+					}
+				)
+			end
+		end
+		if context.joker_main or context.forcetrigger then
+			return {
+				chips = card.ability.extra.chips,
+				mult = card.ability.extra.mult
+			}
+		end
+    end,
+}
+
+SMODS.Joker {
+    key = "illuminati",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	pronouns = 'they_them',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 5,
+    config = { extra = { chips = 0, mult = 0, gain = 3 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.chips, card.ability.extra.mult, card.ability.extra.gain } }
+    end,
+    calculate = function(self, card, context)
+        if ( context.MDJ_mod_key_and_amount or context.forcetrigger ) and not context.blueprint_card then
+			local key = context.MDJ_key
+			local amount = context.MDJ_amount
+			if ( not key and not amount ) or MyDreamJournal.pluschipstoxchips[key] and string.find(number_format(amount), "3") then
+				SMODS.scale_card(
+					card,
+					{
+						ref_table = card.ability.extra, -- the table that has the value you are changing in
+						ref_value = "chips", -- the key to the value in the ref_table
+						scalar_value = "gain", -- the key to the value to scale by, in the ref_table by default
+						scaling_message = {
+							message = localize({ type = 'variable', key = 'k_MDJ_scaling_chips', vars = { card.ability.extra.gain } }),
+							colour = G.C.CHIPS
+						}
+					}
+				)
+			end
+			if ( not key and not amount ) or MyDreamJournal.plusmulttoxmult[key] and string.find(number_format(amount), "3") then
+				SMODS.scale_card(
+					card,
+					{
+						ref_table = card.ability.extra, -- the table that has the value you are changing in
+						ref_value = "mult", -- the key to the value in the ref_table
+						scalar_value = "gain", -- the key to the value to scale by, in the ref_table by default
+						scaling_message = {
+							message = localize({ type = 'variable', key = 'a_mult', vars = { card.ability.extra.gain } }),
+							colour = G.C.CHIPS
+						}
+					}
+				)
+			end
+		end
+		if context.joker_main or context.forcetrigger then
+			return {
+				chips = card.ability.extra.chips,
+				mult = card.ability.extra.mult
+			}
+		end
+    end,
+}
+
+SMODS.Joker {
+    key = "petervsdeadpool",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 2,
+	pronouns = 'they_them',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 6,
+    config = { extra = {
+		mult = 0,
+		chips = 0,
+		xmult = 1,
+		xchips = 1,
+		pmult = 0,
+		pchips = 0,
+		pxmult = 0,
+		pxchips = 0,
+		basemult = 10,
+		basechips = 10,
+		mingain = 1,
+		maxgain = 5,
+		randomtable = {
+			"mult", "chips", "xmult",
+			"xchips", "pmult", "pchips",
+			"pxmult", "pxchips", "basemult",
+			"basechips"
+		},
+		divideby10 = {
+			xchips = 1,
+			xmult = 1,
+			pmult = 1,
+			pchips = 1
+		},
+		chipstable = {
+			chips = 1,
+			xchips = 1,
+			pchips = 1,
+			pxchips = 1,
+			basechips = 1
+		}
+	}, },
+    loc_vars = function(self, info_queue, card)
+		local sh = card.ability.extra
+        return { vars = {
+			sh.mult, sh.chips, sh.xmult,
+			sh.xchips, sh.pmult, sh.pchips,
+			sh.pxmult, sh.pxchips, sh.basemult,
+			sh.basechips
+		} }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+			if not context.blueprint_card then
+				local randomkey = pseudorandom_element(card.ability.extra.randomtable, pseudoseed("peter"))
+				local randomvalue = pseudorandom(pseudoseed("deadpool"), math.floor(card.ability.extra.mingain), math.ceil(card.ability.extra.maxgain))
+				if randomkey == "basemult" or randomkey == "basechips" then
+					randomvalue = 1
+				elseif card.ability.extra.divideby10[randomkey] then
+					randomvalue = randomvalue/10
+				elseif randomkey == "pxmult" or randomkey == "pxchips" then
+					randomvalue = randomvalue/100
+				end
+				SMODS.scale_card(
+					card,
+					{
+						ref_table = card.ability.extra, -- the table that has the value you are changing in
+						ref_value = randomkey, -- the key to the value in the ref_table
+						scalar_table = {a = randomvalue},
+						scalar_value = "a", -- the key to the value to scale by, in the ref_table by default
+						scaling_message = {
+							message = localize({ type = 'variable', key = randomkey == "mult" and 'a_mult' or "k_MDJ_scaling_"..randomkey, vars = { randomvalue } }),
+							colour = card.ability.extra.chipstable[randomkey] and G.C.CHIPS or G.C.MULT
+						}
+					}
+				)
+			end
+			return {
+				mult = card.ability.extra.mult,
+				chips = card.ability.extra.chips,
+				xmult = card.ability.extra.xmult,
+				xchips = card.ability.extra.xchips,
+				base_mult = card.ability.extra.basemult,
+				base_chips = card.ability.extra.basechips
+			}
+		end
+		if context.MDJ_mod_key_and_amount then
+			local amount = context.MDJ_amount
+			local key = context.MDJ_key
+			if MyDreamJournal.plusmulttoxmult[key] then
+				return {
+					MDJ_amount = context.MDJ_amount+card.ability.extra.pmult
+				}
+			end
+			if MyDreamJournal.pluschipstoxchips[key] then
+				return {
+					MDJ_amount = context.MDJ_amount+card.ability.extra.pchips
+				}
+			end
+			if MyDreamJournal.xmulttoemult[key] then
+				return {
+					MDJ_amount = context.MDJ_amount+card.ability.extra.pxmult
+				}
+			end
+			if MyDreamJournal.xchipstoechips[key] then
+				return {
+					MDJ_amount = context.MDJ_amount+card.ability.extra.pxchips
+				}
+			end
+		end
+    end,
+}

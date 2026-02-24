@@ -20,3 +20,16 @@ function pseudorandom_element(table, ...)
     end
     return randompick(table, ...)
 end
+
+SMODS.Sticker {
+    key = "hyde",
+    badge_colour = HEX('6432C8'),
+    atlas = "stickers",
+    pos = { x = 0, y = 1 },
+    should_apply = function(self, card, center, area, bypass_roll)
+        return false
+    end,
+    apply = function(self,card,val)
+        card.ability.MDJ_hyde = true
+    end,
+}

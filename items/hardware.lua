@@ -4,7 +4,7 @@ SMODS.ConsumableType{
     secondary_colour = G.C.SECONDARY_SET.Hardware,
     collection_rows = { 4, 4 },
     shop_rate = 0,
-    default = "c_akyrs_replicant_music_streaming"
+    default = "c_MDJ_hardware_motherboard"
 }
 
 SMODS.UndiscoveredSprite{

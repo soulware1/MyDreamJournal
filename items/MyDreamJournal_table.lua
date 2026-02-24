@@ -256,6 +256,18 @@ MyDreamJournal.specilscoreparammodkeys = {
 	['fauxEmult_mod'] = 'expo', ['fauxEchip_mod'] = 'expo',
 }
 
+MyDreamJournal.eternalstickers = {
+	"unik_decaying",
+	"entr_aleph",
+	"cry_absolute",
+	"payasaka_delivered",
+	"payasaka_delivery",
+	"payasaka_warranty",
+	"payasaka_sunset",
+	"payasaka_sunset",
+	"GSPhanta_sleepy"
+}
+
 MyDreamJournal.otherscoremodkeys = {
 	['digit_mult'] = 'add',
     ['digit_chips'] = 'add',

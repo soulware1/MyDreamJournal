@@ -640,41 +640,22 @@ function SMODS.debuff_card(card, debuff, source)
 	end
 	return other_debuff_hook(card, debuff, source)
 end
-
-
-local calcindiveffectref = SMODS.calculate_individual_effect
+-- hooks for this mod's keys
+local keyhook = SMODS.calculate_individual_effect
 SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
-	local og_key = key
-	local og_amount = amount
-	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
-	local theres_a_brainware = next(SMODS.find_card("j_MDJ_brainware"))
-	local calls = SMODS.find_card("j_MDJ_callandresponse")
-	if next(calls) and not effect.response and key and MyDreamJournal.scoreparammodkeys[key] then
-		effect.response = true
-		for _, v in ipairs(calls) do
-			SMODS.calculate_individual_effect(effect, v, key, amount, from_edition)
-		end
-	end
-	local is_demicolon = nil
-	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
-	if scored_card and scored_card.config and scored_card.config.center then
-		is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
-	end
 	if key == 'set_mult' then
-		local mult = SMODS.Scoring_Parameters["mult"]
-		amount = SetDigits(mult.current, amount)-mult.current
-		key = "mult_mod"
+		mult = mod_mult(SetDigits(mult, amount))
 		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = "..mult.current, G.C.RED)
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = "..SetDigits(mult, amount), G.C.RED)
 		end
+		return true
 	end
 	if key == 'set_chips' then
-		local chips = SMODS.Scoring_Parameters["chips"]
-		amount = SetDigits(chips.current, amount)-chips.current
-		key = "chip_mod"
+		hand_chips = mod_chips(SetDigits(hand_chips, amount))
 		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = "..chips.current, G.C.BLUE)
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = "..SetDigits(hand_chips, amount), G.C.BLUE)
 		end
+		return true
 	end
 	if key == 'set_score' then
 		local score = SetDigits(G.GAME.chips, amount)
@@ -682,7 +663,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			func = function()
 				G.GAME.chips = score
 				G.HUD:get_UIE_by_ID('chip_UI_count'):juice_up(0.3, 0.3)
-
 				return true
 			end
 		}))
@@ -692,20 +672,22 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		return true
 	end
 	if key == 'set_visible_mult' then
-		local mult = SMODS.Scoring_Parameters["mult"]
-		amount = SetVisibleDigits(mult.current, amount)-mult.current
-		key = "mult_mod"
+		local mults = SMODS.Scoring_Parameters["mult"]
+		amount = SetVisibleDigits(mults.current, amount)
+		mult = mod_mult(amount)
 		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = "..mult.current, G.C.RED)
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = "..mults.current, G.C.RED)
 		end
+		return true
 	end
 	if key == 'set_visible_chips' then
 		local chips = SMODS.Scoring_Parameters["chips"]
-		amount = SetVisibleDigits(chips.current, amount)-chips.current
-		key = "chip_mod"
+		amount = SetVisibleDigits(chips.current, amount)
+		hand_chips = mod_chips(amount)
 		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = "..chips.current, G.C.BLUE)
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = "..amount, G.C.BLUE)
 		end
+		return true
 	end
 	if key == 'set_visible_score' then
 		local score = SetVisibleDigits(G.GAME.chips, amount)
@@ -713,7 +695,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			func = function()
 				G.GAME.chips = score
 				G.HUD:get_UIE_by_ID('chip_UI_count'):juice_up(0.3, 0.3)
-
 				return true
 			end
 		}))
@@ -765,20 +746,22 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		amount = to_big(math.cos(to_number(SMODS.Scoring_Parameters.mult.current % (2*math.pi)))+amount)
 	end
 	if key == 'percent_mult' then
-		local mult = SMODS.Scoring_Parameters["mult"]
+		local mults = SMODS.Scoring_Parameters["mult"]
+		amount = mults.current+mults.current*(amount/100)
+		mult = mod_mult(mults.current+amount)
 		if not Talisman or not Talisman.config_file.disable_anims then
 			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "+"..amount.."% Mult", G.C.RED)
 		end
-		amount = (mult.current+mult.current*(amount/100))/mult.current
-		key = "Xmult_mod"
+		return true
 	end
 	if key == 'percent_chips' then
 		local chips = SMODS.Scoring_Parameters["chips"]
+		amount = chips.current+chips.current*(amount/100)
+		hand_chips = mod_chips(hand_chips+amount)
 		if not Talisman or not Talisman.config_file.disable_anims then
 			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "+"..amount.."%", G.C.BLUE)
 		end
-		amount = (chips.current+chips.current*(amount/100))/chips.current
-		key = "Xchip_mod"
+		return true
 	end
 	if not (SMODS.Mods["Astronomica"] and SMODS.Mods["Astronomica"].can_load) then
 		if (key == 'eq_score') then
@@ -796,6 +779,115 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			}))
 			return true
 		end
+	end
+-- add in the equals if no entropy :sob:
+	if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
+		if (key == 'eq_mult' or key == 'Eqmult_mod') then
+			mult = mod_mult(amount)
+			if not Talisman or not Talisman.config_file.disable_anims then
+				MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = "..amount, G.C.RED)
+			end
+			return true
+		end
+		if (key == 'eq_chips' or key == 'Eqchips_mod') then
+			hand_chips = mod_chips(amount)
+			if not Talisman or not Talisman.config_file.disable_anims then
+				MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = "..amount, G.C.BLUE)
+			end
+			return true
+		end
+	end
+	if key == 'base_mult' then
+		local mults = SMODS.Scoring_Parameters["mult"]
+		amount = math.floor(amount+0.5)
+		local formeramount = amount
+		if amount ~= 10 then
+			amount = Base10_to_base_less_then_10(mults.current, amount)
+			mult = mod_mult(amount)
+		end
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..formeramount, G.C.RED)
+		end
+		return true
+	end
+	if key == 'base_chips' then
+		local chips = SMODS.Scoring_Parameters["chips"]
+		amount = math.floor(amount+0.5)
+		local formeramount = amount
+		if amount ~= 10 then
+			amount = Base10_to_base_less_then_10(chips.current, amount)
+			hand_chips = mod_chips(amount)
+		end
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..formeramount, G.C.BLUE)
+		end
+		return true
+	end
+	if key == "base_sum_mult" then
+		local mults = SMODS.Scoring_Parameters["mult"]
+		amount = SumOfDigits(mults.current)
+		local formeramount = amount
+		amount = Base10_to_base_less_then_10(mults.current, amount)
+		mult = mod_mult(amount)
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..formeramount, G.C.RED)
+		end
+		return true
+	end
+	if key == 'base_sum_chips' then
+		local chips = SMODS.Scoring_Parameters["chips"]
+		amount = SumOfDigits(chips.current)
+		local formeramount = amount
+		amount = Base10_to_base_less_then_10(chips.current, amount)
+		hand_chips = mod_chips(amount)
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..formeramount, G.C.BLUE)
+		end
+		return true
+	end
+	if key == 'base_mod_plus_one_mult_then_chips' then
+		local mults = SMODS.Scoring_Parameters["mult"]
+		local chips = SMODS.Scoring_Parameters["chips"]
+		local modmult = ((mults.current-1)%(amount-1))+1
+		local modchips = ((chips.current-1)%(amount-1))+1
+		amount = Base10_to_base_less_then_10(mults.current, modchips)
+		local otheramount = Base10_to_base_less_then_10(chips.current, modmult)
+		mult = mod_mult(amount)
+		hand_chips = mod_chips(otheramount)
+		if not Talisman or not Talisman.config_file.disable_anims then
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "ZZ-ZZ`ZZvZZdZZoZZsZZ_ZZQZZAZZMZZjZZtZZgZZfZZHZZ$ZZ1ZZxZZ/ZZnZZ0ZZ:ZZZZZmZZ?ZZ?ZZFZZzZZ:ZZwZZ,ZZ'ZZLZZrZZ&ZZ3ZZZZZMZZoZZkZZ?ZZ&ZZuZZ'ZZmZZ8ZZlZZ-ZZ_ZZOZZ6ZZ>ZZvZZ[ZZ?ZZ3ZZ$ZZOZZ8ZZtZZuZZMZZcZZ&ZZ:ZZ:ZZLZZ;ZZEZZ`ZZBZZ(ZZ(ZZ^ZZ`ZZ ZZTZZ/ZZ8ZZxZZ,ZZ4ZZaZZTZZTZZ#ZZ/ZZmZZ$ZZSZZUZZ`ZZVZZAZZvZZ5ZZ,ZZ3ZZDZZ?ZZ", G.C.BLACK)
+		end
+		return true
+	end
+	-- slop
+	if key == 'MDJ_key' or key == 'MDJ_amount' or key == 'MDJ_og_key' or key == 'MDJ_og_amount' or key == 'from_mindware_lol' then
+        return { [key] = amount }
+    end
+	local ret = keyhook(effect, scored_card, key, amount, from_edition)
+	if ret then return ret end
+end
+
+
+-- large empty area so i can notice when i'm going into the other hook
+
+
+local calcindiveffectref = SMODS.calculate_individual_effect
+SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
+	local og_key = key
+	local og_amount = amount
+	local theres_a_mindware = next(SMODS.find_card("j_MDJ_mindware"))
+	local theres_a_brainware = next(SMODS.find_card("j_MDJ_brainware"))
+	local calls = SMODS.find_card("j_MDJ_callandresponse")
+	if next(calls) and not effect.response and key and MyDreamJournal.scoreparammodkeys[key] then
+		effect.response = true
+		for _, v in ipairs(calls) do
+			SMODS.calculate_individual_effect(effect, v, key, amount, from_edition)
+		end
+	end
+	local is_demicolon = nil
+	-- a scored_card could SOMEHOW not have a center, therefor crashing the game without these checks >:(
+	if scored_card and scored_card.config and scored_card.config.center then
+		is_demicolon = (scored_card.config.center.key == "j_cry_demicolon")
 	end
 	if theres_a_mindware and not effect.from_mindware and key then
 		local new_effect = Copy3(effect)
@@ -838,63 +930,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		if all_key[key] and key ~= og_key then
 			effect.no_alter = true
 			SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
-		end
-	end
-	-- add in the equals if no entropy :sob:
-	if not (SMODS.Mods["entr"] and SMODS.Mods["entr"].can_load) then
-		if (key == 'eq_mult' or key == 'Eqmult_mod') then
-			local mult = SMODS.Scoring_Parameters["mult"]
-			key = "mult_mod"
-			amount = amount-mult.current
-			if not Talisman or not Talisman.config_file.disable_anims then
-				MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = "..amount, G.C.RED)
-			end
-		end
-		if (key == 'eq_chips' or key == 'Eqchips_mod') then
-			local chips = SMODS.Scoring_Parameters["chips"]
-			key = "chip_mod"
-			amount = amount-mult.current
-			if not Talisman or not Talisman.config_file.disable_anims then
-				MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = "..amount, G.C.BLUE)
-			end
-		end
-	end
-	if key == 'base_mult' then
-		local mult = SMODS.Scoring_Parameters["mult"]
-		local formeramount = amount
-		amount = Base10_to_base_less_then_10(mult.current, amount)-mult.current
-		key = "fauxEmult_mod"
-		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..formeramount, G.C.RED)
-		end
-	end
-	if key == 'base_chips' then
-		local chips = SMODS.Scoring_Parameters["chips"]
-		local formeramount = amount
-		amount = Base10_to_base_less_then_10(chips.current, amount)-chips.current
-		key = "fauxEchip_mod"
-		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..formeramount, G.C.BLUE)
-		end
-	end
-	if key == "base_sum_mult" then
-		local mult = SMODS.Scoring_Parameters["mult"]
-		amount = SumOfDigits(mult.current)
-		local formeramount = amount
-		key = "fauxEmult_mod"
-		amount = Base10_to_base_less_then_10(mult.current, amount)-mult.current
-		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..formeramount, G.C.RED)
-		end
-	end
-	if key == 'base_sum_chips' then
-		local chips = SMODS.Scoring_Parameters["chips"]
-		amount = SumOfDigits(chips.current)
-		local formeramount = amount
-		amount = Base10_to_base_less_then_10(chips.current, amount)-chips.current
-		key = "fauxEchip_mod"
-		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..formeramount, G.C.BLUE)
 		end
 	end
 	if theres_a_brainware and ( MyDreamJournal.scoreparammodkeys[og_key] or MyDreamJournal.otherscoremodkeys[og_key] ) and not effect.frombrainware then
@@ -944,30 +979,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 			operations["hyperoperator_hell_is_a_real_place"][#operations["hyperoperator_hell_is_a_real_place"]+1] = operation_table
 		end
 	end
-	if key == 'base_mod_plus_one_mult_then_chips' then
-		local mult = SMODS.Scoring_Parameters["mult"]
-		local chips = SMODS.Scoring_Parameters["chips"]
-		local modmult = ((mult.current-1)%(amount-1))+1
-		local modchips = ((chips.current-1)%(amount-1))+1
-		amount = Base10_to_base_less_then_10(mult.current, modchips)-mult.current
-		local otheramount = Base10_to_base_less_then_10(chips.current, modmult)-chips.current
-		local othereffect = { fauxEchip_mod = otheramount }
-		SMODS.calculate_effect(othereffect, scored_card, from_edition)
-		key = "fauxEmult_mod"
-		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "ZZ-ZZ`ZZvZZdZZoZZsZZ_ZZQZZAZZMZZjZZtZZgZZfZZHZZ$ZZ1ZZxZZ/ZZnZZ0ZZ:ZZZZZmZZ?ZZ?ZZFZZzZZ:ZZwZZ,ZZ'ZZLZZrZZ&ZZ3ZZZZZMZZoZZkZZ?ZZ&ZZuZZ'ZZmZZ8ZZlZZ-ZZ_ZZOZZ6ZZ>ZZvZZ[ZZ?ZZ3ZZ$ZZOZZ8ZZtZZuZZMZZcZZ&ZZ:ZZ:ZZLZZ;ZZEZZ`ZZBZZ(ZZ(ZZ^ZZ`ZZ ZZTZZ/ZZ8ZZxZZ,ZZ4ZZaZZTZZTZZ#ZZ/ZZmZZ$ZZSZZUZZ`ZZVZZAZZvZZ5ZZ,ZZ3ZZDZZ?ZZ", G.C.BLACK)
-		end
-	end
-	if key == 'fauxEchip_mod' then
-		key = "chip_mod"
-	end
-	if key == "fauxEmult_mod" then
-		key = "mult_mod"
-	end
-	-- slop
-	if key == 'MDJ_key' or key == 'MDJ_amount' or key == 'MDJ_og_key' or key == 'MDJ_og_amount' or key == 'from_mindware_lol' then
-        return { [key] = amount }
-    end
 	local ret = calcindiveffectref(effect, scored_card, key, amount, from_edition)
 	if ret then return ret end
 end

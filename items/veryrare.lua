@@ -446,3 +446,46 @@ SMODS.Joker {
 		end
     end,
 }
+
+SMODS.Joker {
+    key = "stuck_in_a_loop",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 3,
+	pronouns = 'he_him',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    immutable = true,
+    cost = 11,
+    config = { extra = { spenthands = 0 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { } }
+    end,
+    calculate = function(self, card, context)
+        if context.before then
+            card.ability.spenthands = G.GAME.current_round.hands_left
+            ease_hands_played(-G.GAME.current_round.hands_left)
+        end
+        if context.after then
+            card.ability.spenthands = 0
+        end
+        if context.repetition and context.other_card:get_id() == 12 then
+            return {
+                repetitions = card.ability.spenthands
+            }
+        end
+		if context.retrigger_joker_check and context.other_card.config.center.key ~= "j_MDJ_stuck_in_a_loop" then
+			if context.other_card then
+				return {
+					message = localize("k_again_ex"),
+					repetitions = card.ability.spenthands,
+					card = card,
+				}
+			else
+				return nil, true
+			end
+		end
+    end,
+}

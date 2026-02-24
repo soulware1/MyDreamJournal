@@ -4,4 +4,6 @@ if MyDreamJournal.entropyinstalled then
     SMODS.load_file("items/entropy/rlegendary.lua")()
     SMODS.load_file("items/entropy/entropic.lua")()
     SMODS.load_file("items/entropy/tags.lua")()
+    SMODS.load_file("items/entropy/stickers.lua")()
+    SMODS.load_file("items/entropy/software.lua")()
 end
