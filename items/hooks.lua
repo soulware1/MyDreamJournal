@@ -339,15 +339,18 @@ function Base10_to_BaseB(n, b, precision)
     end
     result = #digits > 0 and table.concat(digits) or "0"
     if (tonumber(result) ~= tonumber(result)) or (tonumber(result) == math.huge) then
+        --[[
         local radix = {}
         local integer = {}
         table.move(digits, 1, digitLog + 1 - 1, 1, integer)
         table.move(digits, digitLog + 1, #digits, 1, radix)
         digit_arrays_to_bignumber(integer, radix)
+        ]]--
+        result = to_big(result)
     else
         result = to_big(tonumber(result))
     end
-    return to_big(result)
+    return result
 end
 function SumOfDigits(n)
 	local old_n = n
