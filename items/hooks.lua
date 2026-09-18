@@ -278,11 +278,12 @@ end
 
 -- mostly based on this guy's base conversion https://github.com/uellenberg/DecimalSystem/blob/7d4f6c4927a3e4c778d07a3e7dadf776b6ee2e9b/src/Num.ts#L120
 local big_ass_number = to_big(10)^1000
-local scientific_notation = to_big(10)^14
+local limit = to_big(10)^307
+-- k assumed to be 10 unless b is larger then k, then k becomes b and b becomes 10
 function BaseB_to_Base10(n, b)
 	n = math.floor(n)
 	-- really early to do this, but i think players care more about number go up then exactness that could result in a infinite loop
-	if n > scientific_notation then
+	if n > limit then
 		return  n*(b/10)^math.log(n, 10)
 	end
     local result = to_big(0)
@@ -339,18 +340,15 @@ function Base10_to_BaseB(n, b, precision)
     end
     result = #digits > 0 and table.concat(digits) or "0"
     if (tonumber(result) ~= tonumber(result)) or (tonumber(result) == math.huge) then
-        --[[
         local radix = {}
         local integer = {}
         table.move(digits, 1, digitLog + 1 - 1, 1, integer)
         table.move(digits, digitLog + 1, #digits, 1, radix)
         digit_arrays_to_bignumber(integer, radix)
-        ]]--
-        result = to_big(result)
     else
         result = to_big(tonumber(result))
     end
-    return result
+    return to_big(result)
 end
 function SumOfDigits(n)
 	local old_n = n
@@ -846,23 +844,27 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if key == 'base_mult' then
 		local mults = SMODS.Scoring_Parameters["mult"]
+		amount = math.floor(amount+0.5)
+		local formeramount = amount
 		if amount ~= 10 then
 			amount = Base10_to_BaseB(mults.current, amount)
 			mult = mod_mult(amount)
 		end
 		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..amount, G.C.RED)
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..formeramount, G.C.RED)
 		end
 		return true
 	end
 	if key == 'base_chips' then
 		local chips = SMODS.Scoring_Parameters["chips"]
+		amount = math.floor(amount+0.5)
+		local formeramount = amount
 		if amount ~= 10 then
 			amount = Base10_to_BaseB(chips.current, amount)
 			hand_chips = mod_chips(amount)
 		end
 		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..amount, G.C.BLUE)
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..formeramount, G.C.BLUE)
 		end
 		return true
 	end
