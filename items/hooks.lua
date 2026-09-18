@@ -252,58 +252,102 @@ function Copy3(obj, seen)
     return setmetatable(res, getmetatable(obj))
 end
 
-local big_ass_number = to_big(10)^1000
-local scientific_notation = to_big(10)^14
-function Base10_to_base_less_then_10(n, b)
-    if n == to_big(0) then return to_big(0) end
-    b = math.floor(b)
-    n = math.floor(n)
-	b = to_big(b)
-	n = to_big(n)
-	if b > to_big(10) then
-		return BaseB_to_base_10(n, b)
-	-- silly goose
-	elseif b == to_big(10) then
-		return n
-	end
-    -- this is a VERY rough approximation of what would happen during a base conversion, only use for when /10 doesn't reduce the tailsman number or it just takes too long man...
-    local approximation = math.log(b, to_big(10))
-    if n >= big_ass_number and b ~= 1 then
-        return n^approximation
-    end
-	n = math.floor(to_big(n))
-    local result = to_big(0)
-    local place = to_big(1)
-    
-    if b == to_big(1) then
-		-- 1 ninth of 10^n = a number with N amount of digits, all of them being one
-        result = 1/9*((to_big(10)^n)-1)
-        goto base1_skip
+function reverseIndices(t)
+    local n = #t
+    local result = {}
+
+    for i = 1, n do
+        result[n - i] = t[i]
     end
 
-    while n > to_big(0) do
-        local remainder = n % to_big(b)
-        result = result + remainder * place
-        n = math.floor(n / to_big(b))
-        place = place * to_big(10)
-    end
-    ::base1_skip::
-    
-    return to_big(result)
+    return result
 end
-function BaseB_to_base_10(n, b)
-	if n >= big_ass_number then
-		return (n/10^math.floor(math.log(n, to_big(10))))*b^math.floor(math.log(n, to_big(10)))
+-- inn is index number, rn is radix number
+function digit_arrays_to_bignumber(inn, rn)
+    local inn_size = #inn-1
+    inn = reverseIndices(inn)
+    local endresult = to_big(0)
+    for i = 0, inn_size do
+        endresult = endresult+to_big(inn[i])*(to_big(10)^to_big(i))
+    end
+    for i = 1, #rn do
+        endresult = endresult+to_big(rn[i])*(to_big(10)^to_big(-i))
+    end
+    return endresult
+end
+
+-- mostly based on this guy's base conversion https://github.com/uellenberg/DecimalSystem/blob/7d4f6c4927a3e4c778d07a3e7dadf776b6ee2e9b/src/Num.ts#L120
+local big_ass_number = to_big(10)^1000
+local scientific_notation = to_big(10)^14
+function BaseB_to_Base10(n, b)
+	n = math.floor(n)
+	-- really early to do this, but i think players care more about number go up then exactness that could result in a infinite loop
+	if n > scientific_notation then
+		return  n*(b/10)^math.log(n, 10)
 	end
-	local result = to_big(0)
+    local result = to_big(0)
     local place = to_big(0)
-	while n > 0 do
-        local digit = n % to_big(10)
-        result = result + digit * b^place
-        n = math.floor(n/10)
+    while n > 0 do
+        local digit = n % 10
+        result = result + (digit * (b^place))
         place = place+1
+        n = math.floor(n / 10)
     end
 	return result
+end
+function Base10_to_BaseB(n, b, precision)
+	if not precision then
+		precision = 11
+	end
+    if n == to_big(0) then return to_big(0) end
+	-- silly goose
+    if b == to_big(10) then
+		return n
+	elseif b == to_big(1) then
+		-- 1 ninth of 10^n = a number with N amount of digits, all of them being one
+        result = 1/9*((to_big(10)^n)-1)
+        return to_big(result)
+	elseif 10 < b then
+		return BaseB_to_Base10(n, b)
+    end
+	local digit = n
+    local digitLog = math.floor(math.log(digit,b)) + 1
+    if digitLog < 0 then
+        digitLog = 0
+    end
+    local digits = {}
+    local toAdd = {}
+    for i = digitLog - 1, -precision - 1, -1 do
+        local number = math.floor(digit/(b^i)%b);
+        digit = digit - number * b^i
+        local digitStr = tostring(number)
+        if(digitStr ~= "0" or #digits < digitLog) then
+            for d = 1, #toAdd do
+                digits[#digits + 1] = toAdd[d]
+            end
+            digits[#digits+1] = digitStr
+            toAdd = {}
+        else
+            toAdd[#toAdd+1] = "0"
+        end
+    end
+    while #digits < digitLog do
+        table.insert(digits, 1, "0")
+    end
+    if #digits > digitLog then
+        table.insert(digits, digitLog + 1, ".")
+    end
+    result = #digits > 0 and table.concat(digits) or "0"
+    if (tonumber(result) ~= tonumber(result)) or (tonumber(result) == math.huge) then
+        local radix = {}
+        local integer = {}
+        table.move(digits, 1, digitLog + 1 - 1, 1, integer)
+        table.move(digits, digitLog + 1, #digits, 1, radix)
+        digit_arrays_to_bignumber(integer, radix)
+    else
+        result = to_big(tonumber(result))
+    end
+    return to_big(result)
 end
 function SumOfDigits(n)
 	local old_n = n
@@ -802,7 +846,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		amount = math.floor(amount+0.5)
 		local formeramount = amount
 		if amount ~= 10 then
-			amount = Base10_to_base_less_then_10(mults.current, amount)
+			amount = Base10_to_BaseB(mults.current, amount)
 			mult = mod_mult(amount)
 		end
 		if not Talisman or not Talisman.config_file.disable_anims then
@@ -815,7 +859,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		amount = math.floor(amount+0.5)
 		local formeramount = amount
 		if amount ~= 10 then
-			amount = Base10_to_base_less_then_10(chips.current, amount)
+			amount = Base10_to_BaseB(chips.current, amount)
 			hand_chips = mod_chips(amount)
 		end
 		if not Talisman or not Talisman.config_file.disable_anims then
@@ -827,7 +871,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		local mults = SMODS.Scoring_Parameters["mult"]
 		amount = SumOfDigits(mults.current)
 		local formeramount = amount
-		amount = Base10_to_base_less_then_10(mults.current, amount)
+		amount = Base10_to_BaseB(mults.current, amount)
 		mult = mod_mult(amount)
 		if not Talisman or not Talisman.config_file.disable_anims then
 			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..formeramount, G.C.RED)
@@ -838,7 +882,7 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		local chips = SMODS.Scoring_Parameters["chips"]
 		amount = SumOfDigits(chips.current)
 		local formeramount = amount
-		amount = Base10_to_base_less_then_10(chips.current, amount)
+		amount = Base10_to_BaseB(chips.current, amount)
 		hand_chips = mod_chips(amount)
 		if not Talisman or not Talisman.config_file.disable_anims then
 			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..formeramount, G.C.BLUE)
@@ -850,8 +894,8 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 		local chips = SMODS.Scoring_Parameters["chips"]
 		local modmult = ((mults.current-1)%(amount-1))+1
 		local modchips = ((chips.current-1)%(amount-1))+1
-		amount = Base10_to_base_less_then_10(mults.current, modchips)
-		local otheramount = Base10_to_base_less_then_10(chips.current, modmult)
+		amount = Base10_to_BaseB(mults.current, modchips)
+		local otheramount = Base10_to_BaseB(chips.current, modmult)
 		mult = mod_mult(amount)
 		hand_chips = mod_chips(otheramount)
 		if not Talisman or not Talisman.config_file.disable_anims then
