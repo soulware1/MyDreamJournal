@@ -843,27 +843,23 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if key == 'base_mult' then
 		local mults = SMODS.Scoring_Parameters["mult"]
-		amount = math.floor(amount+0.5)
-		local formeramount = amount
 		if amount ~= 10 then
 			amount = Base10_to_BaseB(mults.current, amount)
 			mult = mod_mult(amount)
 		end
 		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..formeramount, G.C.RED)
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'mult', amount, percent, nil, nil, "Mult = Base "..amount, G.C.RED)
 		end
 		return true
 	end
 	if key == 'base_chips' then
 		local chips = SMODS.Scoring_Parameters["chips"]
-		amount = math.floor(amount+0.5)
-		local formeramount = amount
 		if amount ~= 10 then
 			amount = Base10_to_BaseB(chips.current, amount)
 			hand_chips = mod_chips(amount)
 		end
 		if not Talisman or not Talisman.config_file.disable_anims then
-			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..formeramount, G.C.BLUE)
+			MyDreamJournal.card_eval_status_text_eq(scored_card or effect.card or effect.focus, 'chips', amount, percent, nil, nil, "Chips = Base "..amount, G.C.BLUE)
 		end
 		return true
 	end
