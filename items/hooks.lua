@@ -314,7 +314,7 @@ function Base10_to_BaseB(n, b, precision)
 		return BaseB_to_Base10(n, b)
     end
     if (tonumber(n) ~= tonumber(n)) or tonumber(n) == math.huge then
-        return n^math.log(b, to_big(10))
+        return n^math.log(to_big(10), b)
     else
         n = to_number(n)
     end
