@@ -313,8 +313,15 @@ function Base10_to_BaseB(n, b, precision)
 	elseif 10 < b then
 		return BaseB_to_Base10(n, b)
     end
+    if (tonumber(n) ~= tonumber(n)) or tonumber(n) == math.huge then
+        return n^math.log(b, to_big(10))
+    else
+        n = to_number(n)
+    end
 	local digit = n
     local digitLog = math.floor(math.log(digit,b)) + 1
+    digit = to_big(digit)
+    n = to_big(n)
     if digitLog < 0 then
         digitLog = 0
     end
