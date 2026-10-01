@@ -856,7 +856,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if key == 'base_mult' then
 		local mults = SMODS.Scoring_Parameters["mult"]
-		amount = math.floor(amount+0.5)
 		local formeramount = amount
 		if amount ~= 10 then
 			amount = Base10_to_BaseB(mults.current, amount)
@@ -869,7 +868,6 @@ SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, f
 	end
 	if key == 'base_chips' then
 		local chips = SMODS.Scoring_Parameters["chips"]
-		amount = math.floor(amount+0.5)
 		local formeramount = amount
 		if amount ~= 10 then
 			amount = Base10_to_BaseB(chips.current, amount)
