@@ -567,6 +567,7 @@ function create_card(_type, area, legendary, _rarity, skip_materialize, soulable
     if not card then
         return
     end
+	if G.STAGE ~= G.STAGES.RUN then return card end
 	local grilled_chicken = false
 	for i, v in pairs(G.jokers.cards) do
 		if MyDreamJournal.is_grilled_chicken(v) then
