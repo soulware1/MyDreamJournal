@@ -281,11 +281,13 @@ local big_ass_number = to_big(10)^1000
 local limit = to_big(10)^307
 -- k assumed to be 10 unless b is larger then k, then k becomes b and b becomes 10
 function BaseB_to_Base10(n, b)
-	n = math.floor(n)
-	-- really early to do this, but i think players care more about number go up then exactness that could result in a infinite loop
+    local decimal = n-math.floor(n)
 	if n > limit then
 		return  n*(b/10)^math.log(n, 10)
 	end
+	n = math.floor(n)
+    -- big decimal doesn't want you to know this one easy trick!
+    decimal = tonumber(string.reverse(string.sub(tostring(decimal), 3)))
     local result = to_big(0)
     local place = to_big(0)
     while n > 0 do
@@ -293,6 +295,15 @@ function BaseB_to_Base10(n, b)
         result = result + (digit * (b^place))
         place = place+1
         n = math.floor(n / 10)
+    end
+    if decimal then
+        place = to_big(-1)
+        while decimal > 0 do
+            local digit = decimal % 10
+            result = result + (digit * (b^place))
+            place = place-1
+            decimal = math.floor(decimal / 10)
+        end
     end
 	return result
 end
