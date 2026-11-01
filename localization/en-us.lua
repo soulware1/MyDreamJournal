@@ -1218,7 +1218,7 @@ return {
         },
         Spectral = {
             c_MDJ_ware = {
-                name = "Ware",
+                name = "TS Crystal",
                 text = {
                     "Destroy the selected joker",
                     "of the {C:attention}highest{} owned rarity",
