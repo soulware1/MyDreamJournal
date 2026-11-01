@@ -56,10 +56,10 @@ return {
             j_MDJ_suitshuffle = {
                 name = 'Suit Shuffle',
                 text = {
-                    "{C:spades}Hearts{} count as {C:hearts}Spades{}",
-                    "{C:hearts}Spades{} count as {C:spades}Hearts{}",
-                    "{C:diamonds}Clubs{} count as {C:clubs}Diamonds{}",
-                    "{C:clubs}Diamonds{} count as {C:diamonds}Clubs{}",
+                    "{C:spades}Hearts{} instead count as {C:hearts}Spades{}",
+                    "{C:hearts}Spades{} instead count as {C:spades}Hearts{}",
+                    "{C:diamonds}Clubs{} instead count as {C:clubs}Diamonds{}",
+                    "{C:clubs}Diamonds{} instead count as {C:diamonds}Clubs{}",
                 }
             },
             j_MDJ_unicode = {
@@ -1206,6 +1206,15 @@ return {
                    },
                 }
             },
+            j_MDJ_slurmcore = {
+                name = 'SLURMCORE',
+                text = {
+                    "If {C:chips}Chips{} and {C:money}Money{} and {C:mult}Mult{} < #1#",
+                    "{C:chips}+abs(base11func(abs(floor(chips))..abs(floor(money))..abs(floor(mult)))){} Chips",
+                    "{C:attention}else",
+                    "{C:chips}+abs(base11func({element:1}{C:chips}e{element:2}{C:chips})){} Chips"
+                }
+            },
         },
         Spectral = {
             c_MDJ_ware = {
@@ -1555,6 +1564,16 @@ return {
                     "{C:attention}Base Conversion{} is sorta like exponentiation",
                     "here's two examples",
                     "When Base B (9) is below 10"
+                }
+            },
+            MDJ_base11func = {
+                name = "base11func example",
+                text = {
+                    "Convert a number (791829) to Base 11 (4A0A05)",
+                    "Change A to +, and 0 to - (4+-+-5)",
+                    "Parse that as a math equation (9)",
+                    "Return 0 if invalid (+++, 3+4-)",
+                    "{C:inactive,s:0.75}Unary + does nothing, Unary - inverts the sign of a number"
                 }
             },
             MDJ_inversionscoreop = {

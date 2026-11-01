@@ -1264,3 +1264,119 @@ end
 function SMODS.current_mod.reset_game_globals(run_start)
     reset_achilles()
 end
+
+function digitConverter(n)
+    if n == 0 then
+        return "-"
+    elseif n == 10 then
+        return "+"
+    else
+        return tostring(n)
+    end
+end
+
+function splitEquationString(str)
+    local result = {}
+    local pos = 1
+    while pos <= #str do
+        local startPos, endPos = str:find("[+-]*%d+", pos)
+        if not startPos or startPos ~= pos then
+            return 0
+        end
+        table.insert(result, str:sub(startPos, endPos))
+        pos = endPos + 1
+    end
+    return result
+end
+
+function equationProperTableMaker(str)
+    local initalEquationTable = splitEquationString(str)
+    if initalEquationTable == 0 then
+        return {0}
+    end
+    local equationTable = {}
+    for  i, v in ipairs(initalEquationTable) do
+        if i ~= 1 then
+            equationTable[#equationTable+1] = v:sub(1, 1)
+            v = v:sub(2, -1)
+        end
+        v = v:gsub("[+]", "")
+        local is_negative = #v:gsub('[^-]', '')
+        v = v:gsub("[-]", "")
+        if is_negative ~= 0 and is_negative%2 == 0 then
+            v = "-"..v
+        end
+        equationTable[#equationTable+1] = tonumber(v)
+    end
+    return equationTable
+end
+
+function equationDoer(tb)
+    for i, v in ipairs(tb) do
+        if type(v) == "number" then
+            -- pass through
+        else
+            if v == "+" then
+                tb[i+1] = tb[i-1]+tb[i+1]
+            elseif v == "-" then
+                tb[i+1] = tb[i-1]-tb[i+1]
+            end
+        end
+    end
+    return tb[#tb]
+end
+
+function base11Func(n)
+    local generatedString = ""
+    while n > 0 do
+        generatedString = digitConverter(n%11)..generatedString
+        n = math.floor(n/11)
+    end
+    if generatedString == "" then
+        generatedString = "0"
+    end
+    return equationDoer(equationProperTableMaker(generatedString))
+end
+
+SMODS.Joker {
+    key = "slurmcore",
+    atlas = 'awesomejokers',
+    pos = { x = 3, y = 7 },
+    pronouns = 'it_its',
+    rarity = 3,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+	demicolon_compat = true,
+    cost = 6,
+    discovered = true,
+    config = { extra = { mantissalow = 11, mantissahigh = 99, exponentlow = 101, exponenthigh = 305, selectedmantissa = "18", selectedexponent = "305", }, },
+    loc_vars = function(self, info_queue, card)
+        local mantissa = {n = G.UIT.T, config = {colour = G.C.CHIPS, scale = 0.32, ref_table = card.ability.extra, ref_value = "selectedmantissa"}}
+        local exponent = {n = G.UIT.T, config = {colour = G.C.CHIPS, scale = 0.32, ref_table = card.ability.extra, ref_value = "selectedexponent"}}
+		info_queue[#info_queue+1] = { set = "Other", key = "MDJ_base11func", config = {} }
+        return { vars = { 9.9e101, elements = {mantissa, exponent} } }
+    end,
+    update = function (self, card, dt)
+		local secret = math.floor(9.99*(G.TIMERS.REAL - dt))%8
+		if card.ability.secret ~= secret then
+			card.ability.secret = secret
+            card.ability.extra.selectedmantissa = string.format("%.1f", math.random(card.ability.extra.mantissalow, card.ability.extra.mantissahigh)/10)
+            card.ability.extra.selectedexponent = number_format(math.random(card.ability.extra.exponentlow, card.ability.extra.exponenthigh))
+		end
+	end,
+    calculate = function(self, card, context)
+        if context.joker_main or context.forcetrigger then
+			local maxd = 9.9e101
+			if hand_chips < maxd and G.GAME.dollars < maxd and mult < maxd then
+				return {
+					chips = math.abs(base11Func(tonumber(string.format("%.0f", math.abs(math.floor(hand_chips)))..string.format("%.0f",math.abs(math.floor(G.GAME.dollars))))..string.format("%.0f",math.abs(math.floor(mult)))))
+				}
+			else
+				return {
+					chips = math.abs(base11Func((pseudorandom('mantissa', card.ability.extra.mantissalow, card.ability.extra.mantissahigh)/10)^pseudorandom('exponent', card.ability.extra.exponentlow, card.ability.extra.exponenthigh)))
+				}
+			end
+        end
+    end,
+}

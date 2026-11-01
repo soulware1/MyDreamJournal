@@ -41,7 +41,7 @@ SMODS.Joker {
 	perishable_compat = true,
     eternal_compat = true,
     cost = 2,
-    config = { extra = { add = 0.01 }, },
+    config = { extra = { add = 0.1 }, },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.add } }
     end,

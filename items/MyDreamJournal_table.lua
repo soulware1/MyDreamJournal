@@ -196,6 +196,25 @@ MyDreamJournal.multmodkeys = {
 	-- Other mods can add their custom operations to this table.
 }
 
+MyDreamJournal.scoremodkeys = {
+        ['score'] = 'add', ['h_score'] = 'add', ['score_mod'] = 'add',
+        ['x_score'] = 'mult', ['xscore'] = 'mult', ['Xscore_mod'] = 'mult',
+        ['e_score'] = 'expo', ['escore'] = 'expo', ['Escore_mod'] = 'expo',
+        ['ee_score'] = 'tetra', ['eescore'] = 'tetra', ['EEscore_mod'] = 'tetra',
+        ['eee_score'] = 'penta', ['eeescore'] = 'penta', ['EEEscore_mod'] = 'penta',
+        ['hyperscore'] = 'hyper', ['hyper_score'] = 'hyper', ['hyperscore_mod'] = 'hyper',
+        -- Other mods can add their custom operations to this table.
+    }
+MyDreamJournal.blindsizemodkeys = {
+     	['blindsize'] = 'add', ['h_blindsize'] = 'add', ['blindsize_mod'] = 'add', ['blind_size'] = 'add', ['h_blind_size'] = 'add', ['blind_size_mod'] = 'add',
+   	  	['x_blindsize'] = 'mult', ['xblindsize'] = 'mult', ['Xblindsize_mod'] = 'mult', ['x_blind_size'] = 'mult', ['xblind_size'] = 'mult', ['Xblind_size_mod'] = 'mult',
+   	 	['e_blindsize'] = 'expo', ['eblindsize'] = 'expo', ['Eblindsize_mod'] = 'expo',
+    	['ee_blindsize'] = 'tetra', ['eeblindsize'] = 'tetra', ['EEblindsize_mod'] = 'tetra',
+   	   	['eee_blindsize'] = 'penta', ['eeeblindsize'] = 'penta', ['EEEblindsize_mod'] = 'penta',
+    	['hyperblindsize'] = 'hyper', ['hyper_blindsize'] = 'hyper', ['hyperblindsize_mod'] = 'hyper',
+     -- Other mods can add their custom operations to this table.
+}
+
 MyDreamJournal.downgrade = {
 	['ee_mult'] = 'e_mult', ['eemult'] = 'emult', ['EEmult_mod'] = 'Emult_mod',
 	['eee_mult'] = 'e_mult', ['eeemult'] = 'emult', ['EEEmult_mod'] = 'Emult_mod',
@@ -203,6 +222,12 @@ MyDreamJournal.downgrade = {
 	['ee_chips'] = 'e_chips', ['eechips'] = 'echips', ['EEchip_mod'] = 'Echip_mod',
 	['eee_chips'] = 'e_chips', ['eeechips'] = 'echips', ['EEEchip_mod'] = 'Echip_mod',
 	['hyperchips'] = 'e_chips', ['hyper_chips'] = 'echips', ['hyperchip_mod'] = 'Echip_mod',
+	['ee_blindsize'] = 'e_blindsize', ['eeblindsize'] = 'eblindsize', ['EEblindsize_mod'] = 'Eblindsize_mod',
+	['eee_blindsize'] = 'e_blindsize', ['eeeblindsize'] = 'eblindsize', ['EEEblindsize_mod'] = 'Eblindsize_mod',
+	['hyperblindsize'] = 'e_blindsize', ['hyper_blindsize'] = 'eblindsize', ['hyperblindsize_mod'] = 'Eblindsize_mod',
+	['ee_score'] = 'e_score', ['eescore'] = 'escore', ['EEscore_mod'] = 'Escore_mod',
+	['eee_score'] = 'e_score', ['eeescore'] = 'escore', ['EEEscore_mod'] = 'Escore_mod',
+	['hyperscore'] = 'e_score', ['hyper_score'] = 'escore', ['hyperscore_mod'] = 'Escore_mod',
 	['hyper_asc'] = 'exp_asc', ['hyper_asc_mod'] = 'exp_asc_mod',
 	['hyperasc'] = 'exp_asc', ['hyperasc_mod'] = 'exp_asc_mod',
 }
@@ -227,6 +252,18 @@ MyDreamJournal.scoreparammodkeys = {
 	['ee_chips'] = 'tetra', ['eechips'] = 'tetra', ['EEchip_mod'] = 'tetra',
 	['eee_chips'] = 'penta', ['eeechips'] = 'penta', ['EEEchip_mod'] = 'penta',
 	['hyperchips'] = 'hyper', ['hyper_chips'] = 'hyper', ['hyperchip_mod'] = 'hyper',
+	['blindsize'] = 'add', ['h_blindsize'] = 'add', ['blindsize_mod'] = 'add', ['blind_size'] = 'add', ['h_blind_size'] = 'add', ['blind_size_mod'] = 'add',
+    ['x_blindsize'] = 'mult', ['xblindsize'] = 'mult', ['Xblindsize_mod'] = 'mult', ['x_blind_size'] = 'mult', ['xblind_size'] = 'mult', ['Xblind_size_mod'] = 'mult',
+    ['e_blindsize'] = 'expo', ['eblindsize'] = 'expo', ['Eblindsize_mod'] = 'expo',
+    ['ee_blindsize'] = 'tetra', ['eeblindsize'] = 'tetra', ['EEblindsize_mod'] = 'tetra',
+    ['eee_blindsize'] = 'penta', ['eeeblindsize'] = 'penta', ['EEEblindsize_mod'] = 'penta',
+    ['hyperblindsize'] = 'hyper', ['hyper_blindsize'] = 'hyper', ['hyperblindsize_mod'] = 'hyper',
+    ['score'] = 'add', ['h_score'] = 'add', ['score_mod'] = 'add',
+    ['x_score'] = 'mult', ['xscore'] = 'mult', ['Xscore_mod'] = 'mult',
+    ['e_score'] = 'expo', ['escore'] = 'expo', ['Escore_mod'] = 'expo',
+    ['ee_score'] = 'tetra', ['eescore'] = 'tetra', ['EEscore_mod'] = 'tetra',
+    ['eee_score'] = 'penta', ['eeescore'] = 'penta', ['EEEscore_mod'] = 'penta',
+    ['hyperscore'] = 'hyper', ['hyper_score'] = 'hyper', ['hyperscore_mod'] = 'hyper',
 	['glop'] = 'add', ['xglop'] = 'mult', ['eglop'] = 'expo',
     ['sfark'] = 'add', ['xsfark'] = 'mult', ['esfark'] = 'expo',
 	['score'] = 'add', ['xscore'] = 'mult',
@@ -303,6 +340,12 @@ MyDreamJournal.plustox = {
 	['chips'] = 'x_chips',
 	['h_chips'] = 'xchips',
 	['chip_mod'] = 'Xchip_mod',
+	['blindsize'] = 'x_blindsize',
+	['h_blindsize'] = 'xblindsize',
+	['blindsize_mod'] = 'Xblindsize_mod',
+	['score'] = 'x_score',
+	['h_score'] = 'xscore',
+	['score_mod'] = 'Xscore_mod',
     ['glop'] = "xglop"
 }
 MyDreamJournal.plusmulttoxmult = {
@@ -315,6 +358,16 @@ MyDreamJournal.pluschipstoxchips = {
 	['h_chips'] = 'xchips',
 	['chip_mod'] = 'Xchip_mod',
 }
+MyDreamJournal.plusblindsizetoxblindsize = {
+	['blindsize'] = 'x_blindsize',
+	['h_blindsize'] = 'xblindsize',
+	['blindsize_mod'] = 'Xblindsize_mod',
+}
+MyDreamJournal.plusscoretoxscore = {
+	['score'] = 'x_score',
+	['h_score'] = 'xscore',
+	['score_mod'] = 'Xscore_mod',
+}
 MyDreamJournal.xtoe = {
 	['x_mult'] = 'e_mult',
 	['xmult'] = 'emult',
@@ -322,6 +375,12 @@ MyDreamJournal.xtoe = {
 	['x_chips'] = 'e_chips',
 	['xchips'] = 'echips',
 	['Xchip_mod'] = 'Echip_mod',
+	['x_blindsize'] = 'e_blindsize',
+	['xblindsize'] = 'eblindsize',
+	['Xblindsize_mod'] = 'Eblindsize_mod',
+	['x_score'] = 'e_score',
+	['xscore'] = 'escore',
+	['Xscore_mod'] = 'Escore_mod',
     ['xglop'] = "eglop"
 }
 MyDreamJournal.xmulttoemult = {
@@ -334,23 +393,41 @@ MyDreamJournal.xchipstoechips = {
 	['xchips'] = 'echips',
 	['Xchip_mod'] = 'Echip_mod',
 }
+MyDreamJournal.xblindsizetoeblindsize = {
+	['x_blindsize'] = 'e_blindsize',
+	['xblindsize'] = 'eblindsize',
+	['Xblindsize_mod'] = 'Eblindsize_mod',
+}
+MyDreamJournal.xscoretoescore = {
+	['x_score'] = 'e_score',
+	['xscore'] = 'escore',
+	['Xscore_mod'] = 'Escore_mod',
+}
 MyDreamJournal.plusops = MyDreamJournal.plustox
 MyDreamJournal.xops = MyDreamJournal.xtoe
 MyDreamJournal.eops = {
 	['e_mult'] = 'expo', ['emult'] = 'expo', ['Emult_mod'] = 'expo',
 	['e_chips'] = 'expo', ['echips'] = 'expo', ['Echip_mod'] = 'expo',
+    ['e_score'] = 'expo', ['escore'] = 'expo', ['Escore_mod'] = 'expo',
+	['e_blindsize'] = 'expo', ['eblindsize'] = 'expo', ['Eblindsize_mod'] = 'expo',
 }
 MyDreamJournal.eeops = {
 	['ee_mult'] = 'tetra', ['eemult'] = 'tetra', ['EEmult_mod'] = 'tetra',
 	['ee_chips'] = 'tetra', ['eechips'] = 'tetra', ['EEchip_mod'] = 'tetra',
+    ['ee_score'] = 'tetra', ['eescore'] = 'tetra', ['EEscore_mod'] = 'tetra',
+    ['ee_blindsize'] = 'tetra', ['eeblindsize'] = 'tetra', ['EEblindsize_mod'] = 'tetra',
 }
 MyDreamJournal.eeeops = {
 	['eee_chips'] = 'penta', ['eeechips'] = 'penta', ['EEEchip_mod'] = 'penta',
 	['eee_mult'] = 'penta', ['eeemult'] = 'penta', ['EEEmult_mod'] = 'penta',
+	['eee_blindsize'] = 'penta', ['eeeblindsize'] = 'penta', ['EEEblindsize_mod'] = 'penta',
+    ['eee_score'] = 'penta', ['eeescore'] = 'penta', ['EEEscore_mod'] = 'penta',
 }
 MyDreamJournal.hyperops = {
 	['hyperchips'] = 'hyper', ['hyper_chips'] = 'hyper', ['hyperchip_mod'] = 'hyper',
 	['hypermult'] = 'hyper', ['hyper_mult'] = 'hyper', ['hypermult_mod'] = 'hyper',
+    ['hyperblindsize'] = 'hyper', ['hyper_blindsize'] = 'hyper', ['hyperblindsize_mod'] = 'hyper',
+    ['hyperscore'] = 'hyper', ['hyper_score'] = 'hyper', ['hyperscore_mod'] = 'hyper',
 }
 
 MyDreamJournal.keystonumbers = {
