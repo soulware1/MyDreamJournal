@@ -1370,7 +1370,7 @@ SMODS.Joker {
 			local maxd = 9.9e101
 			if hand_chips < maxd and G.GAME.dollars < maxd and mult < maxd then
 				return {
-					chips = math.abs(base11Func(tonumber(string.format("%.0f", math.abs(math.floor(hand_chips)))..string.format("%.0f",math.abs(math.floor(G.GAME.dollars))))..string.format("%.0f",math.abs(math.floor(mult)))))
+					chips = math.abs(base11Func(tonumber(string.format("%.0f", tonumber(math.abs(math.floor(to_number(hand_chips))))..string.format("%.0f",math.abs(math.floor(to_number(G.GAME.dollars)))))..string.format("%.0f",math.abs(math.floor(to_number(mult)))))))
 				}
 			else
 				return {
