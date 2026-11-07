@@ -287,3 +287,139 @@ SMODS.Joker {
 		end
     end,
 }
+local sqrt = math.sqrt
+local sqrtOfFive = sqrt(5)
+local phi = (1+sqrtOfFive)/2
+local psi = (1-sqrtOfFive)/2
+function NegativesRealToThePowerOfIDKIJustNeedThisForFib(n, x)
+    if x == math.floor(x) then
+        return n^x
+    end
+    return (math.abs(n)^x)*math.cos(x*math.pi)
+end
+function fibbedfibonacci(n)
+    return (phi^n-NegativesRealToThePowerOfIDKIJustNeedThisForFib(psi, n))/sqrtOfFive
+end
+function theSlowestReverseFibFunctionEVER(n)
+    local mightBeFour = -4
+    if n%2 == 0 then
+        mightBeFour = -mightBeFour
+    end
+    return math.log((n*sqrtOfFive + math.sqrt(5*n^2-mightBeFour))/2,phi)
+end
+SMODS.Joker {
+    key = "fervourware",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'he_him',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    immutable = true,
+    cost = 20,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { set = "Other", key = "MDJ_scoreops", config = {} }
+        return { vars = {  } }
+    end,
+    calculate = function (self, card, context)
+        if context.MDJ_mod_key_and_amount then
+            if MyDreamJournal.plusops[context.MDJ_key] then
+                return {
+                    MDJ_amount = fibbedfibonacci(math.ceil(context.MDJ_amount))
+                }
+            end
+        end
+    end
+}
+SMODS.Joker {
+    key = "liverware",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'she_her',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 20,
+    config = { extra = { mult = 10 }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.mult } }
+    end,
+    calculate = function (self, card, context)
+        if context.MDJ_mod_key_and_amount then
+            local key = context.MDJ_key
+			local scoreparams = SMODS.Scoring_Parameters
+            if MyDreamJournal.xchipstoechips[key] then
+                return {
+                    MDJ_key = 'chips',
+					MDJ_amount = ((scoreparams.chips.current*context.MDJ_amount)-scoreparams.chips.current)*card.ability.extra.mult
+                }
+            end
+            if MyDreamJournal.xmulttoemult[key] then
+                return {
+                    MDJ_key = 'mult',
+					MDJ_amount = ((scoreparams.mult.current*context.MDJ_amount)-scoreparams.mult.current)*card.ability.extra.mult
+                }
+            end
+        end
+    end
+}
+SMODS.Joker {
+    key = "ZZaZZ",
+    atlas = 'awesomejokers',
+    pos = { x = 4, y = 4 },
+    soul_pos = { x = 5, y = 4 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'ZZaZZ',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    cost = 20,
+	-- so no one gets any ZZnZZy ideas!
+	immutable = true,
+    config = { extra = { mod = 255 }},
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.mod } }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main or context.forcetrigger then
+            return {
+                base_mod_plus_one_mult_then_chips = card.ability.extra.mod,
+            }
+        end
+    end
+}
+SMODS.Joker {
+    key = "fake_sfark",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'she_her',
+    blueprint_compat = true,
+	perishable_compat = true,
+    eternal_compat = true,
+    demicolon_compat = true,
+    immutable = true,
+    cost = 20,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {  } }
+    end,
+    calculate = function (self, card, context)
+        if context.MDJ_mod_key_and_amount then
+            if MyDreamJournal.pluschipstoxchips[context.MDJ_key] then
+                return {
+                    MDJ_amount = context.MDJ_amount*SMODS.Scoring_Parameters["mult"].current,
+                }
+            end
+        end
+    end
+}

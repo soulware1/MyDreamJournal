@@ -476,7 +476,7 @@ SMODS.Joker {
                 repetitions = card.ability.spenthands
             }
         end
-		if context.retrigger_joker_check and context.other_card.config.center.key ~= "j_MDJ_stuck_in_a_loop" then
+		if context.retrigger_joker_check and context.other_card and context.other_card.config.center and context.other_card.config.center.key ~= "j_MDJ_stuck_in_a_loop" then
 			if context.other_card then
 				return {
 					message = localize("k_again_ex"),

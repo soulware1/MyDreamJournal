@@ -254,6 +254,22 @@ SMODS.Joker {
 	end
 }
 SMODS.Joker {
+    key = "brainware",
+    atlas = 'placeholder',
+    pos = { x = 0, y = 0 },
+	discovered = true,
+    rarity = 4,
+	pronouns = 'they_them',
+    blueprint_compat = false,
+	perishable_compat = true,
+    eternal_compat = true,
+    cost = 20,
+    config = { extra = { }, },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {  } }
+    end,
+}
+SMODS.Joker {
     key = "urotsuki",
     pos = {x = 0, y = 0 },
     soul_pos = { x = 1, y = 0, extra = { x = 2, y = 0 } },
